@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verbraucherpreisindex & Kaufkraft-Dashboard | Deutschland & China</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --card-sub: #f1f5f9;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --primary: #1e3a8a;
+      --primary-light: #3b82f6;
+      --accent-de: #d97706;
+      --accent-cn: #dc2626;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --radius: 14px;
+      --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+      --tooltip-bg: rgba(15, 23, 42, 0.92);
+      --tooltip-text: #ffffff;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b1120;
+      --card-bg: #1e293b;
+      --card-sub: #0f172a;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --primary: #60a5fa;
+      --primary-light: #93c5fd;
+      --accent-de: #f59e0b;
+      --accent-cn: #f87171;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+      --tooltip-bg: rgba(30, 41, 59, 0.95);
+      --tooltip-text: #f8fafc;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); line-height: 1.5; padding: 1.5rem 1rem 4rem; transition: background 0.3s, color 0.3s; }
+    .container { max-width: 1140px; margin: 0 auto; }
+
+    /* Top Navigation */
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+    .badge-bar { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; color: var(--text-muted); text-transform: uppercase; }
+    .theme-toggle-btn { background: var(--card-bg); border: 1.5px solid var(--border); color: var(--text); padding: 7px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; box-shadow: var(--shadow); transition: all 0.2s; }
+    .theme-toggle-btn:hover { border-color: var(--primary-light); }
+
+    header { text-align: center; margin-bottom: 2rem; }
+    header h1 { font-size: 2.2rem; color: var(--primary); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+    header p { color: var(--text-muted); font-size: 1rem; max-width: 720px; margin: 0 auto; }
+
+    /* Tabs */
+    .tabs-nav { display: flex; background: var(--border); padding: 5px; border-radius: 14px; max-width: 650px; margin: 0 auto 2rem; gap: 5px; }
+    .tab-btn { flex: 1; padding: 11px 16px; border: none; border-radius: 10px; background: transparent; font-size: 0.92rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.2s; text-align: center; }
+    .tab-btn.active { background: var(--card-bg); color: var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.06); }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Cards */
+    .card { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); padding: 1.75rem; margin-bottom: 1.75rem; }
+
+    /* Presets */
+    .presets-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 1.5rem; }
+    .presets-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-right: 4px; }
+    .preset-btn { background: var(--card-sub); border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 8px; font-size: 0.82rem; cursor: pointer; font-weight: 500; transition: all 0.15s; }
+    .preset-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    /* Forms */
+    .calc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; align-items: flex-end; margin-bottom: 1.25rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    label { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+    input, select { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 0.95rem; color: var(--text); background: var(--card-bg); outline: none; transition: border-color 0.2s; }
+    input:focus, select:focus { border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); }
+
+    .swap-btn { align-self: flex-end; padding: 10px; background: var(--card-sub); border: 1.5px solid var(--border); border-radius: 10px; cursor: pointer; color: var(--primary); font-weight: 700; height: 44px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .swap-btn:hover { background: var(--border); }
+
+    /* Options & Toggles */
+    .options-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); margin-bottom: 1.5rem; font-size: 0.85rem; }
+    .toggle-group { display: inline-flex; background: var(--card-sub); padding: 3px; border-radius: 8px; gap: 3px; }
+    .toggle-opt { padding: 4px 10px; border-radius: 6px; cursor: pointer; font-weight: 600; color: var(--text-muted); border: none; background: transparent; font-size: 0.82rem; }
+    .toggle-opt.active { background: var(--card-bg); color: var(--text); box-shadow: 0 2px 4px rgba(0,0,0,0.06); }
+
+    /* Results */
+    .result-box { background: var(--card-sub); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; }
+    .result-header { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary); margin-bottom: 0.35rem; }
+    .result-main { font-size: 2.2rem; font-weight: 800; color: var(--text); margin-bottom: 0.2rem; }
+    .result-sub { font-size: 1rem; font-weight: 600; color: var(--primary); margin-bottom: 1rem; }
+
+    /* Loss Bar */
+    .loss-bar-container { margin: 1.25rem 0 0.5rem; }
+    .loss-bar-header { display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; }
+    .loss-bar-bg { width: 100%; height: 12px; background: var(--border); border-radius: 6px; overflow: hidden; display: flex; }
+    .loss-bar-fill { height: 100%; background: var(--success); transition: width 0.4s ease, background 0.4s; }
+
+    .result-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border); }
+    .stat-label { font-size: 0.78rem; color: var(--text-muted); }
+    .stat-val { font-size: 1.05rem; font-weight: 700; color: var(--text); }
+
+    /* Charts with Tooltip */
+    .chart-box { margin: 1.5rem 0; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1rem 0.75rem; position: relative; }
+    .chart-box h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 10px; color: var(--text-muted); display: flex; justify-content: space-between; }
+    .canvas-wrapper { position: relative; width: 100%; height: 230px; cursor: crosshair; }
+    canvas { width: 100%; height: 100%; display: block; }
+
+    .chart-tooltip {
+      position: absolute;
+      display: none;
+      pointer-events: none;
+      background: var(--tooltip-bg);
+      color: var(--tooltip-text);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      line-height: 1.4;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+      z-index: 10;
+      max-width: 280px;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,0.1);
+      transform: translate(-50%, -115%);
+      transition: opacity 0.1s ease;
+    }
+
+    /* Sub Features Grid */
+    .two-col-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .subcard { background: var(--card-sub); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; }
+    .subcard h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 6px; }
+
+    /* Timeline */
+    .timeline-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; }
+    .timeline-box h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .timeline-list { list-style: none; display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto; padding-right: 6px; }
+    .timeline-item { display: flex; gap: 10px; font-size: 0.85rem; line-height: 1.4; }
+    .timeline-year { font-weight: 700; color: var(--primary); min-width: 44px; }
+
+    /* Tables */
+    .table-container { max-height: 380px; overflow-y: auto; border: 1px solid var(--border); border-radius: 10px; margin-top: 1rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left; }
+    thead { position: sticky; top: 0; background: var(--card-sub); z-index: 2; }
+    th, td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+    tbody tr:hover { background-color: rgba(59, 130, 246, 0.05); }
+
+    .badge { display: inline-block; padding: 2px 6px; font-size: 0.72rem; font-weight: 700; border-radius: 999px; }
+    .badge-dm { background: #ffedd5; color: #9a3412; }
+    .badge-eur { background: #dcfce7; color: #166534; }
+    .badge-rmb { background: #fee2e2; color: #991b1b; }
+
+    .action-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+    .action-btn:hover { background: var(--card-sub); }
+
+    @media print {
+      body { background: #fff; color: #000; padding: 0; }
+      .theme-toggle-btn, .tabs-nav, .presets-row, .swap-btn, .action-btn, .table-container { display: none !important; }
+      .card { box-shadow: none; border: 1px solid #ccc; padding: 1cm; page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body data-theme="light">
+
+<div class="container">
+  <div class="top-bar">
+    <div class="badge-bar">VPI HISTORIE: DESTATIS (2020=100) & NBS CHINA (1985=100)</div>
+    <button class="theme-toggle-btn" onclick="toggleTheme()">
+      <span id="theme-icon">🌙</span> <span id="theme-text">Dark Mode</span>
+    </button>
+  </div>
+
+  <header>
+    <h1>Historischer Preisindex- & Kaufkraft-Monitor</h1>
+    <p>Interaktive Kaufkraft-Äquivalente, Reallohn-Checks & detaillierte Wirtschaftsgeschichte im direkten Zeitvergleich.</p>
+  </header>
+
+  <!-- NAVIGATION TABS -->
+  <div class="tabs-nav">
+    <button class="tab-btn active" onclick="switchTab('de')">🇩🇪 Deutschland (1948–2026)</button>
+    <button class="tab-btn" onclick="switchTab('cn')">🇨🇳 China (1985–2026)</button>
+    <button class="tab-btn" onclick="switchTab('comp')">⚔️ Bilateraler Vergleich</button>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- TAB 1: DEUTSCHLAND                                       -->
+  <!-- ======================================================== -->
+  <div id="tab-de" class="tab-content active">
+    <div class="card">
+      <div class="presets-row">
+        <span class="presets-label">Epochen BRD/D:</span>
+        <button class="preset-btn" onclick="setDePreset(1948, 2026)">Gesamtstrecke (1948–2026)</button>
+        <button class="preset-btn" onclick="setDePreset(1950, 1965)">Wirtschaftswunder (1950–65)</button>
+        <button class="preset-btn" onclick="setDePreset(1972, 1981)">Ölkrisen-Stagflation (1972–81)</button>
+        <button class="preset-btn" onclick="setDePreset(1989, 1995)">Wiedervereinigung (1989–95)</button>
+        <button class="preset-btn" onclick="setDePreset(2002, 2026)">Euro-Ära (2002–2026)</button>
+      </div>
+
+      <div class="calc-grid">
+        <div class="form-group">
+          <label for="de-amount">Geldbetrag:</label>
+          <input type="number" id="de-amount" value="100" min="0" step="any" oninput="calculateDE()">
+        </div>
+        <div class="form-group">
+          <label for="de-start-year">Ausgangsjahr:</label>
+          <select id="de-start-year" onchange="onDeYearChange('start')"></select>
+        </div>
+        <button class="swap-btn" title="Jahre tauschen" onclick="swapYears('de')">⇄ Tauschen</button>
+        <div class="form-group">
+          <label for="de-target-year">Zieljahr:</label>
+          <select id="de-target-year" onchange="onDeYearChange('target')"></select>
+        </div>
+      </div>
+
+      <div class="options-bar">
+        <div>
+          <span style="font-weight:600; margin-right: 8px;">Eingabe-Währung:</span>
+          <div class="toggle-group">
+            <button class="toggle-opt" id="btn-de-cur-dm" onclick="setDeInputCur('DM')">DM</button>
+            <button class="toggle-opt" id="btn-de-cur-eur" onclick="setDeInputCur('EUR')">EUR (€)</button>
+          </div>
+          <span id="de-cur-hint" style="margin-left: 8px; color: var(--text-muted); font-size: 0.8rem;"></span>
+        </div>
+        <div style="color: var(--text-muted); font-size: 0.82rem;">
+          Amtlicher Kurs: <strong>1 € = 1,95583 DM</strong> | 2026 einheitlich Januar = <strong>122,8</strong>
+        </div>
+      </div>
+
+      <!-- Result Box -->
+      <div class="result-box">
+        <div class="result-header" id="de-res-header">Kaufkraft-Äquivalent</div>
+        <div class="result-main" id="de-res-primary">0,00 €</div>
+        <div class="result-sub" id="de-res-secondary">= 0,00 DM</div>
+
+        <div class="loss-bar-container">
+          <div class="loss-bar-header">
+            <span>Reale Restkaufkraft einer nominalen Geldeinheit:</span>
+            <span id="de-loss-val">100 %</span>
+          </div>
+          <div class="loss-bar-bg">
+            <div class="loss-bar-fill" id="de-loss-fill" style="width: 100%;"></div>
+          </div>
+        </div>
+
+        <div class="result-stats">
+          <div class="stat-item">
+            <span class="stat-label">Preisänderung gesamt:</span>
+            <span class="stat-val" id="de-stat-factor">+0,0 %</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Inflation p.a. (CAGR):</span>
+            <span class="stat-val" id="de-stat-cagr">0,0 %</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">VPI-Verhältnis (2020=100):</span>
+            <span class="stat-val" id="de-stat-indices">0,0 → 0,0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interaktiver Chart mit Tooltip -->
+      <div class="chart-box">
+        <h4>
+          <span>📈 VERBRAUCHERPREISINDEX DEUTSCHLAND (1948–2026)</span>
+          <span id="chart-de-range" style="font-weight: 500; font-size: 0.8rem; color: var(--primary);"></span>
+        </h4>
+        <div class="canvas-wrapper" id="wrap-chart-de">
+          <canvas id="chart-de"></canvas>
+          <div class="chart-tooltip" id="tip-chart-de"></div>
+        </div>
+      </div>
+
+      <!-- Paritäts-Grid: Reallohn & Alltagsgüter -->
+      <div class="two-col-grid">
+        <div class="subcard">
+          <h4>💼 Reallohn- & Gehalts-Check (Deutschland)</h4>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">
+            Vergleicht ein Gehalt im Ausgangsjahr mit einem im Zieljahr:
+          </p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+            <div>
+              <label style="font-size: 0.75rem;" id="lbl-de-wage-old">Einkommen damals:</label>
+              <input type="number" id="de-salary-old" value="2000" oninput="calculateRealWageDE()">
+            </div>
+            <div>
+              <label style="font-size: 0.75rem;" id="lbl-de-wage-new">Einkommen heute:</label>
+              <input type="number" id="de-salary-new" value="3200" oninput="calculateRealWageDE()">
+            </div>
+          </div>
+          <div id="de-salary-result" style="font-size: 0.85rem; font-weight: 600; padding: 10px; border-radius: 8px; background: var(--card-bg);">
+            Berechne Reallohn...
+          </div>
+        </div>
+
+        <div class="subcard">
+          <h4>🛒 Gefühlte Kaufkraft (Typische Güter)</h4>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
+            Was die Ausgangssumme im Ausgangsjahr näherungsweise kaufte:
+          </p>
+          <ul id="de-basket-list" style="font-size: 0.84rem; list-style: none; display: flex; flex-direction: column; gap: 6px;">
+            <li>Lade Vergleichswerte...</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="timeline-box">
+        <h4>⏳ Zeitleiste: Was geschah zwischen <span id="de-tl-start">1948</span> und <span id="de-tl-target">2026</span>?</h4>
+        <ul class="timeline-list" id="de-timeline"></ul>
+      </div>
+
+      <!-- Tabelle -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+        <input type="text" id="de-search" placeholder="🔍 Tabelle durchsuchen..." style="max-width: 260px; padding: 6px 10px; font-size: 0.82rem;" oninput="filterTable('de')">
+        <button class="action-btn" onclick="exportCSV('de')">📥 Daten als CSV exportieren</button>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Jahr</th>
+              <th>Währung</th>
+              <th>VPI (2020=100)</th>
+              <th>Inflation (YoY)</th>
+              <th>Historischer Kontext & Analyse</th>
+            </tr>
+          </thead>
+          <tbody id="de-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- TAB 2: CHINA                                             -->
+  <!-- ======================================================== -->
+  <div id="tab-cn" class="tab-content">
+    <div class="card">
+      <div class="presets-row">
+        <span class="presets-label">Epochen Chinas:</span>
+        <button class="preset-btn" onclick="setCnPreset(1985, 2026)">Gesamtstrecke (1985–2026)</button>
+        <button class="preset-btn" onclick="setCnPreset(1985, 1994)">Preisfreigaben & Rekordinflation</button>
+        <button class="preset-btn" onclick="setCnPreset(1994, 2001)">Strikte Konsolidierung & WTO</button>
+        <button class="preset-btn" onclick="setCnPreset(2001, 2012)">WTO-Boom & Industrialisierung</button>
+        <button class="preset-btn" onclick="setCnPreset(2020, 2026)">Pandemie & Konsolidierung</button>
+      </div>
+
+      <div class="calc-grid">
+        <div class="form-group">
+          <label for="cn-amount">Geldbetrag (in ¥ / Renminbi):</label>
+          <input type="number" id="cn-amount" value="500" min="0" step="any" oninput="calculateCN()">
+        </div>
+        <div class="form-group">
+          <label for="cn-start-year">Ausgangsjahr (ab 1985):</label>
+          <select id="cn-start-year" onchange="calculateCN()"></select>
+        </div>
+        <button class="swap-btn" title="Jahre tauschen" onclick="swapYears('cn')">⇄ Tauschen</button>
+        <div class="form-group">
+          <label for="cn-target-year">Zieljahr (bis 2026):</label>
+          <select id="cn-target-year" onchange="calculateCN()"></select>
+        </div>
+      </div>
+
+      <div class="result-box" style="border-color: rgba(220, 38, 38, 0.2);">
+        <div class="result-header" style="color: var(--accent-cn);">Kaufkraft-Äquivalent in China</div>
+        <div class="result-main" id="cn-res-primary">0,00 ¥</div>
+        <div class="result-sub" id="cn-res-secondary" style="color: var(--accent-cn);">Faktor: 1,00×</div>
+
+        <div class="loss-bar-container">
+          <div class="loss-bar-header">
+            <span>Reale Restkaufkraft einer nominalen RMB-Einheit:</span>
+            <span id="cn-loss-val">100 %</span>
+          </div>
+          <div class="loss-bar-bg">
+            <div class="loss-bar-fill" id="cn-loss-fill" style="width: 100%;"></div>
+          </div>
+        </div>
+
+        <div class="result-stats">
+          <div class="stat-item">
+            <span class="stat-label">Preisänderung gesamt:</span>
+            <span class="stat-val" id="cn-stat-factor">+0,0 %</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Inflation p.a. (CAGR):</span>
+            <span class="stat-val" id="cn-stat-cagr">0,0 %</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">VPI-Verhältnis (1985=100):</span>
+            <span class="stat-val" id="cn-stat-indices">100,0 → 100,0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interaktiver Chart China mit Tooltip -->
+      <div class="chart-box">
+        <h4>
+          <span>📈 VERBRAUCHERPREISINDEX CHINA (1985–2026)</span>
+          <span id="chart-cn-range" style="font-weight: 500; font-size: 0.8rem; color: var(--accent-cn);"></span>
+        </h4>
+        <div class="canvas-wrapper" id="wrap-chart-cn">
+          <canvas id="chart-cn"></canvas>
+          <div class="chart-tooltip" id="tip-chart-cn"></div>
+        </div>
+      </div>
+
+      <!-- Paritäts-Grid China: Reallohn & Alltagsgüter -->
+      <div class="two-col-grid">
+        <div class="subcard">
+          <h4>💼 Reallohn- & Gehalts-Check (China in RMB)</h4>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">
+            Vergleicht ein Monatsgehalt damals mit heute:
+          </p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+            <div>
+              <label style="font-size: 0.75rem;">Gehalt damals (¥):</label>
+              <input type="number" id="cn-salary-old" value="150" oninput="calculateRealWageCN()">
+            </div>
+            <div>
+              <label style="font-size: 0.75rem;">Gehalt heute (¥):</label>
+              <input type="number" id="cn-salary-new" value="6500" oninput="calculateRealWageCN()">
+            </div>
+          </div>
+          <div id="cn-salary-result" style="font-size: 0.85rem; font-weight: 600; padding: 10px; border-radius: 8px; background: var(--card-bg);">
+            Berechne Reallohn...
+          </div>
+        </div>
+
+        <div class="subcard">
+          <h4>🛒 Gefühlte Kaufkraft (Typische Güter in China)</h4>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
+            Was die Ausgangssumme im Ausgangsjahr nominal kaufte:
+          </p>
+          <ul id="cn-basket-list" style="font-size: 0.84rem; list-style: none; display: flex; flex-direction: column; gap: 6px;">
+            <li>Lade Vergleichswerte...</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Timeline China -->
+      <div class="timeline-box">
+        <h4>⏳ Zeitleiste: Was geschah zwischen <span id="cn-tl-start">1985</span> und <span id="cn-tl-target">2026</span>?</h4>
+        <ul class="timeline-list" id="cn-timeline"></ul>
+      </div>
+
+      <!-- Tabelle China -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+        <input type="text" id="cn-search" placeholder="🔍 Tabelle durchsuchen..." style="max-width: 260px; padding: 6px 10px; font-size: 0.82rem;" oninput="filterTable('cn')">
+        <button class="action-btn" onclick="exportCSV('cn')">📥 Daten als CSV exportieren</button>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Jahr</th>
+              <th>VPI (1985=100)</th>
+              <th>Inflation (YoY)</th>
+              <th>Historische Transformation & Analyse</th>
+            </tr>
+          </thead>
+          <tbody id="cn-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- TAB 3: BILATERALER VERGLEICH                             -->
+  <!-- ======================================================== -->
+  <div id="tab-comp" class="tab-content">
+    <div class="card">
+      <h3 style="margin-bottom: 0.5rem; color: var(--primary);">Bilateraler Vergleich: Deutschland vs. China (1985–2026)</h3>
+      <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+        Vergleichende Analyse der Kaufkraftentwicklung über denselben Zeitraum von 41 Jahren (ab Beginn der modernen chinesischen Reformreihe 1985).
+      </p>
+
+      <div class="two-col-grid" style="margin-bottom: 1.5rem;">
+        <div class="result-box" style="margin: 0;">
+          <div class="result-header">🇩🇪 Deutschland (1985 → 2026)</div>
+          <div class="result-main" style="font-size: 1.9rem;">+196,6 %</div>
+          <div class="result-sub">Preis-Multiplikator: 2,97×</div>
+          <div style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.6;">
+            • Indexanstieg von <strong>41,4</strong> auf <strong>122,8</strong><br>
+            • Durchschnittliche Teuerung: <strong>~2,69 % p.a.</strong><br>
+            • 100 DM (1985) entsprechen 2026 der Kaufkraft von <strong>296,62 DM (151,66 €)</strong>.
+          </div>
+        </div>
+
+        <div class="result-box" style="margin: 0; border-color: rgba(220, 38, 38, 0.2);">
+          <div class="result-header" style="color: var(--accent-cn);">🇨🇳 China (1985 → 2026)</div>
+          <div class="result-main" style="font-size: 1.9rem; color: var(--accent-cn);">+445,5 %</div>
+          <div class="result-sub" style="color: var(--accent-cn);">Preis-Multiplikator: 5,46×</div>
+          <div style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.6;">
+            • Indexanstieg von <strong>100,00</strong> auf <strong>545,53</strong><br>
+            • Durchschnittliche Teuerung: <strong>~4,22 % p.a.</strong><br>
+            • 100 RMB (1985) erfordern 2026 den Gegenwert von <strong>545,53 RMB</strong>.
+          </div>
+        </div>
+      </div>
+
+      <!-- Bilateraler Chart mit Dual-Tooltip -->
+      <div class="chart-box">
+        <h4>
+          <span>📊 RELATIVER PREISINDEX-VERLAUF (NORMIERT: BASIS 1985 = 100)</span>
+          <span style="font-weight: 500; font-size: 0.8rem; color: var(--text-muted);">Bewege die Maus über die Kurven</span>
+        </h4>
+        <div class="canvas-wrapper" id="wrap-chart-comp">
+          <canvas id="chart-comp"></canvas>
+          <div class="chart-tooltip" id="tip-chart-comp"></div>
+        </div>
+      </div>
+
+      <div class="timeline-box" style="margin-top: 1rem;">
+        <h4>Ökonomische Gegenüberstellung:</h4>
+        <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text);">
+          Die deutsche Kurve reflektiert die Stabilität einer hochgradig entwickelten Volkswirtschaft mit zwei markanten Wendepunkten: der Wiedervereinigung 1991 und der Energiepreiskrise 2022. Chinas Kurve verdeutlicht den radikalen Übergang von einer starren Kommandowirtschaft mit festen Abgabepreisen zu einem globalen Industrie- und Technologiezentrum. Trotz drastischer Preissteigerungsschübe Mitte der 1990er Jahre erlebte China gleichzeitig ein noch weitaus stärkeres Reallohnwachstum, das hunderte Millionen Menschen in die Mittelschicht hob.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <footer style="text-align: center; margin-top: 2.5rem; font-size: 0.82rem; color: var(--text-muted);">
+    Amtliche Referenzen: Statistisches Bundesamt (Destatis, VPI 2020=100) & National Bureau of Statistics of China (NBS)
+  </footer>
+</div>
+
+<script>
+/* ==================== DATENREIHEN ==================== */
+
+const dataDE = [
+  { year: 1948, vpi: 14.1, rate: "–", note: "Einführung der Deutschen Mark (Währungsreform) & Start der Nachkriegs-Statistik." },
+  { year: 1949, vpi: 14.2, rate: "+0,7 %", note: "Konsolidierung nach der Währungsreform; Beginn der Sozialen Marktwirtschaft." },
+  { year: 1950, vpi: 13.3, rate: "-6,3 %", note: "Stärkste Deflation der Nachkriegsgeschichte durch massiven Produktionsanstieg." },
+  { year: 1951, vpi: 14.3, rate: "+7,5 %", note: "Korea-Boom: Weltweite Rohstoffverteuerung und sprunghafte Nachfrage." },
+  { year: 1952, vpi: 14.6, rate: "+2,1 %", note: "Beruhigung der Rohstoffmärkte; Stabilisierung des Geldwerts." },
+  { year: 1953, vpi: 14.3, rate: "-2,1 %", note: "Hohe Produktivitätsgewinne im beginnenden Wirtschaftswunder senken Preise." },
+  { year: 1954, vpi: 14.3, rate: "0,0 %", note: "Absolute Preisstabilität bei spürbar steigenden Reallöhnen." },
+  { year: 1955, vpi: 14.5, rate: "+1,4 %", note: "Wirtschaftswunder-Boom; Erreichen der Vollbeschäftigung." },
+  { year: 1956, vpi: 14.9, rate: "+2,8 %", note: "Anziehender Konsum und steigende Unternehmensinvestitionen." },
+  { year: 1957, vpi: 15.2, rate: "+2,0 %", note: "Bundesbankgesetz tritt in Kraft; Beginn der rigorosen Stabilitätspolitik." },
+  { year: 1958, vpi: 15.5, rate: "+2,0 %", note: "Stetiges Wachstum mit geringer Teuerung." },
+  { year: 1959, vpi: 15.7, rate: "+1,3 %", note: "Hohe Sparquote der Bevölkerung bremst Inflationsdruck." },
+  { year: 1960, vpi: 15.9, rate: "+1,3 %", note: "Arbeitskräftemangel beginnt; Abkommen zur Gastarbeiter-Anwerbung." },
+  { year: 1961, vpi: 16.3, rate: "+2,5 %", note: "D-Mark-Aufwertung um 5 % dämpft importierte Inflation." },
+  { year: 1962, vpi: 16.8, rate: "+3,1 %", note: "Lohnkosten steigen stärker als das Produktivitätswachstum." },
+  { year: 1963, vpi: 17.3, rate: "+3,0 %", note: "Moderater Preisauftrieb im Zuge wirtschaftlicher Reifung." },
+  { year: 1964, vpi: 17.7, rate: "+2,3 %", note: "Ausgewogenes Wachstum; Geldpolitik der Bundesbank greift." },
+  { year: 1965, vpi: 18.3, rate: "+3,4 %", note: "Zunehmende Überhitzung; Spannungen auf dem Arbeitsmarkt." },
+  { year: 1966, vpi: 19.0, rate: "+3,8 %", note: "Ende des ersten Nachkriegsbooms; nachlassende Konjunktur." },
+  { year: 1967, vpi: 19.3, rate: "+1,6 %", note: "Erste Rezession der BRD: Teuerung verlangsamt sich deutlich." },
+  { year: 1968, vpi: 19.6, rate: "+1,6 %", note: "Einführung der Mehrwertsteuer (10 %); Konjunkturprogramme greifen." },
+  { year: 1969, vpi: 20.0, rate: "+2,0 %", note: "Erneuter Aufschwung; D-Mark-Aufwertung im Herbst." },
+  { year: 1970, vpi: 20.7, rate: "+3,5 %", note: "Lohn-Preis-Spirale setzt ein; spürbarer Anstieg des Preisniveaus." },
+  { year: 1971, vpi: 21.8, rate: "+5,3 %", note: "Kollaps des Bretton-Woods-Systems fester Wechselkurse." },
+  { year: 1972, vpi: 23.0, rate: "+5,5 %", note: "Expansionistische Finanzpolitik trifft auf kräftige Tarifabschlüsse." },
+  { year: 1973, vpi: 24.6, rate: "+7,0 %", note: "Erste Ölkrise: Rohölpreise vervierfachen sich; Beginn der Stagflation." },
+  { year: 1974, vpi: 26.3, rate: "+6,9 %", note: "Bundesbank wechselt zur strikten Geldmengensteuerung." },
+  { year: 1975, vpi: 27.9, rate: "+6,1 %", note: "Schwere Rezession bei gleichzeitig hoher Inflation." },
+  { year: 1976, vpi: 29.1, rate: "+4,3 %", note: "Konjunkturelle Erholung dämpft den Preisauftrieb leicht." },
+  { year: 1977, vpi: 30.2, rate: "+3,8 %", note: "Lohnzurückhaltung der Tarifpartner zur Sicherung von Jobs." },
+  { year: 1978, vpi: 31.0, rate: "+2,6 %", note: "Starke D-Mark verbilligt Importe spürbar." },
+  { year: 1979, vpi: 32.3, rate: "+4,2 %", note: "Zweite Ölkrise infolge der Revolution im Iran." },
+  { year: 1980, vpi: 34.3, rate: "+6,2 %", note: "Ölpreisschock schlägt voll durch; Hochzinspolitik der Bundesbank." },
+  { year: 1981, vpi: 36.5, rate: "+6,4 %", note: "Höchststand der Inflation der 1980er Jahre." },
+  { year: 1982, vpi: 38.4, rate: "+5,2 %", note: "Regierungswechsel und Rezession dämpfen Nachfrage." },
+  { year: 1983, vpi: 39.7, rate: "+3,4 %", note: "Konsolidierung greift; Entspannung bei den Energiepreisen." },
+  { year: 1984, vpi: 40.6, rate: "+2,3 %", note: "Entlastung an Rohstoffmärkten; moderate Lohnabschlüsse." },
+  { year: 1985, vpi: 41.4, rate: "+2,0 %", note: "Hohe Preisstabilität bei solidem Wachstum." },
+  { year: 1986, vpi: 41.3, rate: "-0,2 %", note: "Ölpreis-Kollaps ('Counter-Shock'): Einzige Jahresdeflation (1953–2023)." },
+  { year: 1987, vpi: 41.4, rate: "+0,2 %", note: "Goldilocks-Umfeld: Starkes Wachstum bei quasi Null-Inflation." },
+  { year: 1988, vpi: 42.0, rate: "+1,4 %", note: "Binnennachfrage zieht wieder moderat an." },
+  { year: 1989, vpi: 43.2, rate: "+2,9 %", note: "Fall der Berliner Mauer; Anstieg von Abgaben und Ölpreisen." },
+  { year: 1990, vpi: 44.3, rate: "+2,5 %", note: "Währungs- und Sozialunion; massiver Nachfrageschock." },
+  { year: 1991, vpi: 61.9, rate: "–", note: "Strukturbruch: Umstellung der amtlichen Statistik auf Gesamtdeutschland." },
+  { year: 1992, vpi: 65.0, rate: "+5,0 %", note: "Vereinigungsboom: Hohe Tarifabschlüsse erfordern Leitzinserhöhungen." },
+  { year: 1993, vpi: 67.9, rate: "+4,5 %", note: "Nachwirkender Preisdruck; Anhebung der Mehrwertsteuer." },
+  { year: 1994, vpi: 69.7, rate: "+2,7 %", note: "Bundesbank-Straffung zeigt volle Wirkung; deutliche Disinflation." },
+  { year: 1995, vpi: 71.0, rate: "+1,9 %", note: "Rückkehr unter 2 % Inflation; Vorbereitung der Währungsunion." },
+  { year: 1996, vpi: 72.0, rate: "+1,4 %", note: "Hohe Arbeitslosigkeit begrenzt Preiserhöhungsspielräume." },
+  { year: 1997, vpi: 73.4, rate: "+1,9 %", note: "Moderater Preisanstieg trotz D-Mark-Schwäche zum Dollar." },
+  { year: 1998, vpi: 74.0, rate: "+0,8 %", note: "Asienkrise führt zu fallenden Rohstoffpreisen weltweit." },
+  { year: 1999, vpi: 74.5, rate: "+0,7 %", note: "Einführung des Euro als Buchgeld (1 € = 1,95583 DM)." },
+  { year: 2000, vpi: 75.5, rate: "+1,3 %", note: "Ölpreissteigerungen werden durch schwachen Euro-Außenwert verstärkt." },
+  { year: 2001, vpi: 77.0, rate: "+2,0 %", note: "BSE-Krise und Seuchen verteuern Fleisch und Nahrungsmittel." },
+  { year: 2002, vpi: 78.1, rate: "+1,4 %", note: "Euro-Bargeldeinführung ('Teuro'-Debatte; statistisch moderat)." },
+  { year: 2003, vpi: 78.9, rate: "+1,0 %", note: "Schwache Binnenwirtschaft hält Teuerung nahe Null." },
+  { year: 2004, vpi: 80.2, rate: "+1,6 %", note: "Einführung der Praxisgebühr & Gesundheitsreform erhöhen Kosten." },
+  { year: 2005, vpi: 81.5, rate: "+1,6 %", note: "Hartz-IV-Reformen treten in Kraft; moderater Preisdruck." },
+  { year: 2006, vpi: 82.8, rate: "+1,6 %", note: "Kräftiger Aufschwung ('Sommermärchen') ohne Inflationsdruck." },
+  { year: 2007, vpi: 84.7, rate: "+2,3 %", note: "Erhöhung der Haupt-Mehrwertsteuer von 16 % auf 19 %." },
+  { year: 2008, vpi: 86.9, rate: "+2,6 %", note: "Historischer Ölpreisrekord (147 $/Barrel) vor Ausbruch der Finanzkrise." },
+  { year: 2009, vpi: 87.2, rate: "+0,3 %", note: "Globale Finanzkrise: Tiefste Rezession wird durch Ölpreistief abgefedert." },
+  { year: 2010, vpi: 88.1, rate: "+1,0 %", note: "Rasche deutsche Konjunkturerholung ('Wirtschaftswunder 2.0')." },
+  { year: 2011, vpi: 90.0, rate: "+2,2 %", note: "Euro-Schuldenkrise; hohe Rohstoffpreise treiben Inflation." },
+  { year: 2012, vpi: 91.7, rate: "+1,9 %", note: "Stabilisierung im Zielbereich der EZB (< 2 %)." },
+  { year: 2013, vpi: 93.1, rate: "+1,5 %", note: "Beginn der langjährigen Niedrigzinsphase der EZB." },
+  { year: 2014, vpi: 94.0, rate: "+1,0 %", note: "Sinkende Energiepreise halten Inflation anhaltend niedrig." },
+  { year: 2015, vpi: 94.5, rate: "+0,5 %", note: "EZB startet Quantitative Easing (QE) gegen Deflationsgefahren." },
+  { year: 2016, vpi: 95.0, rate: "+0,5 %", note: "Nullzinspolitik; Energiepreise markieren Jahrestiefs." },
+  { year: 2017, vpi: 96.4, rate: "+1,5 %", note: "Rohstofferholung leitet wieder spürbareren Preisauftrieb ein." },
+  { year: 2018, vpi: 98.1, rate: "+1,8 %", note: "Solide Konjunktur; Energie und Nahrungsmittel als Treiber." },
+  { year: 2019, vpi: 99.5, rate: "+1,4 %", note: "Handelskonflikte USA-China dämpfen die globale Teuerung." },
+  { year: 2020, vpi: 100.0, rate: "+0,5 %", note: "Basisjahr: Vorübergehende MwSt.-Senkung im Zuge der COVID-19-Krise." },
+  { year: 2021, vpi: 103.1, rate: "+3,1 %", note: "MwSt.-Rücknahme, neue CO₂-Abgabe und weltweite Lieferengpässe." },
+  { year: 2022, vpi: 110.2, rate: "+6,9 %", note: "Ukraine-Krieg & Gaspreisschock: Höchste Inflation seit Wiedervereinigung." },
+  { year: 2023, vpi: 116.7, rate: "+5,9 %", note: "Zweitrundeneffekte bei Lebensmitteln; historische EZB-Zinswende." },
+  { year: 2024, vpi: 119.3, rate: "+2,2 %", note: "Entspannung der Energiemärkte; Annäherung an das 2-%-Ziel." },
+  { year: 2025, vpi: 121.9, rate: "+2,2 %", note: "Stabile Verankerung der Inflation um 2,2 %." },
+  { year: 2026, vpi: 122.8, rate: "+2,0 %", note: "Einheitlicher Jahreswert (Basis Januar 2026: 122,8; Netzentgelte/CO₂)." }
+];
+
+const dataCN = [
+  { year: 1985, vpi: 100.00, rate: "9,3 %", note: "Freigabe städtischer Lebensmittelpreise (Schweinefleisch, Gemüse)." },
+  { year: 1986, vpi: 106.50, rate: "6,5 %", note: "Ausweitung des Doppelspur-Preissystems (Dual-Track) auf Industriegüter." },
+  { year: 1987, vpi: 114.27, rate: "7,3 %", note: "Rasches Kreditwachstum erzeugt Binnennachfrageüberschuss." },
+  { year: 1988, vpi: 135.76, rate: "18,8 %", note: "Ankündigung vollständiger Marktpreise löst Panik- und Hortungskäufe aus." },
+  { year: 1989, vpi: 160.60, rate: "18,3 %", note: "Sehr hohe Teuerung im Halbjahr; danach rigorose Kreditbremse." },
+  { year: 1990, vpi: 165.58, rate: "3,1 %", note: "Strikte Konsolidierung (Tiao Kong) drückt Inflation schlagartig." },
+  { year: 1991, vpi: 171.54, rate: "3,6 %", note: "Stabilisierung der Industrieproduktion bei moderater Inflation." },
+  { year: 1992, vpi: 182.52, rate: "6,4 %", note: "Deng Xiaopings Südreise entfacht Welle marktwirtschaftlicher Reformen." },
+  { year: 1993, vpi: 209.17, rate: "14,6 %", note: "Überhitzung durch massiven Bau- und Immobilienboom in Sonderzonen." },
+  { year: 1994, vpi: 260.00, rate: "24,3 %", note: "RMB-Abwertung und breite Preisfreigaben führen zum Inflationsrekord." },
+  { year: 1995, vpi: 303.68, rate: "16,8 %", note: "Notenbankchef Zhu Rongji setzt harte makroökonomische Bremse durch." },
+  { year: 1996, vpi: 328.88, rate: "8,3 %", note: "Erreichen der 'weichen Landung' (Ruan Zhu Lu) bei hohem Wachstum." },
+  { year: 1997, vpi: 338.09, rate: "2,8 %", note: "Ausbruch der Asienkrise dämpft Exportnachfrage ab." },
+  { year: 1998, vpi: 335.38, rate: "-0,8 %", note: "Erste Deflationsphase; Gegensteuerung durch Konjunkturanleihen." },
+  { year: 1999, vpi: 330.69, rate: "-1,4 %", note: "Überkapazitäten drücken Preise; Restrukturierung der Staatskonzerne." },
+  { year: 2000, vpi: 332.01, rate: "0,4 %", note: "Überwindung der Deflation; Belebung des Binnenkonsums." },
+  { year: 2001, vpi: 334.34, rate: "0,7 %", note: "Beitritt zur Welthandelsorganisation (WTO); Zölle sinken stark." },
+  { year: 2002, vpi: 331.66, rate: "-0,8 %", note: "Effizienzgewinne durch WTO-Öffnung verbilligen Konsumgüter." },
+  { year: 2003, vpi: 335.31, rate: "1,1 %", note: "Rasche Erholung nach vorübergehendem SARS-Schock." },
+  { year: 2004, vpi: 348.05, rate: "3,8 %", note: "Globaler Rohstoffhunger Chinas treibt Energie- und Materialpreise." },
+  { year: 2005, vpi: 354.32, rate: "1,8 %", note: "Ausgewogene Expansion ohne Inflationsdruck." },
+  { year: 2006, vpi: 360.34, rate: "1,7 %", note: "Fortsetzung des zweistelligen BIP-Wachstums bei stabilen Preisen." },
+  { year: 2007, vpi: 377.64, rate: "4,8 %", note: "Schweinekrankheits-Epidemie verteuert Lebensmittel massiv." },
+  { year: 2008, vpi: 399.92, rate: "5,9 %", note: "Globaler Preishöchststand bei Energie und Getreide vor Finanzkrise." },
+  { year: 2009, vpi: 397.12, rate: "-0,7 %", note: "Finanzkrisen-Gegenmaßnahme: 4-Billionen-Yuan-Konjunkturpaket." },
+  { year: 2010, vpi: 409.82, rate: "3,2 %", note: "Stimuluspaket greift vollumfänglich; schnelle Binnenerholung." },
+  { year: 2011, vpi: 432.77, rate: "5,6 %", note: "Liquiditätsüberschuss; Notenbank erhöht Mindestreservesätze." },
+  { year: 2012, vpi: 444.03, rate: "2,6 %", note: "Inflation kühlt auf Zielwert des Staatsrats ab." },
+  { year: 2013, vpi: 455.57, rate: "2,6 %", note: "Übergang zur 'Neuen Normalität' (Xin Chang Tai) – Fokus Qualität." },
+  { year: 2014, vpi: 464.23, rate: "1,9 %", note: "Geringer weltweiter Rohstoffpreisdruck entlastet." },
+  { year: 2015, vpi: 470.73, rate: "1,4 %", note: "Verlangsamung im Immobiliensektor bremst Produzentenpreise." },
+  { year: 2016, vpi: 480.14, rate: "2,0 %", note: "Angebotsseitige Strukturreformen bauen Überkapazitäten ab." },
+  { year: 2017, vpi: 487.82, rate: "1,6 %", note: "Stabile Binnennachfrage und Schuldenbegrenzung im Finanzsektor." },
+  { year: 2018, vpi: 498.07, rate: "2,1 %", note: "Preise bleiben trotz US-Zöllen stabil." },
+  { year: 2019, vpi: 512.51, rate: "2,9 %", note: "Afrikanische Schweinepest dezimiert Bestände und treibt Fleischpreise." },
+  { year: 2020, vpi: 524.81, rate: "2,4 %", note: "COVID-19-Pandemie: Gezielte Logistik stützt Nahrungsmittel." },
+  { year: 2021, vpi: 529.53, rate: "0,9 %", note: "Starker Industrieexport bei verhaltener inländischer Nachfrage." },
+  { year: 2022, vpi: 540.13, rate: "2,0 %", note: "Infektionsschutzmaßnahmen bremsen privaten Konsum." },
+  { year: 2023, vpi: 541.21, rate: "0,2 %", note: "Schwache Binnennachfrage und Immobilienanpassung dämpfen VPI." },
+  { year: 2024, vpi: 540.66, rate: "-0,1 %", note: "Leichte Deflationstendenz; High-Tech-Förderung ('Neue Produktivkräfte')." },
+  { year: 2025, vpi: 541.21, rate: "0,1 %", note: "Stabilisierung durch gezielte Konsumanreize und Notenbankzinsen." },
+  { year: 2026, vpi: 545.53, rate: "0,8 %", note: "Moderate Wiederbelebung der Nachfrage; Ausbau grüner Industrien." }
+];
+
+const EUR_DM_RATE = 1.95583;
+let currentDeInputCur = "DM";
+
+/* ==================== INITIALISIERUNG ==================== */
+
+window.addEventListener('DOMContentLoaded', () => {
+  initDropdowns();
+  renderTableRows('de', dataDE);
+  renderTableRows('cn', dataCN);
+
+  setDePreset(1948, 2026);
+  setCnPreset(1985, 2026);
+
+  calculateRealWageDE();
+  calculateRealWageCN();
+
+  initChartInteraction('wrap-chart-de', 'chart-de', 'tip-chart-de', dataDE, false);
+  initChartInteraction('wrap-chart-cn', 'chart-cn', 'tip-chart-cn', dataCN, false);
+  initCompChartInteraction();
+
+  window.addEventListener('resize', () => {
+    redrawAllCharts();
+  });
+});
+
+function initDropdowns() {
+  const deStart = document.getElementById('de-start-year');
+  const deTarget = document.getElementById('de-target-year');
+  dataDE.forEach(item => {
+    const curBadge = item.year <= 2001 ? "DM" : "EUR";
+    deStart.add(new Option(`${item.year} (${curBadge}, VPI: ${item.vpi.toFixed(1)})`, item.year));
+    deTarget.add(new Option(`${item.year} (${curBadge}, VPI: ${item.vpi.toFixed(1)})`, item.year));
+  });
+
+  const cnStart = document.getElementById('cn-start-year');
+  const cnTarget = document.getElementById('cn-target-year');
+  dataCN.forEach(item => {
+    cnStart.add(new Option(`${item.year} (VPI: ${item.vpi.toFixed(2)})`, item.year));
+    cnTarget.add(new Option(`${item.year} (VPI: ${item.vpi.toFixed(2)})`, item.year));
+  });
+}
+
+function redrawAllCharts() {
+  const sDe = parseInt(document.getElementById('de-start-year').value);
+  const tDe = parseInt(document.getElementById('de-target-year').value);
+  drawChart('chart-de', dataDE, sDe, tDe, '#2563eb');
+
+  const sCn = parseInt(document.getElementById('cn-start-year').value);
+  const tCn = parseInt(document.getElementById('cn-target-year').value);
+  drawChart('chart-cn', dataCN, sCn, tCn, '#dc2626');
+
+  drawCompChart();
+}
+
+/* ==================== TABS & THEME ==================== */
+
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
+    const ids = ['de', 'cn', 'comp'];
+    btn.classList.toggle('active', ids[idx] === tabId);
+  });
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById(`tab-${tabId}`).classList.add('active');
+
+  setTimeout(() => {
+    if (tabId === 'de') calculateDE();
+    if (tabId === 'cn') calculateCN();
+    if (tabId === 'comp') drawCompChart();
+  }, 40);
+}
+
+function toggleTheme() {
+  const body = document.body;
+  const isDark = body.getAttribute('data-theme') === 'dark';
+  body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('theme-icon').textContent = isDark ? '🌙' : '☀️';
+  document.getElementById('theme-text').textContent = isDark ? 'Dark Mode' : 'Light Mode';
+
+  calculateDE();
+  calculateCN();
+  drawCompChart();
+}
+
+function swapYears(country) {
+  const s = document.getElementById(`${country}-start-year`);
+  const t = document.getElementById(`${country}-target-year`);
+  const tmp = s.value;
+  s.value = t.value;
+  t.value = tmp;
+  if (country === 'de') onDeYearChange('start');
+  else calculateCN();
+}
+
+/* ==================== DEUTSCHLAND LOGIK ==================== */
+
+function setDePreset(startY, targetY) {
+  document.getElementById('de-start-year').value = startY;
+  document.getElementById('de-target-year').value = targetY;
+  onDeYearChange('start');
+}
+
+function onDeYearChange(origin) {
+  const startY = parseInt(document.getElementById('de-start-year').value);
+  if (origin === 'start') {
+    setDeInputCur(startY <= 2001 ? 'DM' : 'EUR');
+  }
+  calculateDE();
+}
+
+function setDeInputCur(cur) {
+  currentDeInputCur = cur;
+  document.getElementById('btn-de-cur-dm').classList.toggle('active', cur === 'DM');
+  document.getElementById('btn-de-cur-eur').classList.toggle('active', cur === 'EUR');
+  document.getElementById('de-cur-hint').textContent = cur === 'DM' ? '(Deutsche Mark)' : '(Euro)';
+  calculateDE();
+}
+
+function calculateDE() {
+  const amount = parseFloat(document.getElementById('de-amount').value);
+  const startY = parseInt(document.getElementById('de-start-year').value);
+  const targetY = parseInt(document.getElementById('de-target-year').value);
+
+  const startObj = dataDE.find(d => d.year === startY);
+  const targetObj = dataDE.find(d => d.year === targetY);
+  if (isNaN(amount) || amount < 0 || !startObj || !targetObj) return;
+
+  const factor = targetObj.vpi / startObj.vpi;
+  const baseResult = amount * factor;
+
+  let resEUR = 0, resDM = 0;
+  if (currentDeInputCur === 'DM') {
+    resDM = baseResult;
+    resEUR = resDM / EUR_DM_RATE;
+  } else {
+    resEUR = baseResult;
+    resDM = resEUR * EUR_DM_RATE;
+  }
+
+  const fmt = n => n.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const isTargetEur = targetY >= 2002;
+
+  document.getElementById('de-res-header').textContent = `Kaufkraft-Äquivalent im Jahr ${targetY}`;
+  if (isTargetEur) {
+    document.getElementById('de-res-primary').textContent = `${fmt(resEUR)} €`;
+    document.getElementById('de-res-secondary').textContent = `= historisch ${fmt(resDM)} DM`;
+  } else {
+    document.getElementById('de-res-primary').textContent = `${fmt(resDM)} DM`;
+    document.getElementById('de-res-secondary').textContent = `= umgerechnet ${fmt(resEUR)} €`;
+  }
+
+  const remaining = Math.min(100, Math.max(0, (1 / factor) * 100));
+  document.getElementById('de-loss-val').textContent = `${remaining.toFixed(1)} %`;
+  const lossBar = document.getElementById('de-loss-fill');
+  lossBar.style.width = `${remaining}%`;
+  lossBar.style.background = remaining < 30 ? 'var(--danger)' : (remaining < 60 ? 'var(--accent-de)' : 'var(--success)');
+
+  const totalChange = (factor - 1) * 100;
+  document.getElementById('de-stat-factor').textContent = (totalChange >= 0 ? '+' : '') + totalChange.toFixed(1) + ' %';
+
+  const years = targetY - startY;
+  if (years !== 0) {
+    const cagr = (Math.pow(factor, 1 / years) - 1) * 100;
+    document.getElementById('de-stat-cagr').textContent = (cagr >= 0 ? '+' : '') + cagr.toFixed(2) + ' %';
+  } else {
+    document.getElementById('de-stat-cagr').textContent = "0,00 %";
+  }
+  document.getElementById('de-stat-indices').textContent = `${startObj.vpi.toFixed(1)} → ${targetObj.vpi.toFixed(1)}`;
+
+  drawChart('chart-de', dataDE, startY, targetY, '#2563eb');
+  document.getElementById('chart-de-range').textContent = `Auswahl: ${startY}–${targetY} (${factor.toFixed(2)}×)`;
+
+  renderTimeline('de', startY, targetY, dataDE);
+  updateBasketDE(amount, startY, currentDeInputCur);
+  calculateRealWageDE();
+}
+
+function calculateRealWageDE() {
+  const oldWage = parseFloat(document.getElementById('de-salary-old').value);
+  const newWage = parseFloat(document.getElementById('de-salary-new').value);
+  const startY = parseInt(document.getElementById('de-start-year').value);
+  const targetY = parseInt(document.getElementById('de-target-year').value);
+
+  const startObj = dataDE.find(d => d.year === startY);
+  const targetObj = dataDE.find(d => d.year === targetY);
+  const resEl = document.getElementById('de-salary-result');
+
+  document.getElementById('lbl-de-wage-old').textContent = `Einkommen in ${startY} (${startY <= 2001 ? 'DM' : 'EUR'}):`;
+  document.getElementById('lbl-de-wage-new').textContent = `Einkommen in ${targetY} (${targetY <= 2001 ? 'DM' : 'EUR'}):`;
+
+  if (isNaN(oldWage) || isNaN(newWage) || oldWage <= 0 || newWage <= 0 || !startObj || !targetObj) {
+    resEl.textContent = "Bitte gültige Einkommen eingeben.";
+    return;
+  }
+
+  const oldInEUR = startY <= 2001 ? (oldWage / EUR_DM_RATE) : oldWage;
+  const newInEUR = targetY <= 2001 ? (newWage / EUR_DM_RATE) : newWage;
+
+  const inflationFactor = targetObj.vpi / startObj.vpi;
+  const neededInEUR = oldInEUR * inflationFactor;
+  const diffPercent = ((newInEUR / neededInEUR) - 1) * 100;
+
+  const fmt = n => n.toLocaleString('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  const neededDisplay = targetY <= 2001 ? `${fmt(neededInEUR * EUR_DM_RATE)} DM` : `${fmt(neededInEUR)} €`;
+
+  if (diffPercent >= 0) {
+    resEl.style.color = "var(--success)";
+    resEl.innerHTML = `✅ <strong>Reallohngewinn: +${diffPercent.toFixed(1)} %</strong><br>Um die Kaufkraft zu halten, hätten damals ${neededDisplay} genügt.`;
+  } else {
+    resEl.style.color = "var(--danger)";
+    resEl.innerHTML = `⚠️ <strong>Reallohnverlust: ${diffPercent.toFixed(1)} %</strong><br>Nötig wären ${neededDisplay} gewesen, um die Kaufkraft von ${startY} zu bewahren.`;
+  }
+}
+
+function updateBasketDE(amount, startYear, cur) {
+  const list = document.getElementById('de-basket-list');
+  const valDM = cur === 'DM' ? amount : amount * EUR_DM_RATE;
+
+  let breadPrice = 0.15, gasPrice = 0.60, moviePrice = 2.0;
+  if (startYear < 1960) { breadPrice = 0.08; gasPrice = 0.40; moviePrice = 1.0; }
+  else if (startYear < 1980) { breadPrice = 0.15; gasPrice = 0.70; moviePrice = 3.5; }
+  else if (startYear < 2000) { breadPrice = 0.35; gasPrice = 1.40; moviePrice = 9.0; }
+  else { breadPrice = 0.70; gasPrice = 2.80; moviePrice = 16.0; }
+
+  const breads = Math.floor(valDM / breadPrice);
+  const gas = Math.floor(valDM / gasPrice);
+  const movies = Math.floor(valDM / moviePrice);
+
+  list.innerHTML = `
+    <li>🥖 ca. <strong>${breads.toLocaleString('de-DE')}</strong> Brötchen (je ~${breadPrice.toFixed(2)} DM)</li>
+    <li>⛽ ca. <strong>${gas.toLocaleString('de-DE')}</strong> Liter Benzin (je ~${gasPrice.toFixed(2)} DM)</li>
+    <li>🎟️ ca. <strong>${movies.toLocaleString('de-DE')}</strong> Kinobesuche (je ~${moviePrice.toFixed(2)} DM)</li>
+  `;
+}
+
+/* ==================== CHINA LOGIK ==================== */
+
+function setCnPreset(startY, targetY) {
+  document.getElementById('cn-start-year').value = startY;
+  document.getElementById('cn-target-year').value = targetY;
+  calculateCN();
+}
+
+function calculateCN() {
+  const amount = parseFloat(document.getElementById('cn-amount').value);
+  const startY = parseInt(document.getElementById('cn-start-year').value);
+  const targetY = parseInt(document.getElementById('cn-target-year').value);
+
+  const startObj = dataCN.find(d => d.year === startY);
+  const targetObj = dataCN.find(d => d.year === targetY);
+  if (isNaN(amount) || amount < 0 || !startObj || !targetObj) return;
+
+  const factor = targetObj.vpi / startObj.vpi;
+  const result = amount * factor;
+  const fmt = n => n.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  document.getElementById('cn-res-primary').textContent = `${fmt(result)} ¥ (RMB)`;
+  document.getElementById('cn-res-secondary').textContent = `Veränderungsfaktor: ${factor.toFixed(2)}×`;
+
+  const remaining = Math.min(100, Math.max(0, (1 / factor) * 100));
+  document.getElementById('cn-loss-val').textContent = `${remaining.toFixed(1)} %`;
+  const lossBar = document.getElementById('cn-loss-fill');
+  lossBar.style.width = `${remaining}%`;
+  lossBar.style.background = remaining < 30 ? 'var(--danger)' : (remaining < 60 ? 'var(--accent-cn)' : 'var(--success)');
+
+  const totalChange = (factor - 1) * 100;
+  document.getElementById('cn-stat-factor').textContent = (totalChange >= 0 ? '+' : '') + totalChange.toFixed(1) + ' %';
+
+  const years = targetY - startY;
+  if (years !== 0) {
+    const cagr = (Math.pow(factor, 1 / years) - 1) * 100;
+    document.getElementById('cn-stat-cagr').textContent = (cagr >= 0 ? '+' : '') + cagr.toFixed(2) + ' %';
+  } else {
+    document.getElementById('cn-stat-cagr').textContent = "0,00 %";
+  }
+  document.getElementById('cn-stat-indices').textContent = `${startObj.vpi.toFixed(2)} → ${targetObj.vpi.toFixed(2)}`;
+
+  drawChart('chart-cn', dataCN, startY, targetY, '#dc2626');
+  document.getElementById('chart-cn-range').textContent = `Auswahl: ${startY}–${targetY} (${factor.toFixed(2)}×)`;
+
+  renderTimeline('cn', startY, targetY, dataCN);
+  updateBasketCN(amount, startY);
+  calculateRealWageCN();
+}
+
+function calculateRealWageCN() {
+  const oldWage = parseFloat(document.getElementById('cn-salary-old').value);
+  const newWage = parseFloat(document.getElementById('cn-salary-new').value);
+  const startY = parseInt(document.getElementById('cn-start-year').value);
+  const targetY = parseInt(document.getElementById('cn-target-year').value);
+
+  const startObj = dataCN.find(d => d.year === startY);
+  const targetObj = dataCN.find(d => d.year === targetY);
+  const resEl = document.getElementById('cn-salary-result');
+
+  if (isNaN(oldWage) || isNaN(newWage) || oldWage <= 0 || newWage <= 0 || !startObj || !targetObj) {
+    resEl.textContent = "Bitte gültige Einkommen eingeben.";
+    return;
+  }
+
+  const factor = targetObj.vpi / startObj.vpi;
+  const neededWage = oldWage * factor;
+  const diffPercent = ((newWage / neededWage) - 1) * 100;
+
+  const fmt = n => n.toLocaleString('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+
+  if (diffPercent >= 0) {
+    resEl.style.color = "var(--success)";
+    resEl.innerHTML = `✅ <strong>Reallohngewinn: +${diffPercent.toFixed(1)} %</strong><br>Um die Kaufkraft von ${startY} zu halten, hätten ${fmt(neededWage)} ¥ gereicht.`;
+  } else {
+    resEl.style.color = "var(--danger)";
+    resEl.innerHTML = `⚠️ <strong>Reallohnverlust: ${diffPercent.toFixed(1)} %</strong><br>Nötig wären ${fmt(neededWage)} ¥ gewesen, um dieselbe Kaufkraft wie in ${startY} zu besitzen.`;
+  }
+}
+
+function updateBasketCN(amount, startYear) {
+  const list = document.getElementById('cn-basket-list');
+
+  let porkPrice = 2.0, ricePrice = 0.4, bikePrice = 150.0;
+  if (startYear < 1990) { porkPrice = 2.5; ricePrice = 0.5; bikePrice = 140.0; }
+  else if (startYear < 2000) { porkPrice = 11.0; ricePrice = 2.2; bikePrice = 280.0; }
+  else if (startYear < 2010) { porkPrice = 18.0; ricePrice = 3.8; bikePrice = 350.0; }
+  else { porkPrice = 30.0; ricePrice = 6.0; bikePrice = 600.0; }
+
+  const pork = (amount / porkPrice).toFixed(1);
+  const rice = (amount / ricePrice).toFixed(1);
+  const bikes = (amount / bikePrice).toFixed(1);
+
+  list.innerHTML = `
+    <li>🥩 ca. <strong>${pork} kg</strong> Schweinefleisch (je ~${porkPrice.toFixed(1)} ¥)</li>
+    <li>🍚 ca. <strong>${rice} kg</strong> Reis (je ~${ricePrice.toFixed(1)} ¥)</li>
+    <li>🚲 ca. <strong>${bikes}</strong> Fahrräder / Monatsausstattungen (je ~${bikePrice.toFixed(0)} ¥)</li>
+  `;
+}
+
+/* ==================== TIMELINE ==================== */
+
+function renderTimeline(country, startY, targetY, dataset) {
+  const min = Math.min(startY, targetY);
+  const max = Math.max(startY, targetY);
+  const list = document.getElementById(`${country}-timeline`);
+  document.getElementById(`${country}-tl-start`).textContent = min;
+  document.getElementById(`${country}-tl-target`).textContent = max;
+
+  list.innerHTML = '';
+  const filtered = dataset.filter(d => d.year >= min && d.year <= max);
+
+  if (filtered.length <= 1) {
+    list.innerHTML = '<li class="timeline-item"><span style="color:var(--text-muted);">Keine Zwischenjahre vorhanden.</span></li>';
+    return;
+  }
+
+  filtered.forEach(item => {
+    const li = document.createElement('li');
+    li.className = 'timeline-item';
+    li.innerHTML = `
+      <span class="timeline-year">${item.year}</span>
+      <span><strong>(${item.rate}):</strong> ${item.note}</span>
+    `;
+    list.appendChild(li);
+  });
+}
+
+/* ==================== CANVAS & INTERAKTIVE TOOLTIPS ==================== */
+
+function drawChart(canvasId, dataset, startY, targetY, lineColor, hoverYear = null) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.scale(dpr, dpr);
+
+  const W = rect.width;
+  const H = rect.height;
+  const padL = 45, padR = 15, padT = 15, padB = 25;
+
+  ctx.clearRect(0, 0, W, H);
+
+  const minYear = dataset[0].year;
+  const maxYear = dataset[dataset.length - 1].year;
+  const minVpi = 0;
+  const maxVpi = Math.max(...dataset.map(d => d.vpi)) * 1.1;
+
+  const getX = y => padL + ((y - minYear) / (maxYear - minYear)) * (W - padL - padR);
+  const getY = v => H - padB - ((v - minVpi) / (maxVpi - minVpi)) * (H - padT - padB);
+
+  // Selektionsbereich hinterlegen
+  const selMin = Math.min(startY, targetY);
+  const selMax = Math.max(startY, targetY);
+  const x1 = getX(selMin);
+  const x2 = getX(selMax);
+
+  ctx.fillStyle = 'rgba(59, 130, 246, 0.08)';
+  ctx.fillRect(x1, padT, (x2 - x1), H - padT - padB);
+
+  // Gitternetz
+  ctx.strokeStyle = document.body.getAttribute('data-theme') === 'dark' ? '#334155' : '#e2e8f0';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const yVal = (maxVpi / 4) * i;
+    const yPos = getY(yVal);
+    ctx.beginPath();
+    ctx.moveTo(padL, yPos);
+    ctx.lineTo(W - padR, yPos);
+    ctx.stroke();
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(Math.round(yVal), padL - 8, yPos + 3);
+  }
+
+  // Kurve
+  ctx.beginPath();
+  ctx.lineWidth = 2.5;
+  ctx.strokeStyle = lineColor;
+  dataset.forEach((d, idx) => {
+    const x = getX(d.year);
+    const y = getY(d.vpi);
+    if (idx === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+
+  // Start & Endpunkt
+  [selMin, selMax].forEach(yr => {
+    const item = dataset.find(d => d.year === yr);
+    if (item) {
+      const px = getX(item.year);
+      const py = getY(item.vpi);
+      ctx.fillStyle = lineColor;
+      ctx.beginPath();
+      ctx.arc(px, py, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(px, py, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  });
+
+  // Hover Fadenkreuz
+  if (hoverYear !== null) {
+    const hoverItem = dataset.find(d => d.year === hoverYear);
+    if (hoverItem) {
+      const hx = getX(hoverItem.year);
+      const hy = getY(hoverItem.vpi);
+
+      ctx.strokeStyle = '#94a3b8';
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(hx, padT);
+      ctx.lineTo(hx, H - padB);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = lineColor;
+      ctx.beginPath();
+      ctx.arc(hx, hy, 6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(hx, hy, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  // X-Achsen Jahreszahlen
+  ctx.fillStyle = '#94a3b8';
+  ctx.textAlign = 'center';
+  const step = dataset.length > 50 ? 10 : 5;
+  for (let yr = minYear; yr <= maxYear; yr += step) {
+    ctx.fillText(yr, getX(yr), H - 8);
+  }
+}
+
+function initChartInteraction(wrapperId, canvasId, tipId, dataset, isComp = false) {
+  const wrapper = document.getElementById(wrapperId);
+  const canvas = document.getElementById(canvasId);
+  const tip = document.getElementById(tipId);
+
+  function handleMove(e) {
+    const rect = canvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    const mouseX = clientX - rect.left;
+    const mouseY = clientY - rect.top;
+
+    const padL = 45, padR = 15;
+    const W = rect.width;
+    const minYear = dataset[0].year;
+    const maxYear = dataset[dataset.length - 1].year;
+
+    const yearRatio = (mouseX - padL) / (W - padL - padR);
+    let targetYear = Math.round(minYear + yearRatio * (maxYear - minYear));
+    targetYear = Math.max(minYear, Math.min(maxYear, targetYear));
+
+    const item = dataset.find(d => d.year === targetYear);
+    if (!item) return;
+
+    if (!isComp) {
+      const sY = parseInt(document.getElementById(canvasId === 'chart-de' ? 'de-start-year' : 'cn-start-year').value);
+      const tY = parseInt(document.getElementById(canvasId === 'chart-de' ? 'de-target-year' : 'cn-target-year').value);
+      const color = canvasId === 'chart-de' ? '#2563eb' : '#dc2626';
+      drawChart(canvasId, dataset, sY, tY, color, targetYear);
+
+      tip.style.display = 'block';
+      tip.style.left = `${mouseX}px`;
+      tip.style.top = `${mouseY}px`;
+      tip.innerHTML = `
+        <strong>Jahr ${item.year}</strong><br>
+        VPI: <strong>${item.vpi.toFixed(canvasId === 'chart-de' ? 1 : 2)}</strong> (${item.rate})<br>
+        <span style="font-size:0.75rem; opacity:0.85;">${item.note}</span>
+      `;
+    }
+  }
+
+  function handleLeave() {
+    tip.style.display = 'none';
+    if (!isComp) {
+      const sY = parseInt(document.getElementById(canvasId === 'chart-de' ? 'de-start-year' : 'cn-start-year').value);
+      const tY = parseInt(document.getElementById(canvasId === 'chart-de' ? 'de-target-year' : 'cn-target-year').value);
+      const color = canvasId === 'chart-de' ? '#2563eb' : '#dc2626';
+      drawChart(canvasId, dataset, sY, tY, color, null);
+    }
+  }
+
+  wrapper.addEventListener('mousemove', handleMove);
+  wrapper.addEventListener('mouseleave', handleLeave);
+  wrapper.addEventListener('touchmove', handleMove);
+  wrapper.addEventListener('touchend', handleLeave);
+}
+
+/* ==================== BILATERALER CHART MIT TOOLTIP ==================== */
+
+function drawCompChart(hoverYear = null) {
+  const canvas = document.getElementById('chart-comp');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.scale(dpr, dpr);
+
+  const W = rect.width;
+  const H = rect.height;
+  const padL = 45, padR = 20, padT = 20, padB = 25;
+
+  ctx.clearRect(0, 0, W, H);
+
+  const de1985 = dataDE.find(d => d.year === 1985).vpi;
+  const cn1985 = dataCN.find(d => d.year === 1985).vpi;
+
+  const years = dataCN.map(d => d.year);
+  const normDE = years.map(yr => {
+    const item = dataDE.find(d => d.year === yr);
+    return { year: yr, val: (item.vpi / de1985) * 100, orig: item };
+  });
+  const normCN = dataCN.map(d => ({ year: d.year, val: (d.vpi / cn1985) * 100, orig: d }));
+
+  const maxVal = Math.max(...normCN.map(d => d.val)) * 1.05;
+  const getX = yr => padL + ((yr - 1985) / (2026 - 1985)) * (W - padL - padR);
+  const getY = val => H - padB - (val / maxVal) * (H - padT - padB);
+
+  // Gitter
+  ctx.strokeStyle = document.body.getAttribute('data-theme') === 'dark' ? '#334155' : '#e2e8f0';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const yVal = (maxVal / 4) * i;
+    const yPos = getY(yVal);
+    ctx.beginPath();
+    ctx.moveTo(padL, yPos);
+    ctx.lineTo(W - padR, yPos);
+    ctx.stroke();
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(Math.round(yVal), padL - 8, yPos + 3);
+  }
+
+  // Linien
+  const drawLine = (data, color) => {
+    ctx.beginPath();
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = color;
+    data.forEach((d, i) => {
+      const x = getX(d.year);
+      const y = getY(d.val);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  };
+
+  drawLine(normCN, '#dc2626');
+  drawLine(normDE, '#2563eb');
+
+  if (hoverYear !== null) {
+    const hx = getX(hoverYear);
+    ctx.strokeStyle = '#94a3b8';
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.moveTo(hx, padT);
+    ctx.lineTo(hx, H - padB);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Legende
+  ctx.font = '11px sans-serif';
+  ctx.fillStyle = '#dc2626';
+  ctx.fillText('● China (1985=100 → 545,5)', padL + 10, padT + 12);
+  ctx.fillStyle = '#2563eb';
+  ctx.fillText('● Deutschland (1985=100 → 296,6)', padL + 10, padT + 28);
+
+  ctx.fillStyle = '#94a3b8';
+  ctx.textAlign = 'center';
+  for (let yr = 1985; yr <= 2026; yr += 5) {
+    ctx.fillText(yr, getX(yr), H - 8);
+  }
+}
+
+function initCompChartInteraction() {
+  const wrapper = document.getElementById('wrap-chart-comp');
+  const canvas = document.getElementById('chart-comp');
+  const tip = document.getElementById('tip-chart-comp');
+
+  wrapper.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const padL = 45, padR = 20;
+    const W = rect.width;
+
+    const ratio = (mouseX - padL) / (W - padL - padR);
+    let targetYear = Math.round(1985 + ratio * (2026 - 1985));
+    targetYear = Math.max(1985, Math.min(2026, targetYear));
+
+    const deItem = dataDE.find(d => d.year === targetYear);
+    const cnItem = dataCN.find(d => d.year === targetYear);
+    if (!deItem || !cnItem) return;
+
+    drawCompChart(targetYear);
+
+    tip.style.display = 'block';
+    tip.style.left = `${mouseX}px`;
+    tip.style.top = `${mouseY}px`;
+    tip.innerHTML = `
+      <strong>Jahr ${targetYear}</strong><br>
+      <span style="color:#60a5fa;">🇩🇪 Deutschland:</span> VPI ${deItem.vpi.toFixed(1)} (${deItem.rate})<br>
+      <span style="color:#f87171;">🇨🇳 China:</span> VPI ${cnItem.vpi.toFixed(2)} (${cnItem.rate})
+    `;
+  });
+
+  wrapper.addEventListener('mouseleave', () => {
+    tip.style.display = 'none';
+    drawCompChart(null);
+  });
+}
+
+/* ==================== TABELLEN & FILTER ==================== */
+
+function renderTableRows(country, data) {
+  const tbody = document.getElementById(`${country}-table-body`);
+  tbody.innerHTML = '';
+  data.forEach(row => {
+    const tr = document.createElement('tr');
+    if (country === 'de') {
+      const badge = row.year <= 2001 ? '<span class="badge badge-dm">DM</span>' : '<span class="badge badge-eur">EUR</span>';
+      tr.innerHTML = `
+        <td><strong>${row.year}</strong></td>
+        <td>${badge}</td>
+        <td>${row.vpi.toFixed(1)}</td>
+        <td><strong>${row.rate}</strong></td>
+        <td>${row.note}</td>
+      `;
+    } else {
+      tr.innerHTML = `
+        <td><strong>${row.year}</strong></td>
+        <td>${row.vpi.toFixed(2)}</td>
+        <td><strong>${row.rate}</strong></td>
+        <td>${row.note}</td>
+      `;
+    }
+    tbody.appendChild(tr);
+  });
+}
+
+function filterTable(country) {
+  const query = document.getElementById(`${country}-search`).value.toLowerCase();
+  const dataset = country === 'de' ? dataDE : dataCN;
+  const filtered = dataset.filter(d =>
+    d.year.toString().includes(query) ||
+    d.note.toLowerCase().includes(query) ||
+    d.rate.toLowerCase().includes(query)
+  );
+  renderTableRows(country, filtered);
+}
+
+function exportCSV(country) {
+  const dataset = country === 'de' ? dataDE : dataCN;
+  let csv = country === 'de'
+    ? 'Jahr;Waehrung;VPI_Basis_2020;Inflation_YoY;Kontext\n'
+    : 'Jahr;VPI_Basis_1985;Inflation_YoY;Kontext\n';
+
+  dataset.forEach(d => {
+    if (country === 'de') {
+      csv += `${d.year};${d.year <= 2001 ? 'DM' : 'EUR'};${d.vpi};${d.rate};"${d.note}"\n`;
+    } else {
+      csv += `${d.year};${d.vpi};${d.rate};"${d.note}"\n`;
+    }
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `VPI_${country.toUpperCase()}_1948_2026.csv`;
+  a.click();
+}
+</script>
+</body>
+</html>
