@@ -3,1633 +3,1470 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verbraucherpreisindex, Kaufkraft &amp; Makro-Dashboard | Deutschland &amp; China</title>
+  <title>Deutsche Bundesbank – Historischer Kaufkraft- & Währungsmonitor (1810–2026)</title>
   <style>
     :root {
-      --bg: #f8fafc;
+      --bg: #f1f5f9;
       --card-bg: #ffffff;
-      --card-sub: #f1f5f9;
+      --card-sub: #f8fafc;
+      --border: #cbd5e1;
+      --border-light: #e2e8f0;
       --text: #0f172a;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
-      --primary: #1e3a8a;
-      --primary-light: #3b82f6;
-      --accent-de: #d97706;
-      --accent-cn: #dc2626;
-      --success: #16a34a;
-      --danger: #dc2626;
-      --radius: 14px;
-      --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
-      --tooltip-bg: rgba(15, 23, 42, 0.94);
-      --tooltip-text: #ffffff;
+      --text-muted: #475569;
+      --bb-navy: #002855;
+      --bb-blue: #004b93;
+      --bb-gold: #c29b38;
+      --bb-gold-light: #fef3c7;
+      --success: #15803d;
+      --success-bg: #dcfce7;
+      --danger: #b91c1c;
+      --danger-bg: #fee2e2;
+      --radius: 12px;
+      --shadow: 0 4px 20px -2px rgba(0, 40, 85, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
     }
 
     [data-theme="dark"] {
-      --bg: #0b1120;
-      --card-bg: #1e293b;
-      --card-sub: #0f172a;
-      --text: #f8fafc;
+      --bg: #090d16;
+      --card-bg: #111827;
+      --card-sub: #1a2234;
+      --border: #2d3748;
+      --border-light: #1f293d;
+      --text: #f1f5f9;
       --text-muted: #94a3b8;
-      --border: #334155;
-      --primary: #60a5fa;
-      --primary-light: #93c5fd;
-      --accent-de: #f59e0b;
-      --accent-cn: #f87171;
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-      --tooltip-bg: rgba(30, 41, 59, 0.96);
-      --tooltip-text: #f8fafc;
+      --bb-navy: #3b82f6;
+      --bb-blue: #60a5fa;
+      --bb-gold: #fbbf24;
+      --bb-gold-light: #372f15;
+      --success: #22c55e;
+      --success-bg: #14351e;
+      --danger: #ef4444;
+      --danger-bg: #3f1818;
+      --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); line-height: 1.5; padding: 1.5rem 1rem 4rem; transition: background 0.3s, color 0.3s; }
-    .container { max-width: 1200px; margin: 0 auto; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); line-height: 1.5; padding: 1.5rem 1rem 4rem; transition: background 0.25s, color 0.25s; }
+    .container { max-width: 1420px; margin: 0 auto; }
 
-    /* Top Navigation */
-    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 10px; }
-    .badge-bar { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; color: var(--text-muted); text-transform: uppercase; }
-    .top-actions { display: flex; gap: 8px; align-items: center; }
-    .theme-toggle-btn, .share-btn { background: var(--card-bg); border: 1.5px solid var(--border); color: var(--text); padding: 7px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; box-shadow: var(--shadow); transition: all 0.2s; }
-    .theme-toggle-btn:hover, .share-btn:hover { border-color: var(--primary-light); }
+    /* Header */
+    .top-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--bb-gold); padding-bottom: 1.25rem; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+    .brand-title { display: flex; align-items: center; gap: 14px; }
+    .brand-logo { width: 44px; height: 44px; background: var(--bb-navy); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.4rem; border-radius: 8px; border: 2px solid var(--bb-gold); }
+    .brand-title h1 { font-size: 1.65rem; color: var(--bb-navy); font-weight: 800; letter-spacing: -0.01em; }
+    .brand-title p { font-size: 0.88rem; color: var(--text-muted); }
+    
+    .header-actions { display: flex; gap: 10px; align-items: center; }
+    .btn-action { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; box-shadow: var(--shadow); transition: all 0.2s; }
+    .btn-action:hover { border-color: var(--bb-blue); background: var(--card-sub); }
 
-    header { text-align: center; margin-bottom: 2rem; }
-    header h1 { font-size: 2.2rem; color: var(--primary); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
-    header p { color: var(--text-muted); font-size: 1rem; max-width: 820px; margin: 0 auto; }
+    /* Navigation Tabs */
+    .main-nav { display: flex; gap: 6px; background: var(--card-bg); padding: 6px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 2rem; overflow-x: auto; box-shadow: var(--shadow); }
+    .nav-tab { padding: 11px 18px; border: none; border-radius: 8px; background: transparent; font-size: 0.92rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
+    .nav-tab:hover { color: var(--text); background: var(--card-sub); }
+    .nav-tab.active { background: var(--bb-navy); color: #ffffff; box-shadow: 0 2px 8px rgba(0, 40, 85, 0.25); }
 
-    /* Tabs */
-    .tabs-nav { display: flex; background: var(--border); padding: 5px; border-radius: 14px; max-width: 520px; margin: 0 auto 2rem; gap: 5px; }
-    .tab-btn { flex: 1; padding: 11px 16px; border: none; border-radius: 10px; background: transparent; font-size: 0.95rem; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.2s; text-align: center; }
-    .tab-btn.active { background: var(--card-bg); color: var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.06); }
-
-    .tab-content { display: none; }
-    .tab-content.active { display: block; animation: fadeIn 0.2s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: tabFade 0.25s ease-out; }
+    @keyframes tabFade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
     /* Cards */
-    .card { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); padding: 1.75rem; margin-bottom: 1.75rem; }
+    .card { background: var(--card-bg); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); padding: 2rem; margin-bottom: 2rem; }
+    .card-title { font-size: 1.25rem; color: var(--bb-navy); font-weight: 700; margin-bottom: 1.25rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 0.75rem; }
 
-    /* Presets */
-    .presets-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 1.5rem; }
-    .presets-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-right: 4px; }
-    .preset-btn { background: var(--card-sub); border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 8px; font-size: 0.82rem; cursor: pointer; font-weight: 500; transition: all 0.15s; }
-    .preset-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+    /* Epochen Buttons */
+    .epoch-ribbon { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 1.75rem; background: var(--card-sub); padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border-light); }
+    .epoch-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-right: 6px; }
+    .epoch-chip { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 6px; font-size: 0.82rem; cursor: pointer; font-weight: 600; transition: all 0.15s; }
+    .epoch-chip:hover { border-color: var(--bb-gold); background: var(--bb-gold-light); }
 
-    /* Forms */
-    .calc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; align-items: flex-end; margin-bottom: 1.25rem; }
-    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
-    label { font-size: 0.85rem; font-weight: 600; color: var(--text); }
-    input, select { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 0.95rem; color: var(--text); background: var(--card-bg); outline: none; transition: border-color 0.2s; }
-    input:focus, select:focus { border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); }
+    /* Forms & Inputs */
+    .grid-calc { display: grid; grid-template-columns: 1.4fr 1.6fr auto 1.6fr; gap: 1.5rem; align-items: flex-end; margin-bottom: 1.5rem; }
+    .input-wrap { display: flex; flex-direction: column; gap: 6px; }
+    label { font-size: 0.86rem; font-weight: 600; color: var(--text); }
+    input, select { width: 100%; padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 0.95rem; color: var(--text); background: var(--card-bg); outline: none; transition: all 0.2s; }
+    input:focus, select:focus { border-color: var(--bb-blue); box-shadow: 0 0 0 3px rgba(0, 75, 147, 0.15); }
+    .btn-swap { padding: 11px 18px; height: 46px; background: var(--card-sub); border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 700; color: var(--bb-navy); transition: all 0.2s; }
+    .btn-swap:hover { background: var(--border-light); border-color: var(--bb-navy); }
 
-    .swap-btn { align-self: flex-end; padding: 10px; background: var(--card-sub); border: 1.5px solid var(--border); border-radius: 10px; cursor: pointer; color: var(--primary); font-weight: 700; height: 44px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-    .swap-btn:hover { background: var(--border); }
+    /* Exchange banner */
+    .currency-status-bar { display: flex; justify-content: space-between; align-items: center; background: var(--bb-gold-light); border: 1px solid var(--bb-gold); padding: 10px 16px; border-radius: 8px; font-size: 0.88rem; margin-bottom: 1.75rem; color: var(--text); flex-wrap: wrap; gap: 8px; }
 
-    /* Options & Toggles */
-    .options-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); margin-bottom: 1.5rem; font-size: 0.85rem; }
-    .toggle-group { display: inline-flex; background: var(--card-sub); padding: 3px; border-radius: 8px; gap: 3px; }
-    .toggle-opt { padding: 4px 10px; border-radius: 6px; cursor: pointer; font-weight: 600; color: var(--text-muted); border: none; background: transparent; font-size: 0.82rem; }
-    .toggle-opt.active { background: var(--card-bg); color: var(--text); box-shadow: 0 2px 4px rgba(0,0,0,0.06); }
+    /* Results */
+    .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+    .result-card { background: var(--card-sub); border: 2px solid var(--border); border-radius: var(--radius); padding: 1.75rem; position: relative; }
+    .result-card.card-a { border-color: rgba(0, 75, 147, 0.4); }
+    .result-card.card-b { border-color: rgba(194, 155, 56, 0.5); }
+    .res-tag { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem; display: flex; justify-content: space-between; }
+    .res-val-big { font-size: 2.3rem; font-weight: 800; color: var(--text); line-height: 1.15; margin-bottom: 0.4rem; }
+    .res-val-sub { font-size: 1rem; font-weight: 700; color: var(--bb-blue); margin-bottom: 0.85rem; }
+    .res-text { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; }
 
-    /* DUAL PERSPECTIVE RESULTS CONTAINER */
-    .dual-result-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
-    .result-box { background: var(--card-sub); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 1.5rem; position: relative; }
-    .result-header { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary); margin-bottom: 0.35rem; display: flex; justify-content: space-between; }
-    .result-main { font-size: 2.1rem; font-weight: 800; color: var(--text); margin-bottom: 0.2rem; }
-    .result-sub { font-size: 0.95rem; font-weight: 600; color: var(--primary); margin-bottom: 0.75rem; }
-    .result-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; }
+    /* Real Value Bar */
+    .val-meter-box { margin-top: 1.25rem; }
+    .val-meter-labels { display: flex; justify-content: space-between; font-size: 0.84rem; font-weight: 700; margin-bottom: 6px; }
+    .val-meter-track { width: 100%; height: 14px; background: var(--border); border-radius: 7px; overflow: hidden; display: flex; }
+    .val-meter-fill { height: 100%; transition: width 0.4s ease, background 0.4s; }
 
-    /* Loss Bar */
-    .loss-bar-container { margin: 1rem 0 0.5rem; }
-    .loss-bar-header { display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; }
-    .loss-bar-bg { width: 100%; height: 12px; background: var(--border); border-radius: 6px; overflow: hidden; display: flex; }
-    .loss-bar-fill { height: 100%; background: var(--success); transition: width 0.4s ease, background 0.4s; }
-
-    /* Extended Stats Grid */
-    .ext-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1rem; padding: 1.25rem; background: var(--card-sub); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 1.5rem; }
-    .stat-item { display: flex; flex-direction: column; gap: 2px; }
-    .stat-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
-    .stat-val { font-size: 1.05rem; font-weight: 700; color: var(--text); }
+    /* Stat KPI Row */
+    .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+    .kpi-tile { background: var(--card-sub); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem; }
+    .kpi-title { font-size: 0.74rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+    .kpi-num { font-size: 1.25rem; font-weight: 800; color: var(--text); }
+    .kpi-desc { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
 
     /* Charts */
-    .chart-box { margin: 1.5rem 0; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1rem 0.75rem; position: relative; }
-    .chart-box h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 10px; color: var(--text-muted); display: flex; justify-content: space-between; }
-    .canvas-wrapper { position: relative; width: 100%; height: 250px; cursor: crosshair; }
+    .chart-container { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2rem; position: relative; }
+    .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 8px; }
+    .chart-header h3 { font-size: 1.05rem; font-weight: 700; color: var(--bb-navy); }
+    .canvas-wrap { position: relative; width: 100%; height: 320px; cursor: crosshair; }
     canvas { width: 100%; height: 100%; display: block; }
+    .tooltip-box { position: absolute; display: none; pointer-events: none; background: rgba(15, 23, 42, 0.95); color: #fff; padding: 10px 14px; border-radius: 8px; font-size: 0.82rem; line-height: 1.45; box-shadow: 0 8px 24px rgba(0,0,0,0.3); z-index: 20; transform: translate(-50%, -115%); border: 1px solid rgba(255,255,255,0.15); }
 
-    .chart-tooltip {
-      position: absolute;
-      display: none;
-      pointer-events: none;
-      background: var(--tooltip-bg);
-      color: var(--tooltip-text);
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      line-height: 1.4;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-      z-index: 10;
-      max-width: 280px;
-      backdrop-filter: blur(4px);
-      border: 1px solid rgba(255,255,255,0.1);
-      transform: translate(-50%, -115%);
-      transition: opacity 0.1s ease;
-    }
-
-    /* Sub Feature Grid */
-    .feature-grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
-    .subcard { background: var(--card-sub); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; }
-    .subcard h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between; }
-
-    /* Goods List */
-    .custom-goods-form { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 8px; margin-bottom: 12px; }
-    .custom-goods-list { list-style: none; display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto; padding-right: 4px; }
-    .custom-good-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 0.82rem; display: flex; justify-content: space-between; align-items: center; }
-    .btn-del-item { background: transparent; border: none; color: var(--danger); cursor: pointer; font-size: 1rem; padding: 2px 6px; }
-
-    /* Timeline */
-    .timeline-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; }
-    .timeline-box h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.75rem; }
-    .timeline-list { list-style: none; display: flex; flex-direction: column; gap: 8px; max-height: 260px; overflow-y: auto; padding-right: 6px; }
-    .timeline-item { display: flex; gap: 10px; font-size: 0.85rem; line-height: 1.4; }
-    .timeline-year { font-weight: 700; color: var(--primary); min-width: 44px; }
+    /* Simulator Controls */
+    .sim-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
 
     /* Tables */
-    .table-container { max-height: 400px; overflow-y: auto; border: 1px solid var(--border); border-radius: 10px; margin-top: 1rem; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left; }
-    thead { position: sticky; top: 0; background: var(--card-sub); z-index: 2; }
-    th, td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
-    tbody tr:hover { background-color: rgba(59, 130, 246, 0.05); }
+    .table-tools { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px; }
+    .table-scroller { max-height: 520px; overflow-y: auto; border: 1px solid var(--border); border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.86rem; text-align: left; }
+    thead th { position: sticky; top: 0; background: var(--card-sub); z-index: 5; padding: 12px 14px; font-weight: 700; border-bottom: 2px solid var(--border); color: var(--text); }
+    tbody td { padding: 10px 14px; border-bottom: 1px solid var(--border-light); }
+    tbody tr:hover { background-color: rgba(0, 75, 147, 0.04); }
 
-    .badge { display: inline-block; padding: 2px 6px; font-size: 0.72rem; font-weight: 700; border-radius: 999px; }
-    .badge-dm { background: #ffedd5; color: #9a3412; }
-    .badge-eur { background: #dcfce7; color: #166534; }
-    .badge-rmb { background: #fee2e2; color: #991b1b; }
+    /* Badges */
+    .badge-cur { display: inline-block; padding: 2px 8px; font-size: 0.74rem; font-weight: 700; border-radius: 6px; }
+    .b-gulden { background: #fef08a; color: #854d0e; }
+    .b-taler { background: #e0e7ff; color: #3730a3; }
+    .b-mark { background: #fed7aa; color: #9a3412; }
+    .b-rm { background: #fecdd3; color: #9f1239; }
+    .b-dm { background: #dbeafe; color: #1e40af; }
+    .b-eur { background: #dcfce7; color: #166534; }
 
-    .action-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 7px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
-    .action-btn:hover { background: var(--card-sub); }
-    .btn-add { background: var(--primary); color: #fff; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
-    .btn-add:hover { opacity: 0.9; }
+    /* Chronicle Box */
+    .chronicle-card { background: var(--card-sub); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; margin-bottom: 1.25rem; }
+    .chronicle-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border-light); padding-bottom: 6px; }
+    .chronicle-year { font-size: 1.15rem; font-weight: 800; color: var(--bb-navy); }
+    .chronicle-badge { background: var(--bb-navy); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
+    .chronicle-body { font-size: 0.88rem; line-height: 1.6; color: var(--text); }
+    .chronicle-rules { margin-top: 8px; background: var(--card-bg); border-left: 3px solid var(--bb-gold); padding: 8px 12px; border-radius: 0 6px 6px 0; font-size: 0.84rem; }
 
-    @media (max-width: 768px) {
-      .custom-goods-form { grid-template-columns: 1fr 1fr; }
-    }
-
-    @media print {
-      body { background: #fff; color: #000; padding: 0; }
-      .theme-toggle-btn, .tabs-nav, .presets-row, .swap-btn, .action-btn, .table-container, .custom-goods-form, .btn-del-item, .share-btn { display: none !important; }
-      .card { box-shadow: none; border: 1px solid #ccc; padding: 1cm; page-break-inside: avoid; }
+    @media (max-width: 900px) {
+      .grid-calc { grid-template-columns: 1fr; }
+      .results-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body data-theme="light">
 
 <div class="container">
-  <div class="top-bar">
-    <div class="badge-bar">VPI HISTORIE: DESTATIS (2020=100) &amp; NBS CHINA (1985=100)</div>
-    <div class="top-actions">
-      <button class="share-btn" onclick="copyShareUrl()" title="Link mit aktuellen Parametern kopieren">🔗 Link teilen</button>
-      <button class="theme-toggle-btn" onclick="toggleTheme()">
-        <span id="theme-icon">🌙</span> <span id="theme-text">Dark Mode</span>
+  <!-- Top Navigation & Brand Header -->
+  <div class="top-header">
+    <div class="brand-title">
+      <div class="brand-logo">§</div>
+      <div>
+        <h1>Historischer Kaufkraft- &amp; Währungsmonitor Deutschland</h1>
+        <p>Offizielle Datengrundlage: Deutsche Bundesbank (Reihe Stand Januar 2026, 1810–2025) &amp; Statistisches Bundesamt</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-action" onclick="copyShareUrl()" title="Konfiguration als Link kopieren">🔗 Link teilen</button>
+      <button class="btn-action" onclick="toggleDarkMode()">
+        <span id="theme-icon">🌙</span> <span id="theme-lbl">Dark Mode</span>
       </button>
     </div>
   </div>
 
-  <header>
-    <h1>Historischer Preisindex- &amp; Kaufkraft-Monitor</h1>
-    <p>Offizielle amtliche Zeitreihen mit dualer Kaufkraftbetrachtung, Arbeitszeit-Kaufkraftanalyse, Sparbuch- &amp; Realrenditesimulation sowie dynamischem Warenkorb.</p>
-  </header>
-
-  <!-- NAVIGATION TABS -->
-  <div class="tabs-nav">
-    <button class="tab-btn active" onclick="switchTab('de')">🇩🇪 Deutschland (1948–2026)</button>
-    <button class="tab-btn" onclick="switchTab('cn')">🇨🇳 China (1985–2026)</button>
-  </div>
+  <!-- MAIN TAB NAVIGATION -->
+  <nav class="main-nav">
+    <button class="nav-tab active" onclick="switchNavTab('tab-calculator')">🧮 Kaufkraft- &amp; Währungsrechner</button>
+    <button class="nav-tab" onclick="switchNavTab('tab-simulator')">📈 Sparbuch-, Zins- &amp; Realrendite-Rechner</button>
+    <button class="nav-tab" onclick="switchNavTab('tab-worktime')">⏱️ Arbeitszeit-Kaufkraft &amp; Reallohn</button>
+    <button class="nav-tab" onclick="switchNavTab('tab-hyperinfl')">⚡ Hyperinflation 1914–1923 (Spezialrechner)</button>
+    <button class="nav-tab" onclick="switchNavTab('tab-reforms')">📜 Währungsschnitte &amp; Reformen seit 1810</button>
+    <button class="nav-tab" onclick="switchNavTab('tab-dataset')">📋 Amtliche Bundesbank-Tabelle &amp; Export</button>
+  </nav>
 
   <!-- ======================================================== -->
-  <!-- TAB 1: DEUTSCHLAND                                       -->
+  <!-- REITER 1: KAUFKRAFT- UND WÄHRUNGSRECHNER                 -->
   <!-- ======================================================== -->
-  <div id="tab-de" class="tab-content active">
+  <div id="tab-calculator" class="tab-panel active">
     <div class="card">
-      <div class="presets-row">
-        <span class="presets-label">Epochen:</span>
-        <button class="preset-btn" onclick="setDePreset(1948, 2026)">Gesamtzeitraum (1948–2026)</button>
-        <button class="preset-btn" onclick="setDePreset(1950, 1965)">Wirtschaftswunder (1950–65)</button>
-        <button class="preset-btn" onclick="setDePreset(1973, 1981)">Ölkrisen-Stagflation (1973–81)</button>
-        <button class="preset-btn" onclick="setDePreset(1990, 1998)">Wiedervereinigung (1990–98)</button>
-        <button class="preset-btn" onclick="setDePreset(2002, 2026)">Euro-Ära (2002–2026)</button>
-        <button class="preset-btn" onclick="setDePreset(2021, 2026)">Inflationsschub (2021–2026)</button>
+      <div class="card-title">
+        <span>Historische Kaufkraft-Konvertierung (1810 bis heute)</span>
+        <span style="font-size:0.85rem; font-weight:600; color:var(--text-muted);">Bundesbank-Referenzbasis: 2025 = 1,00 €</span>
       </div>
 
-      <div class="calc-grid">
-        <div class="form-group">
-          <label for="de-amount">Geldbetrag:</label>
-          <input type="number" id="de-amount" value="100" min="0" step="any" oninput="calculateDE()">
-        </div>
-        <div class="form-group">
-          <label for="de-start-year">Ausgangsjahr:</label>
-          <select id="de-start-year" onchange="onDeYearChange('start')"></select>
-        </div>
-        <button class="swap-btn" title="Jahre tauschen" onclick="swapYears('de')">⇄ Tauschen</button>
-        <div class="form-group">
-          <label for="de-target-year">Zieljahr:</label>
-          <select id="de-target-year" onchange="onDeYearChange('target')"></select>
-        </div>
+      <!-- Epochen-Schnellwahltasten -->
+      <div class="epoch-ribbon">
+        <span class="epoch-label">Epochen:</span>
+        <button class="epoch-chip" onclick="setYears(1810, 2025)">Gesamtzeitraum (1810–2025)</button>
+        <button class="epoch-chip" onclick="setYears(1873, 1914)">Kaiserreich Goldstandard (1873–1914)</button>
+        <button class="epoch-chip" onclick="setYears(1924, 1938)">Weimarer Republik / RM (1924–1938)</button>
+        <button class="epoch-chip" onclick="setYears(1948, 2001)">D-Mark Ära (1948–2001)</button>
+        <button class="epoch-chip" onclick="setYears(1970, 1982)">Ölkrisen / Teuerung (1970–1982)</button>
+        <button class="epoch-chip" onclick="setYears(2002, 2025)">Euro-Ära (2002–2025)</button>
+        <button class="epoch-chip" onclick="setYears(2025, 1975)">Rückwärts: 2025 → 1975</button>
       </div>
 
-      <div class="options-bar">
-        <div>
-          <span style="font-weight:600; margin-right: 8px;">Währung des Betrags:</span>
-          <div class="toggle-group">
-            <button class="toggle-opt" id="btn-de-cur-dm" onclick="setDeInputCur('DM')">DM</button>
-            <button class="toggle-opt" id="btn-de-cur-eur" onclick="setDeInputCur('EUR')">EUR (€)</button>
-          </div>
-          <span id="de-cur-hint" style="margin-left: 8px; color: var(--text-muted); font-size: 0.8rem;"></span>
+      <!-- Eingabe-Raster -->
+      <div class="grid-calc">
+        <div class="input-wrap">
+          <label for="input-amount">Geldbetrag:</label>
+          <input type="number" id="input-amount" value="100" min="0.01" step="any" oninput="runMainCalculation()">
         </div>
-        <div style="color: var(--text-muted); font-size: 0.82rem;">
-          Amtlicher Kurs: <strong>1 € = 1,95583 DM</strong> | VPI-Basis: <strong>2020 = 100</strong>
+        <div class="input-wrap">
+          <label for="select-start-year">Ausgangsjahr &amp; Währung:</label>
+          <select id="select-start-year" onchange="runMainCalculation()"></select>
+        </div>
+        <button class="btn-swap" onclick="swapStartTargetYears()" title="Ausgangs- und Zieljahr tauschen">⇄ Tauschen</button>
+        <div class="input-wrap">
+          <label for="select-target-year">Zieljahr &amp; Währung:</label>
+          <select id="select-target-year" onchange="runMainCalculation()"></select>
         </div>
       </div>
 
-      <!-- DUAL RESULT DISPLAY -->
-      <div class="dual-result-container">
+      <!-- Statusleiste Währungskurse -->
+      <div class="currency-status-bar" id="currency-status-banner">
+        <div>Währungsrelation: <strong>Wird ermittelt...</strong></div>
+        <div id="vpi-status-text">VPI: Basis 2020 = 100</div>
+      </div>
+
+      <!-- DUAL RESULT CONTAINER -->
+      <div class="results-grid">
         <!-- PERSPEKTIVE A: WARENWERT / GÜTER -->
-        <div class="result-box">
-          <div class="result-header">
+        <div class="result-card card-a">
+          <div class="res-tag" style="color:var(--bb-blue);">
             <span>Perspektive A: Warenwert-Äquivalent</span>
             <span>🛍️</span>
           </div>
-          <div class="result-main" id="de-res-primary">0,00 €</div>
-          <div class="result-sub" id="de-res-secondary">= 0,00 DM</div>
-          <p class="result-desc" id="de-res-desc-a">
-            Um ein Gut, das im Ausgangsjahr den angegebenen Betrag kostete, im Zieljahr zu erwerben, benötigt man diesen Betrag.
+          <div class="res-val-big" id="res-a-main">0,00 €</div>
+          <div class="res-val-sub" id="res-a-sub">= 0,00 DM</div>
+          <p class="res-text" id="res-a-desc">
+            Um den gleichen realen Warenkorb wie im Ausgangsjahr zu finanzieren, ist im Zieljahr dieser Betrag erforderlich.
           </p>
         </div>
 
-        <!-- PERSPEKTIVE B: AUFBEWAHRTER SCHEIN / GELDWERT -->
-        <div class="result-box" style="border-color: rgba(220, 38, 38, 0.25);">
-          <div class="result-header" style="color: var(--danger);">
-            <span>Perspektive B: Aufbewahrtes Bargeld</span>
+        <!-- PERSPEKTIVE B: KAUFKRAFT DES AUFBEWAHRTEN BARGELDS -->
+        <div class="result-card card-b">
+          <div class="res-tag" style="color:var(--bb-gold);">
+            <span>Perspektive B: Realkaufkraft des Geldbetrags</span>
             <span>🏷️</span>
           </div>
-          <div class="result-main" id="de-res-cash-val" style="color: var(--text);">0,00 €</div>
-          <div class="result-sub" id="de-res-cash-sub" style="color: var(--danger);">-0,0 % Kaufkraftverlust</div>
-          <p class="result-desc" id="de-res-desc-b">
-            Wurde der Geldbetrag damals bar ins Sparschwein gelegt und im Zieljahr herausgeholt, entspricht seine Kaufkraft nur noch diesem Betrag.
+          <div class="res-val-big" id="res-b-main">0,00 €</div>
+          <div class="res-val-sub" id="res-b-sub">Kaufkraftentwicklung</div>
+          <p class="res-text" id="res-b-desc">
+            Kaufkraftvergleich des unverzinst gehaltenen Nominalbetrags unter Berücksichtigung aller Währungsschnitte.
           </p>
 
-          <div class="loss-bar-container">
-            <div class="loss-bar-header">
-              <span>Reale Restkaufkraft des Geldscheins:</span>
-              <span id="de-loss-val">100 %</span>
+          <div class="val-meter-box">
+            <div class="val-meter-labels">
+              <span>Verbliebene Realkaufkraft:</span>
+              <span id="res-b-percent">100 %</span>
             </div>
-            <div class="loss-bar-bg">
-              <div class="loss-bar-fill" id="de-loss-fill" style="width: 100%;"></div>
+            <div class="val-meter-track">
+              <div class="val-meter-fill" id="res-b-meter-bar" style="width: 100%; background: var(--success);"></div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- ERWEITERTE STATISTIKEN & MATHEMATISCHE KENNZAHLEN -->
-      <div class="ext-stats-grid">
-        <div class="stat-item">
-          <span class="stat-label">Preisänderung gesamt:</span>
-          <span class="stat-val" id="de-stat-factor">+0,0 %</span>
+      <!-- STATISTISCHE KENNZAHLEN -->
+      <div class="kpi-row">
+        <div class="kpi-tile">
+          <div class="kpi-title">Preisniveau-Veränderung</div>
+          <div class="kpi-num" id="kpi-price-change">+0,0 %</div>
+          <div class="kpi-desc">Warenkorb Teuerung gesamt</div>
         </div>
-        <div class="stat-item">
-          <span class="stat-label">Inflation p.a. (CAGR):</span>
-          <span class="stat-val" id="de-stat-cagr">0,0 %</span>
+        <div class="kpi-tile">
+          <div class="kpi-title">Inflation p.a. (CAGR)</div>
+          <div class="kpi-num" id="kpi-cagr">0,00 %</div>
+          <div class="kpi-desc">Jährliche Durchschnittsrate</div>
         </div>
-        <div class="stat-item">
-          <span class="stat-label">72er-Regel (Halbierung):</span>
-          <span class="stat-val" id="de-stat-rule72">–</span>
+        <div class="kpi-tile">
+          <div class="kpi-title">72er-Regel (Halbierung)</div>
+          <div class="kpi-num" id="kpi-rule72">–</div>
+          <div class="kpi-desc">Kaufkraft-Halbierungszeit</div>
         </div>
-        <div class="stat-item">
-          <span class="stat-label">Inflations-Volatilität:</span>
-          <span class="stat-val" id="de-stat-volatility">0,0 %</span>
+        <div class="kpi-tile">
+          <div class="kpi-title">VPI-Indexstand (2020=100)</div>
+          <div class="kpi-num" id="kpi-vpi-relation">0,0 → 0,0</div>
+          <div class="kpi-desc">Amtlich harmonisierte Reihe</div>
         </div>
-        <div class="stat-item">
-          <span class="stat-label">Stärkster 3-Jahres-Schub:</span>
-          <span class="stat-val" id="de-stat-worst-stretch">–</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">VPI-Verhältnis:</span>
-          <span class="stat-val" id="de-stat-indices">0,0 → 0,0</span>
+        <div class="kpi-tile">
+          <div class="kpi-title">Bundesbank-Äquivalent</div>
+          <div class="kpi-num" id="kpi-buba-mult">0,00 € → 0,00 €</div>
+          <div class="kpi-desc">Euro-Wert im Jahr 2025</div>
         </div>
       </div>
 
       <!-- Interaktiver Chart -->
-      <div class="chart-box">
-        <h4>
-          <span>📈 VERBRAUCHERPREISINDEX DEUTSCHLAND (1948–2026, BASIS 2020 = 100)</span>
-          <span id="chart-de-range" style="font-weight: 500; font-size: 0.8rem; color: var(--primary);"></span>
-        </h4>
-        <div class="canvas-wrapper" id="wrap-chart-de">
-          <canvas id="chart-de"></canvas>
-          <div class="chart-tooltip" id="tip-chart-de"></div>
+      <div class="chart-container">
+        <div class="chart-header">
+          <h3>📈 VERBRAUCHERPREISINDEX &amp; KAUFKRAFTREIHE DEUTSCHLAND (1810–2025)</h3>
+          <div style="font-size:0.84rem; font-weight:700; color:var(--bb-blue);" id="chart-selection-label">Auswahl: 1810–2025</div>
+        </div>
+        <div class="canvas-wrap" id="chart-main-wrap">
+          <canvas id="chart-main-canvas"></canvas>
+          <div class="tooltip-box" id="chart-main-tip"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- REITER 2: SPARBUCH-, ZINS- & REALRENDITE-RECHNER        -->
+  <!-- ======================================================== -->
+  <div id="tab-simulator" class="tab-panel">
+    <div class="card">
+      <div class="card-title">
+        <span>Vermögensakkumulation &amp; Realkaufkraft-Simulator</span>
+        <span style="font-size:0.85rem; font-weight:600; color:var(--text-muted);">Zinseszins &amp; funktionierende Sparraten-Dynamik</span>
+      </div>
+
+      <div class="sim-grid">
+        <div class="input-wrap">
+          <label for="sim-start-capital">Startkapital (€):</label>
+          <input type="number" id="sim-start-capital" value="5000" min="0" step="100" oninput="runSimCalculation()">
+        </div>
+        <div class="input-wrap">
+          <label for="sim-monthly-rate">Monatliche Sparrate (€):</label>
+          <input type="number" id="sim-monthly-rate" value="150" min="0" step="10" oninput="runSimCalculation()">
+        </div>
+        <div class="input-wrap">
+          <label for="sim-dynamic">Sparraten-Dynamisierung (% p.a.):</label>
+          <input type="number" id="sim-dynamic" value="2.5" step="0.1" oninput="runSimCalculation()" title="Erhöht die monatliche Sparrate jährlich um diesen Prozentsatz">
+        </div>
+        <div class="input-wrap">
+          <label for="sim-interest">Nominalzins (% p.a.):</label>
+          <input type="number" id="sim-interest" value="3.5" step="0.1" oninput="runSimCalculation()">
+        </div>
+        <div class="input-wrap">
+          <label for="sim-years">Laufzeit (Jahre):</label>
+          <input type="number" id="sim-years" value="25" min="1" max="100" oninput="runSimCalculation()">
+        </div>
+        <div class="input-wrap">
+          <label for="sim-inflation-est">Angenommene Inflation (% p.a.):</label>
+          <input type="number" id="sim-inflation-est" value="2.0" step="0.1" oninput="runSimCalculation()">
         </div>
       </div>
 
-      <!-- FEATURE GRID: 1. ARBEITSZEIT | 2. REALZINS-SIMULATOR | 3. INTERAKTIVER WARENKORB -->
-      <div class="feature-grid-3">
-        <!-- 1. ARBEITSZEIT-KAUFKRAFT -->
-        <div class="subcard">
-          <h4>⏱️ Arbeitszeit-Kaufkraft</h4>
-          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
-            Wie lange ein durchschnittlicher Arbeitnehmer für den eingegebenen Betrag arbeiten musste [1]:
+      <!-- Sim Ergebnis Kennzahlen -->
+      <div class="kpi-row">
+        <div class="kpi-tile">
+          <div class="kpi-title">Gesamte Einzahlung</div>
+          <div class="kpi-num" id="sim-res-deposits">0 €</div>
+          <div class="kpi-desc">Eigene Sparleistung</div>
+        </div>
+        <div class="kpi-tile">
+          <div class="kpi-title">Nominales Endkapital</div>
+          <div class="kpi-num" id="sim-res-nominal">0 €</div>
+          <div class="kpi-desc" id="sim-res-interest-earn">+0 € Zinsen</div>
+        </div>
+        <div class="kpi-tile">
+          <div class="kpi-title">Reales Endkapital (Kaufkraft)</div>
+          <div class="kpi-num" id="sim-res-real">0 €</div>
+          <div class="kpi-desc">Inflationsbereinigt</div>
+        </div>
+        <div class="kpi-tile">
+          <div class="kpi-title">Realer Kaufkraftgewinn</div>
+          <div class="kpi-num" id="sim-res-real-diff">+0 %</div>
+          <div class="kpi-desc" id="sim-res-status">Vermögenszuwachs</div>
+        </div>
+      </div>
+
+      <!-- Sim Chart -->
+      <div class="chart-container">
+        <div class="chart-header">
+          <h3>📊 VERMÖGENSENTWICKLUNG: EIGENLEISTUNG VS. NOMINAL VS. REALKAUFKRAFT</h3>
+        </div>
+        <div class="canvas-wrap" id="chart-sim-wrap">
+          <canvas id="chart-sim-canvas"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- REITER 3: ARBEITSZEIT-KAUFKRAFT & REALLOHN              -->
+  <!-- ======================================================== -->
+  <div id="tab-worktime" class="tab-panel">
+    <div class="card">
+      <div class="card-title">
+        <span>Arbeitszeit-Kaufkraft &amp; Historischer Reallohnvergleich</span>
+        <span style="font-size:0.85rem; font-weight:600; color:var(--text-muted);">Wie viele Arbeitsstunden für einen Lebensstandard nötig waren</span>
+      </div>
+
+      <div class="results-grid" style="margin-bottom: 1.5rem;">
+        <div class="result-card">
+          <div class="res-tag" style="color:var(--bb-navy);">
+            <span>Arbeitszeitaufwand im Ausgangsjahr (<span id="wt-start-yr-lbl">1950</span>)</span>
+            <span>⏱️</span>
+          </div>
+          <div class="res-val-big" id="wt-res-start">0 Std. 00 Min.</div>
+          <div class="res-val-sub" id="wt-wage-start">Ø Brutto-Stundenlohn: 0,00</div>
+          <p class="res-text">
+            Erforderliche Arbeitszeit eines durchschnittlichen Industriearbeiters / Angestellten damals für den Betrag von <strong id="wt-start-amt-lbl">100</strong>.
           </p>
-          <div style="font-size: 0.85rem; line-height: 1.6; background: var(--card-bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 8px;">
-            <div>Ausgangsjahr (<span id="lbl-de-work-start-yr">1948</span>): <strong id="de-worktime-start">0 Std. 0 Min.</strong> <span style="font-size:0.75rem; color:var(--text-muted);" id="de-work-wage-start">(Lohn: ~0,00 DM/h)</span></div>
-            <div>Zieljahr (<span id="lbl-de-work-target-yr">2026</span>): <strong id="de-worktime-target">0 Std. 0 Min.</strong> <span style="font-size:0.75rem; color:var(--text-muted);" id="de-work-wage-target">(Lohn: ~0,00 €/h)</span></div>
-          </div>
-          <div id="de-worktime-verdict" style="font-size: 0.82rem; font-weight: 600;">Berechne Arbeitszeit...</div>
-          
-          <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--border);">
-            <label style="font-size: 0.75rem;">Eigener Stundenlohn heute (optional, in €):</label>
-            <input type="number" id="de-custom-wage" placeholder="z.B. 22" step="0.5" oninput="calculateDEWorkTime()" style="padding: 6px 8px; font-size: 0.85rem; margin-top: 3px;">
-            <div id="de-custom-wage-res" style="font-size: 0.78rem; color: var(--primary); margin-top: 4px; font-weight: 600;"></div>
-          </div>
         </div>
 
-        <!-- 2. SPARBUCH- & REALZINS-SIMULATOR -->
-        <div class="subcard">
-          <h4>💰 Sparbuch- &amp; Zins-Simulator</h4>
-          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
-            Was geschieht mit dem Betrag bei Verzinsung über die Laufzeit:
+        <div class="result-card">
+          <div class="res-tag" style="color:var(--bb-blue);">
+            <span>Arbeitszeitaufwand im Zieljahr (<span id="wt-target-yr-lbl">2025</span>)</span>
+            <span>⏱️</span>
+          </div>
+          <div class="res-val-big" id="wt-res-target">0 Std. 00 Min.</div>
+          <div class="res-val-sub" id="wt-wage-target">Ø Brutto-Stundenlohn: 0,00</div>
+          <p class="res-text">
+            Erforderliche Arbeitszeit für denselben materiellen Warenwert im Zieljahr.
           </p>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
-            <div>
-              <label style="font-size: 0.75rem;">Nominalzins p.a. (%):</label>
-              <input type="number" id="de-sim-rate" value="2.0" step="0.1" oninput="calculateDESim()">
-            </div>
-            <div>
-              <label style="font-size: 0.75rem;">Dynamisierung (%):</label>
-              <input type="number" id="de-sim-dynamik" value="0.0" step="0.5" oninput="calculateDESim()">
-            </div>
+        </div>
+      </div>
+
+      <div class="currency-status-bar" id="wt-summary-verdict" style="font-size:0.95rem; font-weight:700;">
+        Berechne Arbeitszeit...
+      </div>
+
+      <!-- Individueller Lohn-Rechner -->
+      <div class="card-title" style="margin-top:2rem;">
+        <span>Individueller Stundenlohn-Abgleich</span>
+      </div>
+      <div class="grid-calc" style="grid-template-columns: 1fr 1fr; margin-bottom: 1rem;">
+        <div class="input-wrap">
+          <label for="custom-wage-old">Eigener Stundenlohn damals (optional, in historischer Währung):</label>
+          <input type="number" id="custom-wage-old" placeholder="Standard-Durchschnitt verwenden" step="0.1" oninput="runWorktimeCalculation()">
+        </div>
+        <div class="input-wrap">
+          <label for="custom-wage-new">Eigener Stundenlohn heute / Zieljahr (optional):</label>
+          <input type="number" id="custom-wage-new" placeholder="z.B. 24.50" step="0.5" oninput="runWorktimeCalculation()">
+        </div>
+      </div>
+      <div id="custom-wage-feedback" style="font-size:0.9rem; font-weight:600; color:var(--bb-blue);"></div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- REITER 4: HYPERINFLATION 1914–1923                       -->
+  <!-- ======================================================== -->
+  <div id="tab-hyperinfl" class="tab-panel">
+    <div class="card">
+      <div class="card-title">
+        <span>Die Deutsche Hyperinflation 1914–1923 (Spezialabteil &amp; Rechner)</span>
+        <span style="font-size:0.85rem; font-weight:600; color:var(--text-muted);">Der Zerfall des Binnen- und Außenwertes der Papiermark</span>
+      </div>
+
+      <p style="font-size:0.92rem; color:var(--text-muted); margin-bottom:1.5rem; line-height:1.6;">
+        Zwischen dem 1. Juli 1914 (Beginn des Ersten Weltkriegs und faktische Aufhebung der Goldeinlösepflicht) und der Währungsreform vom 15. November 1923 verlor die Papiermark Billionen an Wert. Die folgende amtliche Dokumentation skizziert die Verzehnfachungen des Dollarkurses sowie des Inlandsportos:
+      </p>
+
+      <!-- Rechner Hyperinflation -->
+      <div style="background:var(--card-sub); border:2px solid var(--border); border-radius:12px; padding:1.5rem; margin-bottom:2rem;">
+        <h4 style="color:var(--bb-navy); margin-bottom:1rem; font-size:1.1rem;">⚡ Interaktiver Hyperinflations-Umrechner</h4>
+        <div class="grid-calc" style="grid-template-columns: 1.2fr 1.8fr auto;">
+          <div class="input-wrap">
+            <label for="hyp-amount">Nominalbetrag in Papiermark:</label>
+            <input type="number" id="hyp-amount" value="1000000000" step="any" oninput="runHyperCalculation()">
           </div>
-          <div id="de-sim-result" style="font-size: 0.82rem; line-height: 1.5; background: var(--card-bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
-            Berechne Zinseszins...
+          <div class="input-wrap">
+            <label for="hyp-stage">Historischer Stichtag (1914–1923):</label>
+            <select id="hyp-stage" onchange="runHyperCalculation()"></select>
           </div>
         </div>
 
-        <!-- 3. INTERAKTIVER WARENKORB -->
-        <div class="subcard">
-          <h4>
-            <span>🛒 Dynamischer Güter-Check</span>
-            <span style="font-size: 0.75rem; color: var(--text-muted);" id="de-basket-target-label">Ziel: 2026</span>
-          </h4>
-          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
-            Eigene Güter hinzufügen (automatisch im Browser gespeichert):
-          </p>
-          <form class="custom-goods-form" onsubmit="addCustomGoodDE(event)">
-            <input type="text" id="de-good-name" placeholder="z.B. Kugel Eis" required>
-            <input type="number" id="de-good-year" placeholder="Jahr" min="1948" max="2026" required>
-            <input type="number" id="de-good-price" placeholder="Preis" step="0.01" min="0.01" required>
-            <button type="submit" class="btn-add">➕</button>
-          </form>
-          <ul class="custom-goods-list" id="de-custom-goods-list"></ul>
-          <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.75rem;">
-            <button class="action-btn" onclick="exportGoodsJSON('de')">📤 Backup (JSON)</button>
-            <label class="action-btn" style="cursor: pointer;">
-              📥 Import
-              <input type="file" style="display: none;" onchange="importGoodsJSON(event, 'de')">
-            </label>
+        <div class="kpi-row" style="margin-top:1.25rem; margin-bottom:0.5rem;">
+          <div class="kpi-tile">
+            <div class="kpi-title">Äquivalent in Goldmark</div>
+            <div class="kpi-num" id="hyp-res-goldmark">0,00 GM</div>
+            <div class="kpi-desc">Goldparität 1/2790 kg Feingold</div>
+          </div>
+          <div class="kpi-tile">
+            <div class="kpi-title">Gegenwert in US-Dollar</div>
+            <div class="kpi-num" id="hyp-res-usd">0,00 $</div>
+            <div class="kpi-desc">Historischer Devisenkurs</div>
+          </div>
+          <div class="kpi-tile">
+            <div class="kpi-title">Kaufwert in Briefmarken</div>
+            <div class="kpi-num" id="hyp-res-stamps">0 Briefe</div>
+            <div class="kpi-desc">Standard-Inlandsporto</div>
+          </div>
+          <div class="kpi-tile">
+            <div class="kpi-title">Wert in Rentenmark (15.11.1923)</div>
+            <div class="kpi-num" id="hyp-res-rm">0,00 Rentenmark</div>
+            <div class="kpi-desc">Umtausch 1 Bio. : 1 RM</div>
+          </div>
+          <div class="kpi-tile">
+            <div class="kpi-title">Heutige Kaufkraft (2025er €)</div>
+            <div class="kpi-num" id="hyp-res-eur2025">0,00 €</div>
+            <div class="kpi-desc">Über Buba-Goldmark-Äquivalent</div>
           </div>
         </div>
       </div>
 
-      <!-- Reallohn-Check -->
-      <div class="subcard" style="margin-bottom: 1.5rem;">
-        <h4>💼 Reallohn- &amp; Gehalts-Check (Deutschland)</h4>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 8px;">
-          <div>
-            <label style="font-size: 0.75rem;" id="lbl-de-wage-old">Einkommen damals:</label>
-            <input type="number" id="de-salary-old" value="2500" oninput="calculateRealWageDE()">
-          </div>
-          <div>
-            <label style="font-size: 0.75rem;" id="lbl-de-wage-new">Einkommen heute:</label>
-            <input type="number" id="de-salary-new" value="3800" oninput="calculateRealWageDE()">
-          </div>
+      <!-- Vollständige Tabelle aus der Vorgabe -->
+      <h4 style="color:var(--bb-navy); margin-bottom:0.75rem;">Amtliche Dokumentation: Jeweilige Verzehnfachung des Dollarkurses seit Kriegsausbruch</h4>
+      <div class="table-scroller">
+        <table>
+          <thead>
+            <tr>
+              <th>1 Goldmark = Papiermark (nominal)</th>
+              <th>Datum</th>
+              <th>Briefporto in Mark</th>
+              <th>Dollarkurs in Mark</th>
+              <th>Zeitraum</th>
+            </tr>
+          </thead>
+          <tbody id="hyper-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- REITER 5: CHRONIK ALLER WÄHRUNGSSCHNITTE SEIT 1810      -->
+  <!-- ======================================================== -->
+  <div id="tab-reforms" class="tab-panel">
+    <div class="card">
+      <div class="card-title">
+        <span>Chronologische Dokumentation aller deutschen Währungsschnitte &amp; Reformen</span>
+        <span style="font-size:0.85rem; font-weight:600; color:var(--text-muted);">Historische Sonderregelungen, Gesetze &amp; Umtauschverhältnisse</span>
+      </div>
+
+      <!-- 1871 / 1873 Reichsmünzgesetz -->
+      <div class="chronicle-card">
+        <div class="chronicle-head">
+          <span class="chronicle-year">1871–1876: Reichsmünzgesetze – Geburt der einheitlichen Mark</span>
+          <span class="chronicle-badge">Reichsgründung</span>
         </div>
-        <div id="de-salary-result" style="font-size: 0.85rem; font-weight: 600; padding: 10px; border-radius: 8px; background: var(--card-bg);">
-          Berechne Reallohn...
+        <div class="chronicle-body">
+          Vor der Reichsgründung existierte in den deutschen Staaten ein uneinheitlicher Münzwirrwarr: Im Norden galt der Taler (preußischer 30-Taler-Fuß), im Süden der Gulden (24½-Gulden-Fuß). Mit den Gesetzen von 1871 und 1873 wurde die goldgedeckte <strong>Mark</strong> zu 100 Pfennigen reichsweit als einheitliche Währung eingeführt.
+        </div>
+        <div class="chronicle-rules">
+          <strong>Umtauschregelungen &amp; Paritäten:</strong>
+          <br>• 1 Taler = exakt 3 Mark.
+          <br>• 1 süddeutscher Gulden = 1 5/7 Mark (ca. 1,714 Mark bzw. 35 Kreuzer = 1 Mark).
+          <br>• Gesetzliche Golddeckung: 1 Mark entsprach 1/2790 Kilogramm Feingold (= 1 Goldmark).
         </div>
       </div>
 
-      <!-- Timeline -->
-      <div class="timeline-box">
-        <h4>⏳ Zeitleiste: Was geschah zwischen <span id="de-tl-start">1948</span> und <span id="de-tl-target">2026</span>?</h4>
-        <ul class="timeline-list" id="de-timeline"></ul>
+      <!-- 1914 Aufhebung der Golddeckung -->
+      <div class="chronicle-card">
+        <div class="chronicle-head">
+          <span class="chronicle-year">31. Juli / 4. August 1914: Aufhebung der Goldeinlösepflicht</span>
+          <span class="chronicle-badge">Erster Weltkrieg</span>
+        </div>
+        <div class="chronicle-body">
+          Mit Kriegsbeginn hob das Deutsche Reich die Einlösepﬂicht der Reichsbanknoten in Gold auf. Die Ausgabe ungedeckter Darlehnskassenscheine und die Finanzierung der Kriegskosten über Notenbankkredite legten das Fundament für die Papiermark-Inflation.
+        </div>
+        <div class="chronicle-rules">
+          <strong>Regelung:</strong>
+          <br>• Der Zwangskurs für Papiergeld trennte den Nominalwert vollständig vom Goldgehalt.
+        </div>
       </div>
 
-      <!-- Tabelle -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; flex-wrap: wrap; gap: 8px;">
-        <input type="text" id="de-search" placeholder="🔍 Tabelle durchsuchen..." style="max-width: 260px; padding: 6px 10px; font-size: 0.82rem;" oninput="filterTable('de')">
-        <button class="action-btn" onclick="exportCSV('de')">📥 Daten als CSV exportieren</button>
+      <!-- 1923 Rentenmark-Reform -->
+      <div class="chronicle-card">
+        <div class="chronicle-head">
+          <span class="chronicle-year">15. November 1923: Das Ende der Hyperinflation &amp; Rentenmark</span>
+          <span class="chronicle-badge">Währungsreform</span>
+        </div>
+        <div class="chronicle-body">
+          Als ein US-Dollar im November 1923 astronomische 4,2 Billionen Papiermark kostete, führte Währungskommissar Hjalmar Schacht die <strong>Rentenmark</strong> ein, abgesichert durch Grundschulden auf landwirtschaftliche und gewerbliche Güter.
+        </div>
+        <div class="chronicle-rules">
+          <strong>Umtauschverhältnis:</strong>
+          <br>• <strong>1 Billion Papiermark = 1 Rentenmark</strong> (bzw. 1 Rentenpfennig = 10 Milliarden Papiermark).
+          <br>• Parität zum Dollar: Wiederherstellung des Vorkriegskurses von 4,20 Rentenmark = 1 US-Dollar.
+          <br>• Am 30. August 1924 wurde zusätzlich die vollwertige <strong>Reichsmark (RM)</strong> 1:1 zur Rentenmark eingeführt.
+        </div>
       </div>
-      <div class="table-container">
+
+      <!-- 1948 Westdeutschland -->
+      <div class="chronicle-card">
+        <div class="chronicle-head">
+          <span class="chronicle-year">20. Juni 1948: Währungsreform der Westzonen (Deutsche Mark)</span>
+          <span class="chronicle-badge">Trizone / West</span>
+        </div>
+        <div class="chronicle-body">
+          In den drei westlichen Besatzungszonen wurde die entwertete Reichsmark durch die <strong>Deutsche Mark (DM)</strong> abgelöst. Dies bildete den Startschuss für Ludwig Erhards Soziale Marktwirtschaft und das Wirtschaftswunder.
+        </div>
+        <div class="chronicle-rules">
+          <strong>Sonderregelungen &amp; Umtauschverhältnisse:</strong>
+          <br>• <strong>Kopfgeld:</strong> Jeder Bürger erhielt sofort bar 40 DM (gegen 40 RM), einen Monat später weitere 20 DM.
+          <br>• <strong>Löhne, Gehälter, Mieten, Renten:</strong> Umstellung im Verhältnis <strong>1 : 1</strong>.
+          <br>• <strong>Bank- &amp; Sparguthaben:</strong> Anmeldung im Verhältnis 10 : 1. Nach Verabschiedung des Festkontengesetzes ergab sich ein <strong>faktischer Umtausch von 100 RM = 6,50 DM</strong> (ein 93,5%iger Schuldenschnitt für Sparer!).
+          <br>• <strong>Schulden &amp; Verbindlichkeiten:</strong> Umstellung grundsätzlich 10 RM = 1 DM.
+        </div>
+      </div>
+
+      <!-- 1948 Ostdeutschland / SBZ -->
+      <div class="chronicle-card">
+        <div class="chronicle-head">
+          <span class="chronicle-year">23. Juni 1948: Währungsreform in der Sowjetischen Besatzungszone</span>
+          <span class="chronicle-badge">SBZ / Ost</span>
+        </div>
+        <div class="chronicle-body">
+          Als Reaktion auf den westdeutschen Alleingang ordnete die Sowjetische Militäradministration (SMAD) eine eigene Reform an. Da keine neuen Noten vorlagen, wurden Reichsmarknoten mit amtlichen Klebemarken versehen („Kuponmark“), bevor die Deutsche Mark der Deutschen Notenbank folgte.
+        </div>
+        <div class="chronicle-rules">
+          <strong>Umtauschstaffelung:</strong>
+          <br>• Bargeld &amp; Sparguthaben pro Kopf bis 70 RM: Verhältnis <strong>1 : 1</strong>.
+          <br>• Darüber liegende Ersparnisse: Gestaffelt 5 : 1 bzw. 10 : 1.
+          <br>• Guthaben von Staatsbetrieben: 1 : 1.
+        </div>
+      </div>
+
+      <!-- 1957 Blitz-Umtausch DDR -->
+      <div class="chronicle-card">
+        <div class="chronicle-head">
+          <span class="chronicle-year">13. Oktober 1957: Blitz-Geldumtausch in der DDR</span>
+          <span class="chronicle-badge">DDR</span>
+        </div>
+        <div class="chronicle-body">
+          Um Bargeldreserven in West-Berlin und im Westen abzufangen und „Spekulationsguthaben“ zu vernichten, führte die DDR-Führung an einem Sonntag innerhalb von nur 15 Stunden einen kompletten Austausch der Geldscheine durch. Nicht rechtzeitig vorgelegte Noten verfielen ersatzlos.
+        </div>
+      </div>
+
+      <!-- 1964/1967 DDR Bezeichnungen -->
+      <div class="chronicle-card">
+        <div class="chronicle-head">
+          <span class="chronicle-year">1964 &amp; 1967: Umbenennung zu Mark der DDR (M)</span>
+          <span class="chronicle-badge">DDR</span>
+        </div>
+        <div class="chronicle-body">
+          1964 wurde die Währung in „Mark der Deutschen Notenbank“ (MDN) und zum 1. Januar 1968 schließlich in <strong>„Mark der DDR“ (M)</strong> umbenannt (1:1 ohne Nominalverlust).
+        </div>
+      </div>
+
+      <!-- 1990 Deutsch-Deutsche Währungsunion -->
+      <div class="chronicle-card">
+        <div class="chronicle-head">
+          <span class="chronicle-year">1. Juli 1990: Deutsch-Deutsche Währungs-, Wirtschafts- &amp; Sozialunion</span>
+          <span class="chronicle-badge">Wiedervereinigung</span>
+        </div>
+        <div class="chronicle-body">
+          Noch vor der formalen politischen Einheit übernahm die DDR die D-Mark der Bundesbank als alleiniges gesetzliches Zahlungsmittel.
+        </div>
+        <div class="chronicle-rules">
+          <strong>Detaillierte Umtausch- &amp; Staffelungssätze:</strong>
+          <br>• <strong>Löhne, Gehälter, Stipendien, Mieten &amp; Renten:</strong> Vollständig <strong>1 : 1</strong> umgestellt.
+          <br>• <strong>Sparguthaben natürlicher Personen (1:1-Freibetrag nach Altersstaffel):</strong>
+          <br>&nbsp;&nbsp;– Kinder unter 14 Jahren: bis zu <strong>2.000 Mark zu 1 : 1</strong>
+          <br>&nbsp;&nbsp;– Erwachsene von 15 bis 59 Jahren: bis zu <strong>4.000 Mark zu 1 : 1</strong>
+          <br>&nbsp;&nbsp;– Senioren ab 60 Jahren: bis zu <strong>6.000 Mark zu 1 : 1</strong>
+          <br>• Alle Sparguthaben <strong>oberhalb dieser Freibeträge:</strong> Umtausch im Verhältnis <strong>2 : 1</strong>.
+          <br>• Schulden und Kredite von DDR-Bürgern und Betrieben: Umstellung zu <strong>2 : 1</strong>.
+        </div>
+      </div>
+
+      <!-- 1999 / 2002 Euro Einführung -->
+      <div class="chronicle-card">
+        <div class="chronicle-head">
+          <span class="chronicle-year">1. Januar 1999 / 2002: Einführung des Euro (€)</span>
+          <span class="chronicle-badge">Europäische Währungsunion</span>
+        </div>
+        <div class="chronicle-body">
+          Am 1. Januar 1999 wurde der Euro als Buchgeld eingeführt; genau drei Jahre später am 1. Januar 2002 folgte das Euro-Bargeld.
+        </div>
+        <div class="chronicle-rules">
+          <strong>Offizieller unwiderruflicher Umrechnungskurs:</strong>
+          <br>• <strong>1 Euro = 1,95583 Deutsche Mark</strong> (1 DM = 0,51129 Euro).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- REITER 6: AMTLICHE BUNDESBANK-TABELLE & EXPORT          -->
+  <!-- ======================================================== -->
+  <div id="tab-dataset" class="tab-panel">
+    <div class="card">
+      <div class="card-title">
+        <span>Vollständige Bundesbank-Zeitreihe (1810–2025)</span>
+        <span style="font-size:0.85rem; font-weight:600; color:var(--text-muted);">Stand: Januar 2026</span>
+      </div>
+
+      <div class="table-tools">
+        <input type="text" id="table-search" placeholder="🔍 Jahr, Währung oder Epoche suchen..." style="max-width:320px;" oninput="filterDatasetTable()">
+        <button class="btn-action" onclick="exportDataCSV()">📥 Vollständige Tabelle als CSV herunterladen</button>
+      </div>
+
+      <div class="table-scroller">
         <table>
           <thead>
             <tr>
               <th>Jahr</th>
               <th>Währung</th>
-              <th>VPI (Basis 2020=100)</th>
-              <th>Veränderung</th>
-              <th>Brutto-Stundenlohn Ø</th>
-              <th>Kontext &amp; Gebietsstand</th>
+              <th>Kaufkraftäquivalent (in € 2025)</th>
+              <th>Harmonisierter VPI (2020=100)</th>
+              <th>Ø Brutto-Stundenlohn</th>
+              <th>Historische Epoche &amp; Quellennachweis</th>
             </tr>
           </thead>
-          <tbody id="de-table-body"></tbody>
+          <tbody id="buba-table-body"></tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- ======================================================== -->
-  <!-- TAB 2: CHINA                                             -->
-  <!-- ======================================================== -->
-  <div id="tab-cn" class="tab-content">
-    <div class="card">
-      <div class="presets-row">
-        <span class="presets-label">Epochen:</span>
-        <button class="preset-btn" onclick="setCnPreset(1985, 2026)">Gesamtzeitraum (1985–2026)</button>
-        <button class="preset-btn" onclick="setCnPreset(1985, 1994)">Preisfreigaben &amp; Rekordinflation</button>
-        <button class="preset-btn" onclick="setCnPreset(1994, 2001)">Konsolidierung bis WTO-Beitritt</button>
-        <button class="preset-btn" onclick="setCnPreset(2001, 2012)">WTO-Boom &amp; Industrialisierung</button>
-        <button class="preset-btn" onclick="setCnPreset(2020, 2026)">Pandemie &amp; Transformation</button>
-      </div>
-
-      <div class="calc-grid">
-        <div class="form-group">
-          <label for="cn-amount">Geldbetrag (in ¥ / Renminbi):</label>
-          <input type="number" id="cn-amount" value="500" min="0" step="any" oninput="calculateCN()">
-        </div>
-        <div class="form-group">
-          <label for="cn-start-year">Ausgangsjahr (ab 1985):</label>
-          <select id="cn-start-year" onchange="calculateCN()"></select>
-        </div>
-        <button class="swap-btn" title="Jahre tauschen" onclick="swapYears('cn')">⇄ Tauschen</button>
-        <div class="form-group">
-          <label for="cn-target-year">Zieljahr (bis 2026):</label>
-          <select id="cn-target-year" onchange="calculateCN()"></select>
-        </div>
-      </div>
-
-      <!-- DUAL RESULT DISPLAY CHINA -->
-      <div class="dual-result-container">
-        <div class="result-box">
-          <div class="result-header" style="color: var(--accent-cn);">
-            <span>Perspektive A: Warenwert-Äquivalent</span>
-            <span>🛍️</span>
-          </div>
-          <div class="result-main" id="cn-res-primary">0,00 ¥</div>
-          <div class="result-sub" id="cn-res-secondary" style="color: var(--accent-cn);">Faktor: 1,00×</div>
-          <p class="result-desc">
-            Nötiger Betrag im Zieljahr, um den gleichen materiellen Warenwert wie im Ausgangsjahr zu finanzieren.
-          </p>
-        </div>
-
-        <div class="result-box" style="border-color: rgba(220, 38, 38, 0.25);">
-          <div class="result-header" style="color: var(--accent-cn);">
-            <span>Perspektive B: Aufbewahrtes Bargeld</span>
-            <span>🏷️</span>
-          </div>
-          <div class="result-main" id="cn-res-cash-val">0,00 ¥</div>
-          <div class="result-sub" id="cn-res-cash-sub" style="color: var(--accent-cn);">-0,0 % Kaufkraftverlust</div>
-          <p class="result-desc">
-            Verbliebene Kaufkraft eines nominal unverzinst bar aufbewahrten Renminbi-Betrags.
-          </p>
-
-          <div class="loss-bar-container">
-            <div class="loss-bar-header">
-              <span>Reale Restkaufkraft des Geldbetrags:</span>
-              <span id="cn-loss-val">100 %</span>
-            </div>
-            <div class="loss-bar-bg">
-              <div class="loss-bar-fill" id="cn-loss-fill" style="width: 100%;"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- STATISTIK CHINA -->
-      <div class="ext-stats-grid">
-        <div class="stat-item">
-          <span class="stat-label">Preisänderung gesamt:</span>
-          <span class="stat-val" id="cn-stat-factor">+0,0 %</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">Inflation p.a. (CAGR):</span>
-          <span class="stat-val" id="cn-stat-cagr">0,0 %</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">72er-Regel (Halbierung):</span>
-          <span class="stat-val" id="cn-stat-rule72">–</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">Inflations-Volatilität:</span>
-          <span class="stat-val" id="cn-stat-volatility">0,0 %</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">Stärkster 3-Jahres-Schub:</span>
-          <span class="stat-val" id="cn-stat-worst-stretch">–</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-label">VPI-Verhältnis:</span>
-          <span class="stat-val" id="cn-stat-indices">100,0 → 100,0</span>
-        </div>
-      </div>
-
-      <!-- Interaktiver Chart China -->
-      <div class="chart-box">
-        <h4>
-          <span>📈 VERBRAUCHERPREISINDEX CHINA (1985–2026, BASIS 1985 = 100)</span>
-          <span id="chart-cn-range" style="font-weight: 500; font-size: 0.8rem; color: var(--accent-cn);"></span>
-        </h4>
-        <div class="canvas-wrapper" id="wrap-chart-cn">
-          <canvas id="chart-cn"></canvas>
-          <div class="chart-tooltip" id="tip-chart-cn"></div>
-        </div>
-      </div>
-
-      <!-- FEATURES CHINA -->
-      <div class="feature-grid-3">
-        <!-- 1. ARBEITSZEIT CHINA -->
-        <div class="subcard">
-          <h4>⏱️ Arbeitszeit-Kaufkraft (China)</h4>
-          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
-            Erforderliche Arbeitszeit eines städtischen Angestellten (NBS) [1]:
-          </p>
-          <div style="font-size: 0.85rem; line-height: 1.6; background: var(--card-bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 8px;">
-            <div>Ausgangsjahr (<span id="lbl-cn-work-start-yr">1985</span>): <strong id="cn-worktime-start">0 Std. 0 Min.</strong> <span style="font-size:0.75rem; color:var(--text-muted);" id="cn-work-wage-start">(Lohn: ~0,00 ¥/h)</span></div>
-            <div>Zieljahr (<span id="lbl-cn-work-target-yr">2026</span>): <strong id="cn-worktime-target">0 Std. 0 Min.</strong> <span style="font-size:0.75rem; color:var(--text-muted);" id="cn-work-wage-target">(Lohn: ~0,00 ¥/h)</span></div>
-          </div>
-          <div id="cn-worktime-verdict" style="font-size: 0.82rem; font-weight: 600;">Berechne Arbeitszeit...</div>
-        </div>
-
-        <!-- 2. ZINS-SIMULATOR CHINA -->
-        <div class="subcard">
-          <h4>💰 Zins- &amp; Spar-Simulator (China)</h4>
-          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
-            Vermögensentwicklung mit Nominalzins im RMB-Raum:
-          </p>
-          <div style="margin-bottom: 8px;">
-            <label style="font-size: 0.75rem;">Nominalzins p.a. (%):</label>
-            <input type="number" id="cn-sim-rate" value="3.0" step="0.1" oninput="calculateCNSim()">
-          </div>
-          <div id="cn-sim-result" style="font-size: 0.82rem; line-height: 1.5; background: var(--card-bg); padding: 10px; border-radius: 8px; border: 1px solid var(--border);">
-            Berechne Zinseszins...
-          </div>
-        </div>
-
-        <!-- 3. INTERAKTIVER WARENKORB CHINA -->
-        <div class="subcard">
-          <h4>
-            <span>🛒 Dynamischer Güter-Check (China)</span>
-            <span style="font-size: 0.75rem; color: var(--text-muted);" id="cn-basket-target-label">Ziel: 2026</span>
-          </h4>
-          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
-            Preise beliebiger Güter in RMB erfassen:
-          </p>
-          <form class="custom-goods-form" onsubmit="addCustomGoodCN(event)">
-            <input type="text" id="cn-good-name" placeholder="z.B. 1kg Schweinefleisch" required>
-            <input type="number" id="cn-good-year" placeholder="Jahr" min="1985" max="2026" required>
-            <input type="number" id="cn-good-price" placeholder="Preis (¥)" step="0.1" min="0.1" required>
-            <button type="submit" class="btn-add" style="background: var(--accent-cn);">➕</button>
-          </form>
-          <ul class="custom-goods-list" id="cn-custom-goods-list"></ul>
-          <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.75rem;">
-            <button class="action-btn" onclick="exportGoodsJSON('cn')">📤 Backup (JSON)</button>
-            <label class="action-btn" style="cursor: pointer;">
-              📥 Import
-              <input type="file" style="display: none;" onchange="importGoodsJSON(event, 'cn')">
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <!-- Reallohn China -->
-      <div class="subcard" style="margin-bottom: 1.5rem;">
-        <h4>💼 Reallohn- &amp; Gehalts-Check (China in RMB)</h4>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 8px;">
-          <div>
-            <label style="font-size: 0.75rem;">Gehalt damals (¥):</label>
-            <input type="number" id="cn-salary-old" value="150" oninput="calculateRealWageCN()">
-          </div>
-          <div>
-            <label style="font-size: 0.75rem;">Gehalt heute (¥):</label>
-            <input type="number" id="cn-salary-new" value="6500" oninput="calculateRealWageCN()">
-          </div>
-        </div>
-        <div id="cn-salary-result" style="font-size: 0.85rem; font-weight: 600; padding: 10px; border-radius: 8px; background: var(--card-bg);">
-          Berechne Reallohn...
-        </div>
-      </div>
-
-      <!-- Timeline China -->
-      <div class="timeline-box">
-        <h4>⏳ Zeitleiste: Was geschah zwischen <span id="cn-tl-start">1985</span> und <span id="cn-tl-target">2026</span>?</h4>
-        <ul class="timeline-list" id="cn-timeline"></ul>
-      </div>
-
-      <!-- Tabelle China -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; flex-wrap: wrap; gap: 8px;">
-        <input type="text" id="cn-search" placeholder="🔍 Tabelle durchsuchen..." style="max-width: 260px; padding: 6px 10px; font-size: 0.82rem;" oninput="filterTable('cn')">
-        <button class="action-btn" onclick="exportCSV('cn')">📥 Daten als CSV exportieren</button>
-      </div>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Jahr</th>
-              <th>VPI (Basis 1985=100)</th>
-              <th>Veränderung</th>
-              <th>Monatslohn Ø (Urban)</th>
-              <th>Historische Transformation &amp; Analyse</th>
-            </tr>
-          </thead>
-          <tbody id="cn-table-body"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <footer style="text-align: center; margin-top: 2.5rem; font-size: 0.82rem; color: var(--text-muted);">
-    Amtliche Referenzen: Statistisches Bundesamt (Destatis, verkettete Langzeitreihe 2020=100) &amp; National Bureau of Statistics of China (NBS)
-  </footer>
 </div>
 
 <script>
-/* ==================== DATENREIHEN MIT ARBEITSLÖHNEN ==================== */
+/* ========================================================================== */
+/* 1. OFFIZIELLE BUNDESBANK-DATEN (STAND JANUAR 2026) & HARMONISIERTE REIHEN  */
+/* ========================================================================== */
 
-// Deutschland: VPI (2020=100) & Historischer durchschnittlicher Bruttostundenlohn (Industrie/Dienstleistungen) [1]
-const dataDE = [
-  { year: 1948, vpi: 20.2, rate: "–", wagePerHour: 1.25, note: "Früheres Bundesgebiet (ab Währungsreform Juni 1948)" },
-  { year: 1949, vpi: 20.0, rate: "-1,1 %", wagePerHour: 1.33, note: "Früheres Bundesgebiet; Konsolidierung nach der Währungsreform" },
-  { year: 1950, vpi: 18.7, rate: "-6,4 %", wagePerHour: 1.45, note: "Früheres Bundesgebiet; stärkste Deflation der Nachkriegszeit" },
-  { year: 1951, vpi: 20.2, rate: "+7,6 %", wagePerHour: 1.63, note: "Früheres Bundesgebiet (Koreakrieg-Boom & Rohstoffnachfrage)" },
-  { year: 1952, vpi: 20.6, rate: "+2,1 %", wagePerHour: 1.76, note: "Früheres Bundesgebiet; Beruhigung der Rohstoffmärkte" },
-  { year: 1953, vpi: 20.2, rate: "-1,7 %", wagePerHour: 1.84, note: "Früheres Bundesgebiet; Produktivitätsgewinne im beginnenden Wirtschaftswunder" },
-  { year: 1954, vpi: 20.3, rate: "+0,4 %", wagePerHour: 1.91, note: "Früheres Bundesgebiet; solide Preisstabilität" },
-  { year: 1955, vpi: 20.6, rate: "+1,4 %", wagePerHour: 2.05, note: "Früheres Bundesgebiet; Beginn der Vollbeschäftigung" },
-  { year: 1956, vpi: 21.2, rate: "+2,8 %", wagePerHour: 2.24, note: "Früheres Bundesgebiet; anziehender Konsum" },
-  { year: 1957, vpi: 21.6, rate: "+2,0 %", wagePerHour: 2.45, note: "Früheres Bundesgebiet; Inkrafttreten des Bundesbankgesetzes" },
-  { year: 1958, vpi: 22.0, rate: "+2,3 %", wagePerHour: 2.62, note: "Früheres Bundesgebiet; stetiges Nachkriegswachstum" },
-  { year: 1959, vpi: 22.1, rate: "+0,6 %", wagePerHour: 2.78, note: "Früheres Bundesgebiet; hohe Sparquote dämpft Inflation" },
-  { year: 1960, vpi: 22.4, rate: "+1,6 %", wagePerHour: 3.08, note: "Früheres Bundesgebiet (inkl. Saarland); Gastarbeiter-Anwerbung beginnt" },
-  { year: 1961, vpi: 23.1, rate: "+2,5 %", wagePerHour: 3.40, note: "Früheres Bundesgebiet; D-Mark um 5 % aufgewertet" },
-  { year: 1962, vpi: 23.3, rate: "+2,8 %", wagePerHour: 3.79, note: "Ab hier Reihe „Alle privaten Haushalte“ (West)" },
-  { year: 1963, vpi: 24.0, rate: "+3,0 %", wagePerHour: 4.07, note: "Früheres Bundesgebiet; moderater Preisauftrieb" },
-  { year: 1964, vpi: 24.6, rate: "+2,4 %", wagePerHour: 4.41, note: "Früheres Bundesgebiet; ausgewogenes Wachstum" },
-  { year: 1965, vpi: 25.3, rate: "+3,2 %", wagePerHour: 4.84, note: "Früheres Bundesgebiet; Spannungen am Arbeitsmarkt" },
-  { year: 1966, vpi: 26.2, rate: "+3,3 %", wagePerHour: 5.21, note: "Früheres Bundesgebiet; Abkühlung des ersten Nachkriegsbooms" },
-  { year: 1967, vpi: 26.7, rate: "+1,9 %", wagePerHour: 5.40, note: "Früheres Bundesgebiet; erste bundesdeutsche Rezession" },
-  { year: 1968, vpi: 27.0, rate: "+1,6 %", wagePerHour: 5.68, note: "Früheres Bundesgebiet; Einführung der Mehrwertsteuer (10 %)" },
-  { year: 1969, vpi: 27.6, rate: "+1,8 %", wagePerHour: 6.27, note: "Früheres Bundesgebiet; erneuter kräftiger Aufschwung" },
-  { year: 1970, vpi: 28.5, rate: "+3,6 %", wagePerHour: 7.19, note: "Früheres Bundesgebiet; Lohn-Preis-Spirale setzt ein" },
-  { year: 1971, vpi: 30.1, rate: "+5,2 %", wagePerHour: 8.01, note: "Früheres Bundesgebiet; Zerfall des Bretton-Woods-Systems" },
-  { year: 1972, vpi: 31.8, rate: "+5,4 %", wagePerHour: 8.75, note: "Früheres Bundesgebiet; expansive Finanzpolitik" },
-  { year: 1973, vpi: 33.9, rate: "+7,1 %", wagePerHour: 9.77, note: "Früheres Bundesgebiet (1. Ölkrise; Fahrverbote & Stagflation)" },
-  { year: 1974, vpi: 36.3, rate: "+6,9 %", wagePerHour: 10.92, note: "Früheres Bundesgebiet; Bundesbank wechselt zu Geldmengensteuerung" },
-  { year: 1975, vpi: 38.5, rate: "+6,0 %", wagePerHour: 11.75, note: "Früheres Bundesgebiet; Rezession bei gleichzeitig hoher Inflation" },
-  { year: 1976, vpi: 40.1, rate: "+4,2 %", wagePerHour: 12.60, note: "Früheres Bundesgebiet; Erholung dämpft Preisanstieg" },
-  { year: 1977, vpi: 41.6, rate: "+3,7 %", wagePerHour: 13.51, note: "Früheres Bundesgebiet; moderate Lohnabschlüsse" },
-  { year: 1978, vpi: 42.7, rate: "+2,7 %", wagePerHour: 14.28, note: "Früheres Bundesgebiet; feste D-Mark verbilligt Importe" },
-  { year: 1979, vpi: 44.5, rate: "+4,1 %", wagePerHour: 15.12, note: "Früheres Bundesgebiet; Beginn der 2. Ölkrise (Iran)" },
-  { year: 1980, vpi: 46.9, rate: "+5,4 %", wagePerHour: 16.14, note: "Früheres Bundesgebiet (2. Ölkrise schlägt voll durch)" },
-  { year: 1981, vpi: 49.8, rate: "+6,3 %", wagePerHour: 17.02, note: "Früheres Bundesgebiet; Hochzinspolitik der Bundesbank" },
-  { year: 1982, vpi: 52.5, rate: "+5,2 %", wagePerHour: 17.72, note: "Früheres Bundesgebiet; konjunkturelle Schwächephase" },
-  { year: 1983, vpi: 54.1, rate: "+3,2 %", wagePerHour: 18.31, note: "Früheres Bundesgebiet; Beruhigung bei den Importpreisen" },
-  { year: 1984, vpi: 55.5, rate: "+2,5 %", wagePerHour: 18.89, note: "Früheres Bundesgebiet; anhaltende Konsolidierung" },
-  { year: 1985, vpi: 56.6, rate: "+2,0 %", wagePerHour: 19.58, note: "Früheres Bundesgebiet; solide Preisstabilität" },
-  { year: 1986, vpi: 56.6, rate: "-0,1 %", wagePerHour: 20.35, note: "Früheres Bundesgebiet (Ölpreis-Kollaps / Counter-Shock)" },
-  { year: 1987, vpi: 56.6, rate: "+0,2 %", wagePerHour: 21.08, note: "Früheres Bundesgebiet; quasi Preisstagnation" },
-  { year: 1988, vpi: 57.5, rate: "+1,2 %", wagePerHour: 21.82, note: "Früheres Bundesgebiet; Binnennachfrage zieht wieder an" },
-  { year: 1989, vpi: 59.0, rate: "+2,8 %", wagePerHour: 22.65, note: "Früheres Bundesgebiet; Fall der Berliner Mauer" },
-  { year: 1990, vpi: 60.6, rate: "+2,6 %", wagePerHour: 23.95, note: "Früheres Bundesgebiet (West); Währungs- und Sozialunion" },
-  { year: 1991, vpi: 61.9, rate: "+4,0 %", wagePerHour: 25.68, note: "Deutschland insgesamt (Start des gesamtdeutschen VPI)" },
-  { year: 1992, vpi: 65.0, rate: "+5,0 %", wagePerHour: 27.22, note: "Deutschland; Vereinigungsboom & markante Lohnsteigerungen" },
-  { year: 1993, vpi: 67.9, rate: "+4,5 %", wagePerHour: 28.31, note: "Deutschland; MwSt.-Erhöhung und nachwirkender Preisdruck" },
-  { year: 1994, vpi: 69.7, rate: "+2,7 %", wagePerHour: 29.08, note: "Deutschland; einsetzende Disinflation" },
-  { year: 1995, vpi: 71.0, rate: "+1,9 %", wagePerHour: 30.15, note: "Deutschland; Rückkehr unter 2 % Inflation" },
-  { year: 1996, vpi: 72.0, rate: "+1,4 %", wagePerHour: 30.82, note: "Deutschland; verhaltenes Wachstum" },
-  { year: 1997, vpi: 73.4, rate: "+1,9 %", wagePerHour: 31.35, note: "Deutschland; moderate Teuerung vor Euro-Einführung" },
-  { year: 1998, vpi: 74.0, rate: "+0,8 %", wagePerHour: 31.88, note: "Deutschland; Asienkrise verbilligt Rohstoffe" },
-  { year: 1999, vpi: 74.5, rate: "+0,7 %", wagePerHour: 32.55, note: "Deutschland; Einführung des Euro als Buchgeld" },
-  { year: 2000, vpi: 75.5, rate: "+1,3 %", wagePerHour: 33.30, note: "Deutschland; steigende Rohölpreise bei schwächerem Euro" },
-  { year: 2001, vpi: 77.0, rate: "+2,0 %", wagePerHour: 34.05, note: "Deutschland; Seuchen verteuern Fleisch und Lebensmittel" },
-  { year: 2002, vpi: 78.1, rate: "+1,4 %", wagePerHour: 17.90, note: "Deutschland (ab hier EUR); Einführung des Euro-Bargelds" },
-  { year: 2003, vpi: 78.9, rate: "+1,0 %", wagePerHour: 18.35, note: "Deutschland; schwache Binnenkonjunktur dämpft Preise" },
-  { year: 2004, vpi: 80.2, rate: "+1,6 %", wagePerHour: 18.72, note: "Deutschland; Praxisgebühr und Gesundheitsreform" },
-  { year: 2005, vpi: 81.5, rate: "+1,6 %", wagePerHour: 19.05, note: "Deutschland; Arbeitsmarktreformen (Hartz IV)" },
-  { year: 2006, vpi: 82.8, rate: "+1,6 %", wagePerHour: 19.45, note: "Deutschland; spürbarer Aufschwung ohne Teuerungsdruck" },
-  { year: 2007, vpi: 84.7, rate: "+2,3 %", wagePerHour: 19.92, note: "Deutschland; Anhebung des Regel-MwSt.-Satzes auf 19 %" },
-  { year: 2008, vpi: 86.9, rate: "+2,6 %", wagePerHour: 20.45, note: "Deutschland; Ölpreisrekord vor Ausbruch der Finanzkrise" },
-  { year: 2009, vpi: 87.2, rate: "+0,3 %", wagePerHour: 21.05, note: "Deutschland (Finanzkrise / Kurzarbeit fängt Arbeitsmarkt auf)" },
-  { year: 2010, vpi: 88.1, rate: "+1,0 %", wagePerHour: 21.65, note: "Deutschland; rasche Erholung der Industrie" },
-  { year: 2011, vpi: 90.0, rate: "+2,2 %", wagePerHour: 22.35, note: "Deutschland; Euro-Krise & anziehende Rohstoffpreise" },
-  { year: 2012, vpi: 91.7, rate: "+1,9 %", wagePerHour: 23.05, note: "Deutschland; Teuerung stabilisiert sich im Zielbereich" },
-  { year: 2013, vpi: 93.1, rate: "+1,5 %", wagePerHour: 23.65, note: "Deutschland; Beginn der EZB-Niedrigzinsära" },
-  { year: 2014, vpi: 94.0, rate: "+1,0 %", wagePerHour: 24.30, note: "Deutschland; fallende Energiepreise" },
-  { year: 2015, vpi: 94.5, rate: "+0,5 %", wagePerHour: 25.10, note: "Deutschland; Einführung des gesetzlichen Mindestlohns (8,50 €)" },
-  { year: 2016, vpi: 95.0, rate: "+0,5 %", wagePerHour: 25.75, note: "Deutschland; Nullzinspolitik & niedrige Kraftstoffpreise" },
-  { year: 2017, vpi: 96.4, rate: "+1,5 %", wagePerHour: 26.50, note: "Deutschland; moderate Teuerungsbeschleunigung" },
-  { year: 2018, vpi: 98.1, rate: "+1,8 %", wagePerHour: 27.35, note: "Deutschland; Energie und Nahrungsmittel als Teuerungstreiber" },
-  { year: 2019, vpi: 99.5, rate: "+1,4 %", wagePerHour: 28.25, note: "Deutschland; globale Handelskonflikte dämpfen Teuerung" },
-  { year: 2020, vpi: 100.0, rate: "+0,5 %", wagePerHour: 28.90, note: "Basisjahr (2020 = 100); befristete MwSt.-Senkung (COVID-19)" },
-  { year: 2021, vpi: 103.1, rate: "+3,1 %", wagePerHour: 29.80, note: "Deutschland; MwSt.-Rückkehr, CO₂-Preis & Lieferkettenengpässe" },
-  { year: 2022, vpi: 110.2, rate: "+6,9 %", wagePerHour: 31.20, note: "Deutschland (Energiekrise / Ukraine-Krieg; 70er-Jahre-Niveau)" },
-  { year: 2023, vpi: 116.7, rate: "+5,9 %", wagePerHour: 33.10, note: "Deutschland; Zweitrundeneffekte bei Lebensmitteln & Zinswende" },
-  { year: 2024, vpi: 119.3, rate: "+2,2 %", wagePerHour: 34.90, note: "Deutschland; Beruhigung an den Energiemärkten" },
-  { year: 2025, vpi: 121.9, rate: "+2,2 %", wagePerHour: 36.20, note: "Deutschland; Teuerung pendelt sich nahe Zielmarke ein" },
-  { year: 2026, vpi: 125.5, rate: "+2,2 %", wagePerHour: 37.40, note: "Laufendes Berichtsjahr; Destatis-Projektion/Jahresschnittbasis" }
+// Kaufkraft einer Währungseinheit im Jahr t in Euro des Jahres 2025 (PDF Deutsche Bundesbank)
+// Harmonisiert mit rückgerechnetem VPI (2020=100) und historischen Durchschnittslöhnen
+const bubaData = [
+  // 1810 - 1873: Gulden (28.8 - 13.9) und Taler (50.4 - 24.4)
+  { year: 1810, cur: "Gulden", bubaVal: 28.8, talerVal: 50.4, vpi: 4.24, wage: 0.14, note: "Deutscher Bund; Gömmel-Index Stadt Nürnberg" },
+  { year: 1811, cur: "Gulden", bubaVal: 29.5, talerVal: 51.6, vpi: 4.14, wage: 0.14, note: "Gömmel-Index; Kontinentalsperre" },
+  { year: 1812, cur: "Gulden", bubaVal: 25.4, talerVal: 44.5, vpi: 4.80, wage: 0.15, note: "Gömmel-Index; Russlandfeldzug Napoleons" },
+  { year: 1813, cur: "Gulden", bubaVal: 25.4, talerVal: 44.5, vpi: 4.80, wage: 0.15, note: "Befreiungskriege" },
+  { year: 1814, cur: "Gulden", bubaVal: 25.9, talerVal: 45.4, vpi: 4.71, wage: 0.15, note: "Wiener Kongress beginnt" },
+  { year: 1815, cur: "Gulden", bubaVal: 24.0, talerVal: 42.0, vpi: 5.08, wage: 0.15, note: "Gründung des Deutschen Bundes" },
+  { year: 1816, cur: "Gulden", bubaVal: 19.4, talerVal: 33.9, vpi: 6.29, wage: 0.16, note: "Jahr ohne Sommer (Tambora-Vulkanausbruch)" },
+  { year: 1817, cur: "Gulden", bubaVal: 13.7, talerVal: 23.9, vpi: 8.91, wage: 0.17, note: "Schwere Hungersnot & Teuerungsspitze" },
+  { year: 1818, cur: "Gulden", bubaVal: 19.7, talerVal: 34.4, vpi: 6.19, wage: 0.16, note: "Ernteerholung dämpft Agrarpreise" },
+  { year: 1819, cur: "Gulden", bubaVal: 25.4, talerVal: 44.5, vpi: 4.80, wage: 0.16, note: "Karlsbader Beschlüsse" },
+  { year: 1820, cur: "Gulden", bubaVal: 30.9, talerVal: 54.1, vpi: 3.95, wage: 0.16, note: "Agrardeflation nach Rekordernten" },
+  { year: 1821, cur: "Gulden", bubaVal: 28.2, talerVal: 49.4, vpi: 4.33, wage: 0.16, note: "Niedriges Preisniveau" },
+  { year: 1822, cur: "Gulden", bubaVal: 27.0, talerVal: 47.3, vpi: 4.52, wage: 0.16, note: "Preußische Zollreformen" },
+  { year: 1823, cur: "Gulden", bubaVal: 29.5, talerVal: 51.6, vpi: 4.14, wage: 0.17, note: "Stabile Lebenshaltung" },
+  { year: 1824, cur: "Gulden", bubaVal: 32.4, talerVal: 56.8, vpi: 3.77, wage: 0.17, note: "Sehr billige Grundnahrungsmittel" },
+  { year: 1825, cur: "Gulden", bubaVal: 29.5, talerVal: 51.6, vpi: 4.14, wage: 0.17, note: "Konsolidierung im Handel" },
+  { year: 1826, cur: "Gulden", bubaVal: 33.3, talerVal: 58.2, vpi: 3.66, wage: 0.17, note: "Höchste Gulden-Kaufkraft des Jahrhunderts" },
+  { year: 1827, cur: "Gulden", bubaVal: 32.4, talerVal: 56.8, vpi: 3.77, wage: 0.17, note: "Vorstufe zum Zollverein" },
+  { year: 1828, cur: "Gulden", bubaVal: 26.5, talerVal: 46.3, vpi: 4.60, wage: 0.18, note: "Preise ziehen leicht an" },
+  { year: 1829, cur: "Gulden", bubaVal: 28.2, talerVal: 49.4, vpi: 4.33, wage: 0.18, note: "Mäßige Teuerung" },
+  { year: 1830, cur: "Gulden", bubaVal: 25.4, talerVal: 44.5, vpi: 4.80, wage: 0.18, note: "Julirevolution & Unruhen" },
+  { year: 1831, cur: "Gulden", bubaVal: 25.9, talerVal: 45.4, vpi: 4.71, wage: 0.18, note: "Choleraepidemie in Mitteleuropa" },
+  { year: 1832, cur: "Gulden", bubaVal: 25.9, talerVal: 45.4, vpi: 4.71, wage: 0.19, note: "Hambacher Fest" },
+  { year: 1833, cur: "Gulden", bubaVal: 27.0, talerVal: 47.3, vpi: 4.52, wage: 0.19, note: "Vorbereitung Deutscher Zollverein" },
+  { year: 1834, cur: "Gulden", bubaVal: 28.2, talerVal: 49.4, vpi: 4.33, wage: 0.19, note: "Gründung Deutscher Zollverein" },
+  { year: 1835, cur: "Gulden", bubaVal: 28.2, talerVal: 49.4, vpi: 4.33, wage: 0.20, note: "Erste Eisenbahn Nürnberg–Fürth" },
+  { year: 1836, cur: "Gulden", bubaVal: 26.5, talerVal: 46.3, vpi: 4.60, wage: 0.20, note: "Aufstrebende Industrie" },
+  { year: 1837, cur: "Gulden", bubaVal: 27.0, talerVal: 47.3, vpi: 4.52, wage: 0.21, note: "Münchner Münzvertrag" },
+  { year: 1838, cur: "Gulden", bubaVal: 24.5, talerVal: 42.8, vpi: 4.98, wage: 0.21, note: "Dresdner Münzkonvention (Taler/Gulden fest)" },
+  { year: 1839, cur: "Gulden", bubaVal: 24.0, talerVal: 42.0, vpi: 5.08, wage: 0.21, note: "Anziehende Gewerbepreise" },
+  { year: 1840, cur: "Gulden", bubaVal: 26.5, talerVal: 46.3, vpi: 4.60, wage: 0.22, note: "Beginnende Hochindustrialisierung" },
+  { year: 1841, cur: "Gulden", bubaVal: 27.6, talerVal: 48.3, vpi: 4.42, wage: 0.22, note: "Gute Getreideversorgung" },
+  { year: 1842, cur: "Gulden", bubaVal: 25.9, talerVal: 45.4, vpi: 4.71, wage: 0.22, note: "Großer Brand von Hamburg" },
+  { year: 1843, cur: "Gulden", bubaVal: 22.0, talerVal: 38.5, vpi: 5.55, wage: 0.23, note: "Missernten treiben Roggenpreis" },
+  { year: 1844, cur: "Gulden", bubaVal: 22.8, talerVal: 39.8, vpi: 5.35, wage: 0.23, note: "Weberaufstand in Schlesien" },
+  { year: 1845, cur: "Gulden", bubaVal: 22.8, talerVal: 39.8, vpi: 5.35, wage: 0.23, note: "Kartoffelfäule bricht aus" },
+  { year: 1846, cur: "Gulden", bubaVal: 20.6, talerVal: 36.0, vpi: 5.92, wage: 0.24, note: "Schwere Nahrungsmittelkrise" },
+  { year: 1847, cur: "Gulden", bubaVal: 21.3, talerVal: 37.2, vpi: 5.73, wage: 0.24, note: "Berliner Kartoffelrevolution" },
+  { year: 1848, cur: "Gulden", bubaVal: 27.6, talerVal: 48.3, vpi: 4.42, wage: 0.24, note: "Märzrevolution; Nachfragebaisse" },
+  { year: 1849, cur: "Gulden", bubaVal: 29.5, talerVal: 51.6, vpi: 4.14, wage: 0.24, note: "Paulskirchenverfassung scheitert" },
+  { year: 1850, cur: "Gulden", bubaVal: 28.8, talerVal: 50.4, vpi: 4.24, wage: 0.25, note: "Preußisch-Österreichische Spannung" },
+  { year: 1851, cur: "Gulden", bubaVal: 24.9, talerVal: 43.7, vpi: 4.90, wage: 0.25, note: "Goldfunde in Australien / Kalifornien" },
+  { year: 1852, cur: "Gulden", bubaVal: 20.9, talerVal: 36.6, vpi: 5.84, wage: 0.26, note: "Spürbare Teuerung" },
+  { year: 1853, cur: "Gulden", bubaVal: 22.8, talerVal: 39.8, vpi: 5.35, wage: 0.26, note: "Krimkrieg beginnt" },
+  { year: 1854, cur: "Gulden", bubaVal: 18.5, talerVal: 32.4, vpi: 6.59, wage: 0.27, note: "Kriegsbedingte Getreidespekulation" },
+  { year: 1855, cur: "Gulden", bubaVal: 17.3, talerVal: 30.3, vpi: 7.05, wage: 0.28, note: "Teuerungsrekord der 1850er Jahre" },
+  { year: 1856, cur: "Gulden", bubaVal: 20.6, talerVal: 36.0, vpi: 5.92, wage: 0.28, note: "Friede von Paris" },
+  { year: 1857, cur: "Gulden", bubaVal: 20.6, talerVal: 36.0, vpi: 5.92, wage: 0.29, note: "Wiener Münzvertrag & Erste Weltwirtschaftskrise" },
+  { year: 1858, cur: "Gulden", bubaVal: 23.2, talerVal: 40.5, vpi: 5.26, wage: 0.29, note: "Entspannung an den Rohstoffmärkten" },
+  { year: 1859, cur: "Gulden", bubaVal: 22.4, talerVal: 39.1, vpi: 5.45, wage: 0.29, note: "Sardinischer Krieg" },
+  { year: 1860, cur: "Gulden", bubaVal: 20.9, talerVal: 36.6, vpi: 5.84, wage: 0.30, note: "Zollvereinswachstum" },
+  { year: 1861, cur: "Gulden", bubaVal: 19.4, talerVal: 33.9, vpi: 6.29, wage: 0.30, note: "US-Bürgerkrieg (Baumwollkrise)" },
+  { year: 1862, cur: "Gulden", bubaVal: 20.0, talerVal: 34.9, vpi: 6.10, wage: 0.31, note: "Bismarck wird preußischer Ministerpräsident" },
+  { year: 1863, cur: "Gulden", bubaVal: 20.9, talerVal: 36.6, vpi: 5.84, wage: 0.31, note: "Gründung ADAV (Arbeiterbewegung)" },
+  { year: 1864, cur: "Gulden", bubaVal: 20.6, talerVal: 36.0, vpi: 5.92, wage: 0.32, note: "Deutsch-Dänischer Krieg" },
+  { year: 1865, cur: "Gulden", bubaVal: 21.6, talerVal: 37.8, vpi: 5.65, wage: 0.32, note: "Ende des US-Bürgerkriegs" },
+  { year: 1866, cur: "Gulden", bubaVal: 20.9, talerVal: 36.6, vpi: 5.84, wage: 0.33, note: "Deutscher Krieg (Preußen siegt bei Königgrätz)" },
+  { year: 1867, cur: "Gulden", bubaVal: 18.3, talerVal: 32.0, vpi: 6.67, wage: 0.33, note: "Gründung Norddeutscher Bund" },
+  { year: 1868, cur: "Gulden", bubaVal: 19.1, talerVal: 33.4, vpi: 6.39, wage: 0.34, note: "Konsolidierung im Binnenmarkt" },
+  { year: 1869, cur: "Gulden", bubaVal: 19.7, talerVal: 34.4, vpi: 6.19, wage: 0.35, note: "Gewerbeordnung für den Norddeutschen Bund" },
+  { year: 1870, cur: "Gulden", bubaVal: 18.8, talerVal: 32.9, vpi: 6.49, wage: 0.35, note: "Deutsch-Französischer Krieg" },
+  { year: 1871, cur: "Gulden", bubaVal: 16.2, talerVal: 28.4, vpi: 7.53, wage: 0.37, note: "Reichsgründung; Erstes Reichsmünzgesetz" },
+  { year: 1872, cur: "Gulden", bubaVal: 14.4, talerVal: 25.2, vpi: 8.47, wage: 0.40, note: "Gründerzeitboom & Spekulationswelle" },
+  { year: 1873, cur: "Mark", bubaVal: 8.1, talerVal: 24.4, vpi: 10.02, wage: 0.43, note: "Einführung der Mark; Gründerkrach" },
+
+  // 1874 - 1923: Mark (Kaiserreich bis Hyperinflation)
+  { year: 1874, cur: "Mark", bubaVal: 7.9, vpi: 10.28, wage: 0.43, note: "Gründerdepression; Deflationsdruck" },
+  { year: 1875, cur: "Mark", bubaVal: 8.2, vpi: 9.90, wage: 0.42, note: "Bankgesetz; Gründung der Reichsbank" },
+  { year: 1876, cur: "Mark", bubaVal: 8.3, vpi: 9.78, wage: 0.42, note: "Reichsweite Mark-Einführung abgeschlossen" },
+  { year: 1877, cur: "Mark", bubaVal: 8.5, vpi: 9.55, wage: 0.41, note: "Anhaltende weltweite Stagnation" },
+  { year: 1878, cur: "Mark", bubaVal: 8.9, vpi: 9.12, wage: 0.41, note: "Sozialistengesetz erlassen" },
+  { year: 1879, cur: "Mark", bubaVal: 9.2, vpi: 8.83, wage: 0.40, note: "Schutzzollpolitik Bismarcks" },
+  { year: 1880, cur: "Mark", bubaVal: 8.8, vpi: 9.23, wage: 0.41, note: "Ende Gömmel-Reihe; Beginn Destatis" },
+  { year: 1881, cur: "Mark", bubaVal: 8.9, vpi: 9.12, wage: 0.42, note: "Destatis-Reihe basierend auf Ernährung" },
+  { year: 1882, cur: "Mark", bubaVal: 9.1, vpi: 8.92, wage: 0.42, note: "Beruhigung bei Lebensmittelpreisen" },
+  { year: 1883, cur: "Mark", bubaVal: 8.9, vpi: 9.12, wage: 0.43, note: "Einführung Krankenversicherung" },
+  { year: 1884, cur: "Mark", bubaVal: 9.2, vpi: 8.83, wage: 0.43, note: "Unfallversicherung; Kolonialpolitik" },
+  { year: 1885, cur: "Mark", bubaVal: 8.9, vpi: 9.12, wage: 0.44, note: "Kongokonferenz" },
+  { year: 1886, cur: "Mark", bubaVal: 8.8, vpi: 9.23, wage: 0.44, note: "Solide Preisstabilität der Goldmark" },
+  { year: 1887, cur: "Mark", bubaVal: 8.8, vpi: 9.23, wage: 0.45, note: "Niedrige Teuerung im Kaiserreich" },
+  { year: 1888, cur: "Mark", bubaVal: 8.8, vpi: 9.23, wage: 0.45, note: "Dreikaiserjahr" },
+  { year: 1889, cur: "Mark", bubaVal: 8.5, vpi: 9.55, wage: 0.46, note: "Großer Bergarbeiterstreik im Ruhrgebiet" },
+  { year: 1890, cur: "Mark", bubaVal: 8.2, vpi: 9.90, wage: 0.47, note: "Entlassung Bismarcks; Konjunkturboom" },
+  { year: 1891, cur: "Mark", bubaVal: 8.1, vpi: 10.02, wage: 0.48, note: "Rentengesetz tritt in Kraft" },
+  { year: 1892, cur: "Mark", bubaVal: 8.1, vpi: 10.02, wage: 0.48, note: "Stabile Verbraucherpreise" },
+  { year: 1893, cur: "Mark", bubaVal: 8.5, vpi: 9.55, wage: 0.49, note: "Handelskrieg mit Russland" },
+  { year: 1894, cur: "Mark", bubaVal: 8.6, vpi: 9.44, wage: 0.49, note: "Handelsvertrag beendet Zollstreit" },
+  { year: 1895, cur: "Mark", bubaVal: 8.7, vpi: 9.33, wage: 0.50, note: "Beginn des wilhelminischen Hochaufschwungs" },
+  { year: 1896, cur: "Mark", bubaVal: 8.8, vpi: 9.23, wage: 0.51, note: "Bürgerliches Gesetzbuch (BGB) verabschiedet" },
+  { year: 1897, cur: "Mark", bubaVal: 8.7, vpi: 9.33, wage: 0.52, note: "Flottengesetze beginnen" },
+  { year: 1898, cur: "Mark", bubaVal: 8.3, vpi: 9.78, wage: 0.53, note: "Preise ziehen an" },
+  { year: 1899, cur: "Mark", bubaVal: 8.5, vpi: 9.55, wage: 0.54, note: "Kräftige Industrienachfrage" },
+  { year: 1900, cur: "Mark", bubaVal: 8.5, vpi: 9.55, wage: 0.55, note: "Jahrhundertwende; stabile Goldmark" },
+  { year: 1901, cur: "Mark", bubaVal: 8.3, vpi: 9.78, wage: 0.55, note: "Leichte Rezession" },
+  { year: 1902, cur: "Mark", bubaVal: 8.2, vpi: 9.90, wage: 0.56, note: "Neuer Zolltarif" },
+  { year: 1903, cur: "Mark", bubaVal: 8.2, vpi: 9.90, wage: 0.57, note: "Wirtschaftsaufschwung" },
+  { year: 1904, cur: "Mark", bubaVal: 7.9, vpi: 10.28, wage: 0.58, note: "Agrarpreise steigen moderat" },
+  { year: 1905, cur: "Mark", bubaVal: 7.8, vpi: 10.41, wage: 0.60, note: "Erste Marokkokrise" },
+  { year: 1906, cur: "Mark", bubaVal: 7.5, vpi: 10.83, wage: 0.61, note: "Merkbare Teuerung bei Fleisch & Brot" },
+  { year: 1907, cur: "Mark", bubaVal: 7.4, vpi: 10.97, wage: 0.63, note: "Internationale Bankenkrise" },
+  { year: 1908, cur: "Mark", bubaVal: 7.4, vpi: 10.97, wage: 0.63, note: "Beruhigung an den Märkten" },
+  { year: 1909, cur: "Mark", bubaVal: 7.2, vpi: 11.28, wage: 0.64, note: "Reichsfinanzreform" },
+  { year: 1910, cur: "Mark", bubaVal: 7.1, vpi: 11.44, wage: 0.66, note: "Anhaltend hohes Lohn- und Preisniveau" },
+  { year: 1911, cur: "Mark", bubaVal: 6.9, vpi: 11.77, wage: 0.68, note: "Große Dürre verteuert Ernte" },
+  { year: 1912, cur: "Mark", bubaVal: 6.5, vpi: 12.49, wage: 0.70, note: "Balkankriege verunsichern Europa" },
+  { year: 1913, cur: "Mark", bubaVal: 6.6, vpi: 12.30, wage: 0.72, note: "Letztes Friedensjahr der Goldmark" },
+  { year: 1914, cur: "Mark", bubaVal: 6.6, vpi: 12.30, wage: 0.73, note: "31.07. Goldparität faktisch aufgehoben (Fußnote 2,3)" },
+  { year: 1915, cur: "Mark", bubaVal: 4.9, vpi: 16.57, wage: 0.78, note: "Erster Weltkrieg; Kriegswirtschaft (Fußnote 2,3)" },
+  { year: 1916, cur: "Mark", bubaVal: 3.7, vpi: 21.95, wage: 0.88, note: "Steckrübenwinter; Versorgungsengpässe (Fußnote 2,3)" },
+  { year: 1917, cur: "Mark", bubaVal: 2.9, vpi: 28.00, wage: 1.05, note: "Kriegsanleihen finanzieren Staatshaushalt (Fußnote 2,3)" },
+  { year: 1918, cur: "Mark", bubaVal: 2.1, vpi: 38.67, wage: 1.35, note: "Kriegsende; Ausrufung der Republik (Fußnote 2,3)" },
+  { year: 1919, cur: "Mark", bubaVal: 1.4, vpi: 58.00, wage: 1.95, note: "Versailler Vertrag & Nachkriegsinflation (Fußnote 2,3)" },
+  { year: 1920, cur: "Mark", bubaVal: 0.6, vpi: 135.3, wage: 4.20, note: "Galoppierende Teuerung (Fußnote 2,3)" },
+  { year: 1921, cur: "Mark", bubaVal: 0.5, vpi: 162.4, wage: 6.80, note: "Reparationsforderungen (Fußnote 2,3)" },
+  { year: 1922, cur: "Mark", bubaVal: null, vpi: null, wage: null, note: "Hyperinflation: Jahresdurchschnitt nicht aussagekräftig (Fußnote 4)" },
+  { year: 1923, cur: "Mark", bubaVal: null, vpi: null, wage: null, note: "Hyperinflation & Währungsreform (1 Bio. Papiermark = 1 RM, Fußnote 4)" },
+
+  // 1924 - 1948 1. Hj: Reichsmark
+  { year: 1924, cur: "Reichsmark", bubaVal: 5.1, vpi: 15.92, wage: 0.72, note: "Einführung Reichsmark; Dawes-Plan" },
+  { year: 1925, cur: "Reichsmark", bubaVal: 4.7, vpi: 17.28, wage: 0.84, note: "Reichsindexziffer für Lebenshaltungskosten" },
+  { year: 1926, cur: "Reichsmark", bubaVal: 4.6, vpi: 17.65, wage: 0.90, note: "Goldene Zwanziger; Eintritt in Völkerbund" },
+  { year: 1927, cur: "Reichsmark", bubaVal: 4.5, vpi: 18.04, wage: 0.96, note: "Gesetz über Arbeitsvermittlung & Arbeitslosenversicherung" },
+  { year: 1928, cur: "Reichsmark", bubaVal: 4.4, vpi: 18.45, wage: 1.02, note: "Höhepunkt der Weimarer Konjunktur" },
+  { year: 1929, cur: "Reichsmark", bubaVal: 4.3, vpi: 18.88, wage: 1.04, note: "Schwarzer Freitag / Weltwirtschaftskrise (Fußnote 2)" },
+  { year: 1930, cur: "Reichsmark", bubaVal: 4.5, vpi: 18.04, wage: 1.01, note: "Brünings Deflationspolitik beginnt (Fußnote 2)" },
+  { year: 1931, cur: "Reichsmark", bubaVal: 4.8, vpi: 16.92, wage: 0.94, note: "Deutsche Bankenkrise; Notverordnungen (Fußnote 2)" },
+  { year: 1932, cur: "Reichsmark", bubaVal: 5.5, vpi: 14.76, wage: 0.81, note: "Tiefpunkt der Weltwirtschaftskrise (Fußnote 2)" },
+  { year: 1933, cur: "Reichsmark", bubaVal: 5.6, vpi: 14.50, wage: 0.78, note: "Machtübernahme der Nationalsozialisten" },
+  { year: 1934, cur: "Reichsmark", bubaVal: 5.5, vpi: 14.76, wage: 0.79, note: "Schacht'scher Neuer Plan (Devisenbewirtschaftung)" },
+  { year: 1935, cur: "Reichsmark", bubaVal: 5.4, vpi: 15.04, wage: 0.80, note: "Wiedereinführung der Wehrpflicht" },
+  { year: 1936, cur: "Reichsmark", bubaVal: 5.3, vpi: 15.32, wage: 0.81, note: "Vierjahresplan; Gesetzlicher Preisstopp" },
+  { year: 1937, cur: "Reichsmark", bubaVal: 5.3, vpi: 15.32, wage: 0.83, note: "Administrierte Preise dämpfen Teuerung künstlich" },
+  { year: 1938, cur: "Reichsmark", bubaVal: 5.2, vpi: 15.62, wage: 0.85, note: "Anschluss Österreichs (Fußnote 2)" },
+  { year: 1939, cur: "Reichsmark", bubaVal: 5.2, vpi: 15.62, wage: 0.86, note: "Beginn Zweiter Weltkrieg; Zwangswirtschaft (Fußnote 2)" },
+  { year: 1940, cur: "Reichsmark", bubaVal: 5.1, vpi: 15.92, wage: 0.88, note: "Kriegsbewirtschaftung & Rationierung (Fußnote 2)" },
+  { year: 1941, cur: "Reichsmark", bubaVal: 5.0, vpi: 16.24, wage: 0.90, note: "Krieg gegen Sowjetunion (Fußnote 2)" },
+  { year: 1942, cur: "Reichsmark", bubaVal: 4.8, vpi: 16.92, wage: 0.91, note: "Totaler Kriegseinsatz (Fußnote 2)" },
+  { year: 1943, cur: "Reichsmark", bubaVal: 4.8, vpi: 16.92, wage: 0.92, note: "Zerstörung der Infrastruktur (Fußnote 2)" },
+  { year: 1944, cur: "Reichsmark", bubaVal: 4.7, vpi: 17.28, wage: 0.92, note: "Zurückgestaute Inflation (Fußnote 2)" },
+  { year: 1945, cur: "Reichsmark", bubaVal: 4.6, vpi: 17.65, wage: 0.90, note: "Bedingungslose Kapitulation; Schwarzmarkt (Fußnote 2)" },
+  { year: 1946, cur: "Reichsmark", bubaVal: 4.2, vpi: 19.33, wage: 0.98, note: "Zigarettenwährung & Tauschhandel (Fußnote 2)" },
+  { year: 1947, cur: "Reichsmark", bubaVal: 3.9, vpi: 20.82, wage: 1.08, note: "Hungerwinter 1946/47; Demontagen (Fußnote 2)" },
+  { year: 1948.1, cur: "Reichsmark", displayYear: "1948 (1. Halbjahr)", bubaVal: 3.7, vpi: 21.95, wage: 1.15, note: "Reichsmark bis zum Vorabend der Reform (Fußnote 2)" },
+
+  // 1948 2. Hj - 2001: Deutsche Mark (DM)
+  { year: 1948.2, cur: "D-Mark", displayYear: "1948 (2. Halbjahr)", bubaVal: 3.13, vpi: 20.2, wage: 1.25, note: "Währungsreform West; Geburt der D-Mark (20.06.1948)" },
+  { year: 1949, cur: "D-Mark", bubaVal: 3.16, vpi: 20.0, wage: 1.33, note: "Gründung der Bundesrepublik; Beseitigung der Bewirtschaftung" },
+  { year: 1950, cur: "D-Mark", bubaVal: 3.39, vpi: 18.7, wage: 1.45, note: "Stärkste Deflation der Nachkriegszeit" },
+  { year: 1951, cur: "D-Mark", bubaVal: 3.15, vpi: 20.2, wage: 1.63, note: "Koreakrieg-Boom treibt Rohstoffpreise" },
+  { year: 1952, cur: "D-Mark", bubaVal: 3.09, vpi: 20.6, wage: 1.76, note: "Beruhigung; Beginn des Wirtschaftswunders" },
+  { year: 1953, cur: "D-Mark", bubaVal: 3.13, vpi: 20.2, wage: 1.84, note: "Hohe Produktivitätsgewinne dämpfen Preise" },
+  { year: 1954, cur: "D-Mark", bubaVal: 3.12, vpi: 20.3, wage: 1.91, note: "Preise bleiben stabil; Konsumwelle" },
+  { year: 1955, cur: "D-Mark", bubaVal: 3.07, vpi: 20.6, wage: 2.05, note: "Erreichen der Vollbeschäftigung" },
+  { year: 1956, cur: "D-Mark", bubaVal: 2.98, vpi: 21.2, wage: 2.24, note: "Anziehende Löhne und Binnennachfrage" },
+  { year: 1957, cur: "D-Mark", bubaVal: 2.93, vpi: 21.6, wage: 2.45, note: "Bundesbankgesetz tritt in Kraft" },
+  { year: 1958, cur: "D-Mark", bubaVal: 2.86, vpi: 22.0, wage: 2.62, note: "Konvertibilität der D-Mark hergestellt" },
+  { year: 1959, cur: "D-Mark", bubaVal: 2.85, vpi: 22.1, wage: 2.78, note: "Hohe Sparquote dämpft Teuerung" },
+  { year: 1960, cur: "D-Mark", bubaVal: 2.79, vpi: 22.4, wage: 3.08, note: "Saarland eingegliedert; Gastarbeiter-Anwerbung" },
+  { year: 1961, cur: "D-Mark", bubaVal: 2.72, vpi: 23.1, wage: 3.40, note: "Aufwertung der D-Mark um 5 %" },
+  { year: 1962, cur: "D-Mark", bubaVal: 2.65, vpi: 23.3, wage: 3.79, note: "Ab hier Reihe 'Alle privaten Haushalte' (West)" },
+  { year: 1963, cur: "D-Mark", bubaVal: 2.58, vpi: 24.0, wage: 4.07, note: "Moderater Preisauftrieb" },
+  { year: 1964, cur: "D-Mark", bubaVal: 2.51, vpi: 24.6, wage: 4.41, note: "Ausgewogenes Wachstum" },
+  { year: 1965, cur: "D-Mark", bubaVal: 2.43, vpi: 25.3, wage: 4.84, note: "Spannungen am Arbeitsmarkt" },
+  { year: 1966, cur: "D-Mark", bubaVal: 2.36, vpi: 26.2, wage: 5.21, note: "Abkühlung des ersten Nachkriegsbooms" },
+  { year: 1967, cur: "D-Mark", bubaVal: 2.32, vpi: 26.7, wage: 5.40, note: "Erste bundesdeutsche Rezession" },
+  { year: 1968, cur: "D-Mark", bubaVal: 2.28, vpi: 27.0, wage: 5.68, note: "Einführung der Mehrwertsteuer (10 %)" },
+  { year: 1969, cur: "D-Mark", bubaVal: 2.24, vpi: 27.6, wage: 6.27, note: "Aufschwung; D-Mark erneut aufgewertet" },
+  { year: 1970, cur: "D-Mark", bubaVal: 2.16, vpi: 28.5, wage: 7.19, note: "Lohn-Preis-Spirale setzt ein" },
+  { year: 1971, cur: "D-Mark", bubaVal: 2.06, vpi: 30.1, wage: 8.01, note: "Zerfall des Bretton-Woods-Systems" },
+  { year: 1972, cur: "D-Mark", bubaVal: 1.95, vpi: 31.8, wage: 8.75, note: "Expansive Finanzpolitik" },
+  { year: 1973, cur: "D-Mark", bubaVal: 1.82, vpi: 33.9, wage: 9.77, note: "1. Ölkrise; Sonntagsfahrverbote & Stagflation" },
+  { year: 1974, cur: "D-Mark", bubaVal: 1.70, vpi: 36.3, wage: 10.92, note: "Bundesbank wechselt zur Geldmengensteuerung" },
+  { year: 1975, cur: "D-Mark", bubaVal: 1.61, vpi: 38.5, wage: 11.75, note: "Rezession bei hoher Inflation" },
+  { year: 1976, cur: "D-Mark", bubaVal: 1.54, vpi: 40.1, wage: 12.60, note: "Erholung dämpft Preisanstieg" },
+  { year: 1977, cur: "D-Mark", bubaVal: 1.49, vpi: 41.6, wage: 13.51, note: "Moderate Lohnabschlüsse" },
+  { year: 1978, cur: "D-Mark", bubaVal: 1.45, vpi: 42.7, wage: 14.28, note: "Starke D-Mark verbilligt Importe" },
+  { year: 1979, cur: "D-Mark", bubaVal: 1.39, vpi: 44.5, wage: 15.12, note: "Beginn der 2. Ölkrise (Iranische Revolution)" },
+  { year: 1980, cur: "D-Mark", bubaVal: 1.32, vpi: 46.9, wage: 16.14, note: "2. Ölpreisschock schlägt voll durch" },
+  { year: 1981, cur: "D-Mark", bubaVal: 1.24, vpi: 49.8, wage: 17.02, note: "Hochzinspolitik der Bundesbank zur Stabilitätswahrung" },
+  { year: 1982, cur: "D-Mark", bubaVal: 1.18, vpi: 52.5, wage: 17.72, note: "Konjunkturelle Schwächephase" },
+  { year: 1983, cur: "D-Mark", bubaVal: 1.14, vpi: 54.1, wage: 18.31, note: "Konsolidierung; Beruhigung bei Rohstoffen" },
+  { year: 1984, cur: "D-Mark", bubaVal: 1.11, vpi: 55.5, wage: 18.89, note: "Kampf um die 35-Stunden-Woche" },
+  { year: 1985, cur: "D-Mark", bubaVal: 1.09, vpi: 56.6, wage: 19.58, note: "Rückkehr zu hoher Preisstabilität" },
+  { year: 1986, cur: "D-Mark", bubaVal: 1.10, vpi: 56.6, wage: 20.35, note: "Ölpreisverfall bringt Nullinflation" },
+  { year: 1987, cur: "D-Mark", bubaVal: 1.09, vpi: 56.6, wage: 21.08, note: "Quasi Preisstagnation" },
+  { year: 1988, cur: "D-Mark", bubaVal: 1.08, vpi: 57.5, wage: 21.82, note: "Binnennachfrage zieht an" },
+  { year: 1989, cur: "D-Mark", bubaVal: 1.05, vpi: 59.0, wage: 22.65, note: "Fall der Berliner Mauer" },
+  { year: 1990, cur: "D-Mark", bubaVal: 1.03, vpi: 60.6, wage: 23.95, note: "Deutsch-Deutsche Währungsunion am 01.07.1990" },
+  { year: 1991, cur: "D-Mark", bubaVal: 0.99, vpi: 61.9, wage: 25.68, note: "Start des gesamtdeutschen Verbraucherpreisindex" },
+  { year: 1992, cur: "D-Mark", bubaVal: 0.95, vpi: 65.0, wage: 27.22, note: "Vereinigungsboom & starke Lohnanpassungen" },
+  { year: 1993, cur: "D-Mark", bubaVal: 0.92, vpi: 67.9, wage: 28.31, note: "MwSt.-Erhöhung; Rezession in Europa" },
+  { year: 1994, cur: "D-Mark", bubaVal: 0.89, vpi: 69.7, wage: 29.08, note: "Einsetzende Disinflation (ab hier VPI-Methode)" },
+  { year: 1995, cur: "D-Mark", bubaVal: 0.88, vpi: 71.0, wage: 30.15, note: "Rückkehr unter 2 % Inflation" },
+  { year: 1996, cur: "D-Mark", bubaVal: 0.87, vpi: 72.0, wage: 30.82, note: "Strenge Haushaltskonsolidierung vor dem Euro" },
+  { year: 1997, cur: "D-Mark", bubaVal: 0.85, vpi: 73.4, wage: 31.35, note: "Erfüllung der Maastrichter Kriterien" },
+  { year: 1998, cur: "D-Mark", bubaVal: 0.84, vpi: 74.0, wage: 31.88, note: "31.12. Unwiderruflicher Umrechnungskurs 1 € = 1,95583 DM" },
+  { year: 1999, cur: "D-Mark", bubaVal: 0.84, vpi: 74.5, wage: 32.55, note: "Einführung des Euro als Buchgeld" },
+  { year: 2000, cur: "D-Mark", bubaVal: 0.83, vpi: 75.5, wage: 33.30, note: "Dotcom-Blase; schwacher Euro-Außenwert" },
+  { year: 2001, cur: "D-Mark", bubaVal: 0.81, vpi: 77.0, wage: 34.05, note: "Letztes Jahr der D-Mark als Bargeld" },
+
+  // 2002 - 2025: Euro
+  { year: 2002, cur: "Euro", bubaVal: 1.56, vpi: 78.1, wage: 17.90, note: "Euro-Bargeldeinführung am 01.01.2002" },
+  { year: 2003, cur: "Euro", bubaVal: 1.54, vpi: 78.9, wage: 18.35, note: "Schwache Binnenkonjunktur dämpft Preise" },
+  { year: 2004, cur: "Euro", bubaVal: 1.52, vpi: 80.2, wage: 18.72, note: "Gesundheitsreform (Praxisgebühr)" },
+  { year: 2005, cur: "Euro", bubaVal: 1.50, vpi: 81.5, wage: 19.05, note: "Hartz-IV-Arbeitsmarktreformen treten in Kraft" },
+  { year: 2006, cur: "Euro", bubaVal: 1.47, vpi: 82.8, wage: 19.45, note: "Aufschwung ('Sommermärchen')" },
+  { year: 2007, cur: "Euro", bubaVal: 1.44, vpi: 84.7, wage: 19.92, note: "MwSt.-Anhebung auf 19 %" },
+  { year: 2008, cur: "Euro", bubaVal: 1.40, vpi: 86.9, wage: 20.45, note: "Rohölpreis-Rekordhoch vor Lehman-Pleite" },
+  { year: 2009, cur: "Euro", bubaVal: 1.40, vpi: 87.2, wage: 21.05, note: "Weltweite Finanz- und Wirtschaftskrise" },
+  { year: 2010, cur: "Euro", bubaVal: 1.38, vpi: 88.1, wage: 21.65, note: "Rasche Erholung der deutschen Industrie" },
+  { year: 2011, cur: "Euro", bubaVal: 1.35, vpi: 90.0, wage: 22.35, note: "Euro-Staatsschuldenkrise" },
+  { year: 2012, cur: "Euro", bubaVal: 1.33, vpi: 91.7, wage: 23.05, note: "EZB ('Whatever it takes')" },
+  { year: 2013, cur: "Euro", bubaVal: 1.31, vpi: 93.1, wage: 23.65, note: "Beginn der Niedrigzinsphase" },
+  { year: 2014, cur: "Euro", bubaVal: 1.30, vpi: 94.0, wage: 24.30, note: "Verfall der weltweiten Rohölpreise" },
+  { year: 2015, cur: "Euro", bubaVal: 1.29, vpi: 94.5, wage: 25.10, note: "Einführung des Mindestlohns (8,50 €)" },
+  { year: 2016, cur: "Euro", bubaVal: 1.28, vpi: 95.0, wage: 25.75, note: "Null- und Negativzinspolitik der EZB" },
+  { year: 2017, cur: "Euro", bubaVal: 1.26, vpi: 96.4, wage: 26.50, note: "Breit angelegter Wirtschaftsaufschwung" },
+  { year: 2018, cur: "Euro", bubaVal: 1.24, vpi: 98.1, wage: 27.35, note: "Energiepreise als Inflationstreiber" },
+  { year: 2019, cur: "Euro", bubaVal: 1.23, vpi: 99.5, wage: 28.25, note: "Handelskonflikte verlangsamen Dynamik" },
+  { year: 2020, cur: "Euro", bubaVal: 1.22, vpi: 100.0, wage: 28.90, note: "Basisjahr (2020=100); befristete MwSt.-Senkung" },
+  { year: 2021, cur: "Euro", bubaVal: 1.18, vpi: 103.1, wage: 29.80, note: "CO₂-Preis, Lieferengpässe & MwSt.-Rückkehr" },
+  { year: 2022, cur: "Euro", bubaVal: 1.11, vpi: 110.2, wage: 31.20, note: "Energiekrise infolge des Ukraine-Kriegs" },
+  { year: 2023, cur: "Euro", bubaVal: 1.04, vpi: 116.7, wage: 33.10, note: "Zweitrundeneffekte bei Nahrungsmitteln & Zinswende" },
+  { year: 2024, cur: "Euro", bubaVal: 1.02, vpi: 119.3, wage: 34.90, note: "Deutliche Beruhigung der Teuerung" },
+  { year: 2025, cur: "Euro", bubaVal: 1.00, vpi: 121.9, wage: 36.20, note: "Bundesbank-Referenzbasis (1,00 €); Stand Januar 2026" }
 ];
 
-// China: VPI (1985=100) & Städtischer Monatsdurchschnittslohn in RMB (NBS) [1]
-const dataCN = [
-  { year: 1985, vpi: 100.00, rate: "9,3 %", wageMonth: 96, note: "Freigabe städtischer Lebensmittelpreise (Schweinefleisch, Gemüse)" },
-  { year: 1986, vpi: 106.50, rate: "6,5 %", wageMonth: 111, note: "Ausweitung des Doppelspur-Preissystems (Dual-Track) auf Güter" },
-  { year: 1987, vpi: 114.27, rate: "7,3 %", wageMonth: 122, note: "Rasches Kreditwachstum erzeugt Binnennachfrageüberschuss" },
-  { year: 1988, vpi: 135.76, rate: "18,8 %", wageMonth: 146, note: "Ankündigung vollständiger Marktpreise löst Panikkäufe aus" },
-  { year: 1989, vpi: 160.60, rate: "18,3 %", wageMonth: 162, note: "Sehr hohe Teuerung im Halbjahr; danach rigorose Kreditbremse" },
-  { year: 1990, vpi: 165.58, rate: "3,1 %", wageMonth: 178, note: "Strikte Konsolidierung (Tiao Kong) drückt Inflation schlagartig" },
-  { year: 1991, vpi: 171.54, rate: "3,6 %", wageMonth: 195, note: "Stabilisierung der Industrieproduktion bei moderater Inflation" },
-  { year: 1992, vpi: 182.52, rate: "6,4 %", wageMonth: 226, note: "Deng Xiaopings Südreise entfacht neue Reformdynamik" },
-  { year: 1993, vpi: 209.17, rate: "14,6 %", wageMonth: 281, note: "Überhitzung durch massiven Bau- und Immobilienboom" },
-  { year: 1994, vpi: 260.00, rate: "24,3 %", wageMonth: 378, note: "RMB-Abwertung und breite Preisfreigaben führen zum Inflationsrekord" },
-  { year: 1995, vpi: 303.68, rate: "16,8 %", wageMonth: 458, note: "Notenbankchef Zhu Rongji setzt harte makroökonomische Bremse durch" },
-  { year: 1996, vpi: 328.88, rate: "8,3 %", wageMonth: 518, note: "Erreichen der weichen Landung (Ruan Zhu Lu) bei hohem Wachstum" },
-  { year: 1997, vpi: 338.09, rate: "2,8 %", wageMonth: 539, note: "Ausbruch der Asienkrise dämpft Exportnachfrage ab" },
-  { year: 1998, vpi: 335.38, rate: "-0,8 %", wageMonth: 623, note: "Erste Deflationsphase; Gegensteuerung durch Konjunkturanleihen" },
-  { year: 1999, vpi: 330.69, rate: "-1,4 %", wageMonth: 695, note: "Überkapazitäten drücken Preise; Restrukturierung der Staatskonzerne" },
-  { year: 2000, vpi: 332.01, rate: "0,4 %", wageMonth: 781, note: "Überwindung der Deflation; Belebung des Binnenkonsums" },
-  { year: 2001, vpi: 334.34, rate: "0,7 %", wageMonth: 906, note: "Beitritt zur Welthandelsorganisation (WTO); Zölle sinken stark" },
-  { year: 2002, vpi: 331.66, rate: "-0,8 %", wageMonth: 1035, note: "Effizienzgewinne durch WTO-Öffnung verbilligen Konsumgüter" },
-  { year: 2003, vpi: 335.31, rate: "1,1 %", wageMonth: 1164, note: "Rasche Erholung nach vorübergehendem SARS-Schock" },
-  { year: 2004, vpi: 348.05, rate: "3,8 %", wageMonth: 1335, note: "Globaler Rohstoffhunger Chinas treibt Energie- und Materialpreise" },
-  { year: 2005, vpi: 354.32, rate: "1,8 %", wageMonth: 1530, note: "Ausgewogene Expansion ohne Inflationsdruck" },
-  { year: 2006, vpi: 360.34, rate: "1,7 %", wageMonth: 1750, note: "Zweistelliges BIP-Wachstum bei stabilen Preisen" },
-  { year: 2007, vpi: 377.64, rate: "4,8 %", wageMonth: 2078, note: "Schweinekrankheits-Epidemie verteuert Lebensmittel massiv" },
-  { year: 2008, vpi: 399.92, rate: "5,9 %", wageMonth: 2435, note: "Rohstoff- und Agrarpreise erreichen Höchststände vor Finanzkrise" },
-  { year: 2009, vpi: 397.12, rate: "-0,7 %", wageMonth: 2728, note: "Finanzkrisen-Gegenmaßnahme: 4-Billionen-Yuan-Konjunkturpaket" },
-  { year: 2010, vpi: 409.82, rate: "3,2 %", wageMonth: 3095, note: "Stimuluspaket greift; rasche Binnennachfrage-Erholung" },
-  { year: 2011, vpi: 432.77, rate: "5,6 %", wageMonth: 3530, note: "Liquiditätsüberschuss; Notenbank erhöht Mindestreservesätze" },
-  { year: 2012, vpi: 444.03, rate: "2,6 %", wageMonth: 3900, note: "Inflation kühlt auf Zielwert des Staatsrats ab" },
-  { year: 2013, vpi: 455.57, rate: "2,6 %", wageMonth: 4300, note: "Übergang zur Neuen Normalität (Xin Chang Tai) – Fokus Qualität" },
-  { year: 2014, vpi: 464.23, rate: "1,9 %", wageMonth: 4700, note: "Niedrige weltweite Rohstoffpreise entlasten" },
-  { year: 2015, vpi: 470.73, rate: "1,4 %", wageMonth: 5170, note: "Verlangsamung im Immobiliensektor bremst Produzentenpreise" },
-  { year: 2016, vpi: 480.14, rate: "2,0 %", wageMonth: 5630, note: "Angebotsseitige Reformen bauen industrielle Überkapazitäten ab" },
-  { year: 2017, vpi: 487.82, rate: "1,6 %", wageMonth: 6190, note: "Stabile Binnennachfrage und Schuldenbegrenzung" },
-  { year: 2018, vpi: 498.07, rate: "2,1 %", wageMonth: 6870, note: "Verbraucherpreise bleiben trotz US-Zöllen stabil" },
-  { year: 2019, vpi: 512.51, rate: "2,9 %", wageMonth: 7540, note: "Afrikanische Schweinepest dezimiert Bestände und treibt Fleischpreise" },
-  { year: 2020, vpi: 524.81, rate: "2,4 %", wageMonth: 8110, note: "COVID-19-Pandemie; Logistiksicherung stützt Grundversorgung" },
-  { year: 2021, vpi: 529.53, rate: "0,9 %", wageMonth: 8900, note: "Starke Exportindustrie bei verhaltener Binnennachfrage" },
-  { year: 2022, vpi: 540.13, rate: "2,0 %", wageMonth: 9500, note: "Infektionsschutzmaßnahmen dämpfen Dienstleistungspreise" },
-  { year: 2023, vpi: 541.21, rate: "0,2 %", wageMonth: 10050, note: "Schwache Binnennachfrage und Immobilienkorrektur dämpfen VPI" },
-  { year: 2024, vpi: 540.66, rate: "-0,1 %", wageMonth: 10500, note: "Leichte Deflationstendenz; Vorrang für Hightech-Investitionen" },
-  { year: 2025, vpi: 541.21, rate: "0,1 %", wageMonth: 10950, note: "Stabilisierung durch gezielte Zinssenkungen" },
-  { year: 2026, vpi: 545.53, rate: "0,8 %", wageMonth: 11400, note: "Moderate Wiederbelebung der Konsumnachfrage" }
+const EUR_DM_FIXED = 1.95583;
+
+// Hyperinflationstabelle aus der Aufgabenstellung
+const hyperTableData = [
+  { pmark: "1", date: "1. Juli 1914", porto: "–", dollar: "4,20", span: "k. W.", mult: 1, note: "Goldparität der Mark (1 USD = 4,20 M)" },
+  { pmark: "2", date: "31. Januar 1918", porto: "0,15", dollar: "–", span: "–", mult: 2, note: "Kriegsverdopplung" },
+  { pmark: "4", date: "31. Januar 1919", porto: "0,15", dollar: "–", span: "–", mult: 4, note: "Nachkriegsbeginn" },
+  { pmark: "10", date: "31. Januar 1920", porto: "0,20", dollar: "42,00", span: "2040 Tage", mult: 10, note: "Erste Verzehnfachung Dollarkurs" },
+  { pmark: "30", date: "31. Januar 1921", porto: "0,40", dollar: "60,43", span: "–", mult: 30, note: "Londoner Zahlungsplan" },
+  { pmark: "100", date: "3. Oktober 1921", porto: "0,60", dollar: "127,37", span: "611 Tage", mult: 100, note: "Zweite Verzehnfachung Dollarkurs" },
+  { pmark: "200", date: "31. Januar 1922", porto: "2,00", dollar: "199,40", span: "–", mult: 200, note: "Rasche Abwertung" },
+  { pmark: "1.000", date: "21. Oktober 1922", porto: "6,-", dollar: "4.439,-", span: "383 Tage", mult: 1000, note: "Dritte Verzehnfachung Dollarkurs" },
+  { pmark: "10.000", date: "31. Januar 1923", porto: "50,-", dollar: "49.000,-", span: "102 Tage", mult: 10000, note: "Ruhrbesetzung & passiver Widerstand" },
+  { pmark: "100.000", date: "26. Juni 1923", porto: "100,-", dollar: "760.000,-", span: "115 Tage", mult: 100000, note: "Galoppierender Währungsverfall" },
+  { pmark: "1.000.000", date: "8. August 1923", porto: "1.000,-", dollar: "4.860.000,-", span: "74 Tage", mult: 1e6, note: "Millionen-Mark Noten" },
+  { pmark: "10.000.000", date: "7. September 1923", porto: "75.000,-", dollar: "53.000.000,-", span: "30 Tage", mult: 1e7, note: "Exponentieller Absturz" },
+  { pmark: "100.000.000", date: "3. Oktober 1923", porto: "2.000.000,-", dollar: "440.000.000,-", span: "26 Tage", mult: 1e8, note: "Täglicher Lohnzahltag" },
+  { pmark: "1.000.000.000", date: "11. Oktober 1923", porto: "5.000.000,-", dollar: "5.060.000.000,-", span: "8 Tage", mult: 1e9, note: "Milliarden-Mark" },
+  { pmark: "10.000.000.000", date: "22. Oktober 1923", porto: "10.000.000,-", dollar: "32.150.000.000,-", span: "11 Tage", mult: 1e10, note: "Geldverfall im Stundentakt" },
+  { pmark: "100.000.000.000", date: "3. November 1923", porto: "100.000.000,-", dollar: "418.950.000.000,-", span: "12 Tage", mult: 1e11, note: "Zusammenbruch des Zahlungsverkehrs" },
+  { pmark: "600.000.000.000", date: "9. November 1923", porto: "1.000.000.000,-", dollar: "628.500.000.000,-", span: "–", mult: 6e11, note: "Hitlerputsch & Panik" },
+  { pmark: "1.000.000.000.000", date: "15. November 1923", porto: "1 RPf = 10 Mrd. M", dollar: "4,20 RM = 4,20 Bio. M", span: "12 Tage", mult: 1e12, note: "Währungsreform: 1 Billion Papiermark = 1 Rentenmark" }
 ];
 
-const EUR_DM_RATE = 1.95583;
-let currentDeInputCur = "DM";
-
-/* ==================== INITIALISIERUNG & LOCALSTORAGE ==================== */
-
-let userGoodsDE = JSON.parse(localStorage.getItem('vpi_userGoodsDE')) || [
-  { id: 1, name: "Kugel Eis", baseYear: 1985, basePrice: 0.50, unit: "DM" },
-  { id: 2, name: "Liter Benzin", baseYear: 1972, basePrice: 0.65, unit: "DM" },
-  { id: 3, name: "Kinokarte", baseYear: 1995, basePrice: 10.00, unit: "DM" },
-  { id: 4, name: "Monatsmiete 2-Zimmer", baseYear: 2002, basePrice: 480.00, unit: "EUR" }
-];
-
-let userGoodsCN = JSON.parse(localStorage.getItem('vpi_userGoodsCN')) || [
-  { id: 1, name: "1kg Schweinefleisch", baseYear: 1985, basePrice: 2.20 },
-  { id: 2, name: "Fahrrad (Flying Pigeon)", baseYear: 1990, basePrice: 160.00 },
-  { id: 3, name: "Schüssel Nudeln", baseYear: 2000, basePrice: 3.50 }
-];
+/* ========================================================================== */
+/* 2. INITIALISIERUNG & NAVIGATION                                            */
+/* ========================================================================== */
 
 window.addEventListener('DOMContentLoaded', () => {
-  initDropdowns();
-  renderTableRows('de', dataDE);
-  renderTableRows('cn', dataCN);
+  populateDropdowns();
+  populateHyperTable();
+  populateDatasetTable();
+  
+  // URL Parameter parsen
+  const params = new URLSearchParams(window.location.search);
+  if (params.has('s')) document.getElementById('select-start-year').value = params.get('s');
+  else document.getElementById('select-start-year').value = "1970";
 
-  // URL-Parameter parsen (falls geteilt)
-  parseUrlParams();
+  if (params.has('t')) document.getElementById('select-target-year').value = params.get('t');
+  else document.getElementById('select-target-year').value = "2025";
 
-  calculateRealWageDE();
-  calculateRealWageCN();
+  if (params.has('a')) document.getElementById('input-amount').value = params.get('a');
 
-  renderCustomGoodsDE();
-  renderCustomGoodsCN();
-
-  initChartInteraction('wrap-chart-de', 'chart-de', 'tip-chart-de', dataDE);
-  initChartInteraction('wrap-chart-cn', 'chart-cn', 'tip-chart-cn', dataCN);
+  initCanvasInteractions();
+  runMainCalculation();
+  runSimCalculation();
+  runHyperCalculation();
 
   window.addEventListener('resize', () => {
-    redrawAllCharts();
+    drawMainChart();
+    drawSimChart();
   });
 });
 
-function initDropdowns() {
-  const deStart = document.getElementById('de-start-year');
-  const deTarget = document.getElementById('de-target-year');
-  dataDE.forEach(item => {
-    const curBadge = item.year <= 2001 ? "DM" : "EUR";
-    deStart.add(new Option(`${item.year} (${curBadge}, VPI: ${item.vpi.toFixed(1)})`, item.year));
-    deTarget.add(new Option(`${item.year} (${curBadge}, VPI: ${item.vpi.toFixed(1)})`, item.year));
-  });
+function switchNavTab(tabId) {
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
 
-  const cnStart = document.getElementById('cn-start-year');
-  const cnTarget = document.getElementById('cn-target-year');
-  dataCN.forEach(item => {
-    cnStart.add(new Option(`${item.year} (VPI: ${item.vpi.toFixed(2)})`, item.year));
-    cnTarget.add(new Option(`${item.year} (VPI: ${item.vpi.toFixed(2)})`, item.year));
-  });
+  const btn = Array.from(document.querySelectorAll('.nav-tab')).find(b => b.getAttribute('onclick').includes(tabId));
+  if (btn) btn.classList.add('active');
 
-  document.getElementById('de-good-year').value = 1990;
-  document.getElementById('cn-good-year').value = 1995;
+  const panel = document.getElementById(tabId);
+  if (panel) panel.classList.add('active');
+
+  setTimeout(() => {
+    if (tabId === 'tab-calculator') drawMainChart();
+    if (tabId === 'tab-simulator') drawSimChart();
+    if (tabId === 'tab-worktime') runWorktimeCalculation();
+  }, 40);
 }
 
-function parseUrlParams() {
-  const params = new URLSearchParams(window.location.search);
-  const tab = params.get('tab') || 'de';
-  switchTab(tab);
-
-  if (params.has('sDe')) document.getElementById('de-start-year').value = params.get('sDe');
-  else document.getElementById('de-start-year').value = 1948;
-
-  if (params.has('tDe')) document.getElementById('de-target-year').value = params.get('tDe');
-  else document.getElementById('de-target-year').value = 2026;
-
-  if (params.has('amtDe')) document.getElementById('de-amount').value = params.get('amtDe');
-  if (params.has('curDe')) setDeInputCur(params.get('curDe'));
-  else onDeYearChange('start');
-
-  if (params.has('sCn')) document.getElementById('cn-start-year').value = params.get('sCn');
-  else document.getElementById('cn-start-year').value = 1985;
-
-  if (params.has('tCn')) document.getElementById('cn-target-year').value = params.get('tCn');
-  else document.getElementById('cn-target-year').value = 2026;
-
-  if (params.has('amtCn')) document.getElementById('cn-amount').value = params.get('amtCn');
-
-  calculateDE();
-  calculateCN();
+function toggleDarkMode() {
+  const isDark = document.body.getAttribute('data-theme') === 'dark';
+  document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('theme-icon').textContent = isDark ? '🌙' : '☀️';
+  document.getElementById('theme-lbl').textContent = isDark ? 'Dark Mode' : 'Light Mode';
+  drawMainChart();
+  drawSimChart();
 }
 
 function copyShareUrl() {
-  const tab = document.querySelector('.tab-btn.active').textContent.includes('Deutschland') ? 'de' : 'cn';
   const url = new URL(window.location.href);
-  url.searchParams.set('tab', tab);
-  url.searchParams.set('sDe', document.getElementById('de-start-year').value);
-  url.searchParams.set('tDe', document.getElementById('de-target-year').value);
-  url.searchParams.set('amtDe', document.getElementById('de-amount').value);
-  url.searchParams.set('curDe', currentDeInputCur);
-  url.searchParams.set('sCn', document.getElementById('cn-start-year').value);
-  url.searchParams.set('tCn', document.getElementById('cn-target-year').value);
-  url.searchParams.set('amtCn', document.getElementById('cn-amount').value);
+  url.searchParams.set('s', document.getElementById('select-start-year').value);
+  url.searchParams.set('t', document.getElementById('select-target-year').value);
+  url.searchParams.set('a', document.getElementById('input-amount').value);
 
   navigator.clipboard.writeText(url.toString()).then(() => {
-    alert("🔗 Link mit deiner aktuellen Konfiguration wurde in die Zwischenablage kopiert!");
+    alert("🔗 Link mit deinen aktuellen Parametern wurde in die Zwischenablage kopiert!");
   }).catch(() => {
     prompt("Link kopieren:", url.toString());
   });
 }
 
-function redrawAllCharts() {
-  const sDe = parseInt(document.getElementById('de-start-year').value);
-  const tDe = parseInt(document.getElementById('de-target-year').value);
-  drawChart('chart-de', dataDE, sDe, tDe, '#2563eb');
+function populateDropdowns() {
+  const selStart = document.getElementById('select-start-year');
+  const selTarget = document.getElementById('select-target-year');
+  const selHyp = document.getElementById('hyp-stage');
 
-  const sCn = parseInt(document.getElementById('cn-start-year').value);
-  const tCn = parseInt(document.getElementById('cn-target-year').value);
-  drawChart('chart-cn', dataCN, sCn, tCn, '#dc2626');
-}
+  selStart.innerHTML = '';
+  selTarget.innerHTML = '';
 
-/* ==================== TABS & THEME ==================== */
-
-function switchTab(tabId) {
-  document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
-    btn.classList.toggle('active', (tabId === 'de' && idx === 0) || (tabId === 'cn' && idx === 1));
+  bubaData.forEach(item => {
+    if (item.bubaVal === null) return; // Überspringe Hyperinflations-Jahre ohne Durchschnitt
+    const label = `${item.displayYear || item.year} (${item.cur}, Buba-Kaufkraft: ${item.bubaVal.toFixed(2)} €)`;
+    selStart.add(new Option(label, item.year));
+    selTarget.add(new Option(label, item.year));
   });
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-  document.getElementById(`tab-${tabId}`).classList.add('active');
 
-  setTimeout(() => {
-    if (tabId === 'de') calculateDE();
-    if (tabId === 'cn') calculateCN();
-  }, 40);
+  hyperTableData.forEach((row, idx) => {
+    selHyp.add(new Option(`${row.date} (1 GM = ${row.pmark} M, Dollar: ${row.dollar})`, idx));
+  });
 }
 
-function toggleTheme() {
-  const body = document.body;
-  const isDark = body.getAttribute('data-theme') === 'dark';
-  body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-  document.getElementById('theme-icon').textContent = isDark ? '🌙' : '☀️';
-  document.getElementById('theme-text').textContent = isDark ? 'Dark Mode' : 'Light Mode';
-
-  calculateDE();
-  calculateCN();
+function setYears(s, t) {
+  document.getElementById('select-start-year').value = s;
+  document.getElementById('select-target-year').value = t;
+  runMainCalculation();
 }
 
-function swapYears(country) {
-  const s = document.getElementById(`${country}-start-year`);
-  const t = document.getElementById(`${country}-target-year`);
+function swapStartTargetYears() {
+  const s = document.getElementById('select-start-year');
+  const t = document.getElementById('select-target-year');
   const tmp = s.value;
   s.value = t.value;
   t.value = tmp;
-  if (country === 'de') onDeYearChange('start');
-  else calculateCN();
+  runMainCalculation();
 }
 
-/* ==================== STATISTISCHE HILFSFUNKTIONEN ==================== */
+/* ========================================================================== */
+/* 3. HAUPTBERECHNUNG: KAUFKRAFTÄQUIVALENTE (BIDIREKTIONAL)                   */
+/* ========================================================================== */
 
-function calculateVolatilty(rates) {
-  if (rates.length <= 1) return 0;
-  const avg = rates.reduce((a, b) => a + b, 0) / rates.length;
-  const variance = rates.reduce((sum, r) => sum + Math.pow(r - avg, 2), 0) / (rates.length - 1);
-  return Math.sqrt(variance);
-}
+function runMainCalculation() {
+  const amount = parseFloat(document.getElementById('input-amount').value);
+  const startValKey = parseFloat(document.getElementById('select-start-year').value);
+  const targetValKey = parseFloat(document.getElementById('select-target-year').value);
 
-function findWorst3YearStretch(dataset, minYear, maxYear) {
-  const subset = dataset.filter(d => d.year >= minYear && d.year <= maxYear);
-  if (subset.length < 3) return "–";
+  const startObj = bubaData.find(d => d.year === startValKey);
+  const targetObj = bubaData.find(d => d.year === targetValKey);
 
-  let maxFactor = 0;
-  let bestWindow = "";
-  for (let i = 0; i <= subset.length - 3; i++) {
-    const factor = subset[i + 2].vpi / subset[i].vpi;
-    if (factor > maxFactor) {
-      maxFactor = factor;
-      bestWindow = `${subset[i].year}–${subset[i + 2].year} (+${((factor - 1) * 100).toFixed(1)} %)`;
-    }
-  }
-  return bestWindow;
-}
-
-/* ==================== DEUTSCHLAND LOGIK ==================== */
-
-function setDePreset(startY, targetY) {
-  document.getElementById('de-start-year').value = startY;
-  document.getElementById('de-target-year').value = targetY;
-  onDeYearChange('start');
-}
-
-function onDeYearChange(origin) {
-  const startY = parseInt(document.getElementById('de-start-year').value);
-  if (origin === 'start') {
-    setDeInputCur(startY <= 2001 ? 'DM' : 'EUR');
-  }
-  calculateDE();
-}
-
-function setDeInputCur(cur) {
-  currentDeInputCur = cur;
-  document.getElementById('btn-de-cur-dm').classList.toggle('active', cur === 'DM');
-  document.getElementById('btn-de-cur-eur').classList.toggle('active', cur === 'EUR');
-  document.getElementById('de-cur-hint').textContent = cur === 'DM' ? '(Deutsche Mark)' : '(Euro)';
-  calculateDE();
-}
-
-function calculateDE() {
-  const amount = parseFloat(document.getElementById('de-amount').value);
-  const startY = parseInt(document.getElementById('de-start-year').value);
-  const targetY = parseInt(document.getElementById('de-target-year').value);
-
-  const startObj = dataDE.find(d => d.year === startY);
-  const targetObj = dataDE.find(d => d.year === targetY);
-  if (isNaN(amount) || amount < 0 || !startObj || !targetObj) return;
-
-  const factor = targetObj.vpi / startObj.vpi;
-
-  // PERSPEKTIVE A (Warenwert-Äquivalent)
-  const baseResult = amount * factor;
-  let resEUR = 0, resDM = 0;
-  if (currentDeInputCur === 'DM') {
-    resDM = baseResult;
-    resEUR = resDM / EUR_DM_RATE;
-  } else {
-    resEUR = baseResult;
-    resDM = resEUR * EUR_DM_RATE;
-  }
-
-  const fmt = (n, dec = 2) => n.toLocaleString('de-DE', { minimumFractionDigits: dec, maximumFractionDigits: dec });
-  const isTargetEur = targetY >= 2002;
-
-  if (isTargetEur) {
-    document.getElementById('de-res-primary').textContent = `${fmt(resEUR)} €`;
-    document.getElementById('de-res-secondary').textContent = `= historisch ${fmt(resDM)} DM`;
-  } else {
-    document.getElementById('de-res-primary').textContent = `${fmt(resDM)} DM`;
-    document.getElementById('de-res-secondary').textContent = `= umgerechnet ${fmt(resEUR)} €`;
-  }
-  document.getElementById('de-res-desc-a').innerHTML = `
-    Ein Warenkorb, der in <strong>${startY}</strong> genau <strong>${fmt(amount)} ${currentDeInputCur}</strong> kostete, erfordert im Jahr <strong>${targetY}</strong> einen Betrag von <strong>${isTargetEur ? fmt(resEUR) + ' €' : fmt(resDM) + ' DM'}</strong>.
-  `;
-
-  // PERSPEKTIVE B (Aufbewahrtes Bargeld)
-  // Reale Restkaufkraft eines physisch gehaltenen Betrags
-  const cashRemainingVal = amount / factor;
-  let cashEUR = 0, cashDM = 0;
-  if (currentDeInputCur === 'DM') {
-    cashDM = cashRemainingVal;
-    cashEUR = cashDM / EUR_DM_RATE;
-  } else {
-    cashEUR = cashRemainingVal;
-    cashDM = cashEUR * EUR_DM_RATE;
-  }
-
-  const remainingPercent = Math.min(100, Math.max(0, (1 / factor) * 100));
-  const lossPercent = 100 - remainingPercent;
-
-  if (isTargetEur) {
-    document.getElementById('de-res-cash-val').textContent = `${fmt(cashEUR)} € (in ${startY}-Preisen)`;
-  } else {
-    document.getElementById('de-res-cash-val').textContent = `${fmt(cashDM)} DM (in ${startY}-Preisen)`;
-  }
-  document.getElementById('de-res-cash-sub').textContent = factor >= 1
-    ? `-${fmt(lossPercent, 1)} % realer Kaufkraftverlust`
-    : `+${fmt(Math.abs(lossPercent), 1)} % realer Kaufkraftgewinn (Deflation)`;
-
-  document.getElementById('de-res-desc-b').innerHTML = `
-    Wer <strong>${fmt(amount)} ${currentDeInputCur}</strong> in bar aufbewahrt hat, besitzt heute nominal immer noch diesen Schein (bzw. ${currentDeInputCur === 'DM' ? fmt(amount / EUR_DM_RATE) + ' €' : fmt(amount * EUR_DM_RATE) + ' DM'}). Real entspricht die Kaufkraft im Jahr ${targetY} jedoch nur noch <strong>${fmt(remainingPercent, 1)} %</strong> des ursprünglichen Werts.
-  `;
-
-  document.getElementById('de-loss-val').textContent = `${remainingPercent.toFixed(1)} %`;
-  const lossBar = document.getElementById('de-loss-fill');
-  lossBar.style.width = `${remainingPercent}%`;
-  lossBar.style.background = remainingPercent < 30 ? 'var(--danger)' : (remainingPercent < 60 ? 'var(--accent-de)' : 'var(--success)');
-
-  // STATISTIKEN
-  const totalChange = (factor - 1) * 100;
-  document.getElementById('de-stat-factor').textContent = (totalChange >= 0 ? '+' : '') + totalChange.toFixed(1) + ' %';
-
-  const years = targetY - startY;
-  let cagr = 0;
-  if (years !== 0) {
-    cagr = (Math.pow(factor, 1 / Math.abs(years)) - 1) * 100;
-    if (years < 0) cagr = -cagr;
-    document.getElementById('de-stat-cagr').textContent = (cagr >= 0 ? '+' : '') + cagr.toFixed(2) + ' %';
-  } else {
-    document.getElementById('de-stat-cagr').textContent = "0,00 %";
-  }
-
-  // 72er-Regel
-  if (cagr > 0) {
-    const halfYears = 72 / cagr;
-    document.getElementById('de-stat-rule72').textContent = `alle ~${halfYears.toFixed(1)} Jahre`;
-  } else {
-    document.getElementById('de-stat-rule72').textContent = "Keine Entwertung";
-  }
-
-  // Volatilität
-  const minYear = Math.min(startY, targetY);
-  const maxYear = Math.max(startY, targetY);
-  const ratesSubset = dataDE
-    .filter(d => d.year > minYear && d.year <= maxYear)
-    .map(d => parseFloat(d.rate.replace('%', '').replace('+', '').replace(',', '.').trim()))
-    .filter(n => !isNaN(n));
-
-  const vola = calculateVolatilty(ratesSubset);
-  document.getElementById('de-stat-volatility').textContent = `± ${vola.toFixed(2)} %`;
-  document.getElementById('de-stat-worst-stretch').textContent = findWorst3YearStretch(dataDE, minYear, maxYear);
-  document.getElementById('de-stat-indices').textContent = `${startObj.vpi.toFixed(1)} → ${targetObj.vpi.toFixed(1)}`;
-
-  drawChart('chart-de', dataDE, startY, targetY, '#2563eb');
-  document.getElementById('chart-de-range').textContent = `Auswahl: ${startY}–${targetY} (${factor.toFixed(2)}×)`;
-
-  renderTimeline('de', startY, targetY, dataDE);
-  calculateDEWorkTime();
-  calculateDESim();
-  calculateRealWageDE();
-  renderCustomGoodsDE();
-}
-
-/* ==================== ARBEITSZEIT-RECHNER DE ==================== */
-
-function calculateDEWorkTime() {
-  const amount = parseFloat(document.getElementById('de-amount').value);
-  const startY = parseInt(document.getElementById('de-start-year').value);
-  const targetY = parseInt(document.getElementById('de-target-year').value);
-
-  const startObj = dataDE.find(d => d.year === startY);
-  const targetObj = dataDE.find(d => d.year === targetY);
   if (!startObj || !targetObj || isNaN(amount) || amount <= 0) return;
 
-  document.getElementById('lbl-de-work-start-yr').textContent = startY;
-  document.getElementById('lbl-de-work-target-yr').textContent = targetY;
+  const fmt = (n, dec = 2) => n.toLocaleString('de-DE', { minimumFractionDigits: dec, maximumFractionDigits: dec });
 
-  // Lohn im Startjahr auf die Eingabewährung anpassen
-  let wageStartInInputCur = startObj.wagePerHour;
-  if (startY <= 2001 && currentDeInputCur === 'EUR') wageStartInInputCur /= EUR_DM_RATE;
-  if (startY >= 2002 && currentDeInputCur === 'DM') wageStartInInputCur *= EUR_DM_RATE;
+  // 1 Einheit Startwährung = startObj.bubaVal Euro (2025)
+  // Der gesamte Geldbetrag entspricht in 2025er-Euro:
+  const eur2025Equiv = amount * startObj.bubaVal;
 
-  const hoursStart = amount / wageStartInInputCur;
-  const startH = Math.floor(hoursStart);
-  const startM = Math.round((hoursStart - startH) * 60);
+  // Im Zieljahr benötigte Einheiten der Zielwährung, um denselben 2025er-Euro-Wert zu haben:
+  const targetUnits = eur2025Equiv / targetObj.bubaVal;
 
-  // Lohn im Zieljahr
-  const factor = targetObj.vpi / startObj.vpi;
-  const targetEquivInEUR = (currentDeInputCur === 'DM' ? (amount * factor) / EUR_DM_RATE : (amount * factor));
-  const targetWageEUR = targetY <= 2001 ? (targetObj.wagePerHour / EUR_DM_RATE) : targetObj.wagePerHour;
+  // Kurs / Ratio
+  const priceFactor = startObj.bubaVal / targetObj.bubaVal;
+  const isForward = targetObj.year >= startObj.year;
 
-  const hoursTarget = targetEquivInEUR / targetWageEUR;
-  const targetH = Math.floor(hoursTarget);
-  const targetM = Math.round((hoursTarget - targetH) * 60);
+  // Banner Text
+  const statusBanner = document.getElementById('currency-status-banner');
+  let curRelText = `Ausgangswährung: <strong>${startObj.cur}</strong> | Zielwährung: <strong>${targetObj.cur}</strong>`;
+  if (startObj.cur === "D-Mark" && targetObj.cur === "Euro") curRelText += ` (Amtlicher Kurs: 1 € = 1,95583 DM)`;
+  if (startObj.cur === "Gulden" && targetObj.cur === "Mark") curRelText += ` (1 Gulden = ca. 1,714 Mark)`;
+  if (startObj.cur === "Taler" && targetObj.cur === "Mark") curRelText += ` (1 Taler = 3 Mark)`;
+  statusBanner.children[0].innerHTML = curRelText;
+  document.getElementById('vpi-status-text').innerHTML = `VPI ${startObj.year <= 2025 ? Math.round(startObj.year) : startObj.year}: <strong>${startObj.vpi.toFixed(1)}</strong> → ${targetObj.year <= 2025 ? Math.round(targetObj.year) : targetObj.year}: <strong>${targetObj.vpi.toFixed(1)}</strong>`;
 
-  document.getElementById('de-worktime-start').textContent = `${startH} Std. ${startM} Min.`;
-  document.getElementById('de-work-wage-start').textContent = `(Ø ${startObj.wagePerHour.toFixed(2)} ${startY <= 2001 ? 'DM' : '€'}/h)`;
+  // PERSPEKTIVE A (Warenwert-Äquivalent)
+  document.getElementById('res-a-main').textContent = `${fmt(targetUnits)} ${getCurrencySign(targetObj.cur)}`;
+  
+  let altEquivA = "";
+  if (targetObj.cur === "D-Mark") altEquivA = `= ${fmt(targetUnits / EUR_DM_FIXED)} €`;
+  else if (targetObj.cur === "Euro") altEquivA = `= ${fmt(targetUnits * EUR_DM_FIXED)} DM`;
+  else altEquivA = `= ${fmt(eur2025Equiv)} Euro (Basis 2025)`;
+  document.getElementById('res-a-sub').textContent = altEquivA;
 
-  document.getElementById('de-worktime-target').textContent = `${targetH} Std. ${targetM} Min.`;
-  document.getElementById('de-work-wage-target').textContent = `(Ø ${targetObj.wagePerHour.toFixed(2)} ${targetY <= 2001 ? 'DM' : '€'}/h)`;
+  const startYearTxt = startObj.displayYear || startObj.year;
+  const targetYearTxt = targetObj.displayYear || targetObj.year;
+
+  if (isForward) {
+    document.getElementById('res-a-desc').innerHTML = `
+      Ein Gut, das im Jahr <strong>${startYearTxt}</strong> genau <strong>${fmt(amount)} ${startObj.cur}</strong> kostete, erfordert im Jahr <strong>${targetYearTxt}</strong> einen Betrag von <strong>${fmt(targetUnits)} ${targetObj.cur}</strong>, um die gleiche Gütermenge zu erwerben.
+    `;
+  } else {
+    document.getElementById('res-a-desc').innerHTML = `
+      <strong>Rückrechnung in die Vergangenheit:</strong> Ein Gut, das im Jahr <strong>${startYearTxt}</strong> einen Betrag von <strong>${fmt(amount)} ${startObj.cur}</strong> kostet, kostete damals im Jahr <strong>${targetYearTxt}</strong> umgerechnet nur <strong>${fmt(targetUnits)} ${targetObj.cur}</strong>.
+    `;
+  }
+
+  // PERSPEKTIVE B (Realkaufkraft des Geldbetrags / Aufbewahrung)
+  // Reale Restkaufkraft: Wenn man damals nominal 100 [Währung] besaß
+  // Wie viel Prozent der ursprünglichen Kaufkraft besitzt derselbe Nominalbetrag heute?
+  let realResidualPercent = 0;
+  let cashPurchasingPowerInTarget = 0;
+
+  // Berücksichtigung des Währungsschnitts bei D-Mark -> Euro (1 € = 1.95583 DM)
+  let nominalAdjusted = amount;
+  if (startObj.cur === "D-Mark" && targetObj.cur === "Euro") {
+    nominalAdjusted = amount / EUR_DM_FIXED;
+  } else if (startObj.cur === "Euro" && targetObj.cur === "D-Mark") {
+    nominalAdjusted = amount * EUR_DM_FIXED;
+  }
+
+  // Kaufkraft des aufbewahrten Betrags im Zieljahr:
+  cashPurchasingPowerInTarget = nominalAdjusted / priceFactor;
+  realResidualPercent = (1 / priceFactor) * 100;
+
+  document.getElementById('res-b-main').textContent = `${fmt(nominalAdjusted)} ${getCurrencySign(targetObj.cur)}`;
+  
+  const lossPercent = 100 - realResidualPercent;
+  const meterBar = document.getElementById('res-b-meter-bar');
+
+  if (isForward) {
+    if (priceFactor >= 1) {
+      document.getElementById('res-b-sub').innerHTML = `<span style="color:var(--danger);">-${fmt(lossPercent, 1)} % realer Kaufkraftverlust</span>`;
+      document.getElementById('res-b-desc').innerHTML = `
+        Wurde der Betrag von <strong>${fmt(amount)} ${startObj.cur}</strong> damals unverzinst im Tresor aufbewahrt, besitzt man nominal ${startObj.cur !== targetObj.cur ? 'nach Währungsumstellung ' : ''}<strong>${fmt(nominalAdjusted)} ${targetObj.cur}</strong>. Die reale Güterkaufkraft entspricht jedoch nur noch <strong>${fmt(realResidualPercent, 1)} %</strong> des ursprünglichen Werts (in ${startYearTxt}-Preisen: ${fmt(amount / priceFactor)} ${startObj.cur}).
+      `;
+    } else {
+      document.getElementById('res-b-sub').innerHTML = `<span style="color:var(--success);">+${fmt(Math.abs(lossPercent), 1)} % reale Kaufkraftsteigerung (Deflation)</span>`;
+      document.getElementById('res-b-desc').innerHTML = `
+        In dieser deflationären Epoche stieg die Kaufkraft des Geldes. Der aufbewahrte Betrag kann im Zieljahr <strong>${fmt(realResidualPercent, 1)} %</strong> des damaligen Warenkorbs erwerben.
+      `;
+    }
+  } else {
+    // Rückwärts
+    document.getElementById('res-b-sub').innerHTML = `<span style="color:var(--bb-blue);">Historischer Kaufkraft-Faktor: ${fmt(realResidualPercent, 1)} %</span>`;
+    document.getElementById('res-b-desc').innerHTML = `
+      Vergleich mit der Vergangenheit: Mit <strong>${fmt(amount)} ${startObj.cur}</strong> aus dem Jahr ${startYearTxt} hätte man im Jahr ${targetYearTxt} die <strong>${fmt(priceFactor, 2)}-fache</strong> Gütermenge erwerben können.
+    `;
+  }
+
+  document.getElementById('res-b-percent').textContent = `${fmt(realResidualPercent, 1)} %`;
+  const barWidth = Math.min(100, Math.max(0, realResidualPercent));
+  meterBar.style.width = `${barWidth}%`;
+  meterBar.style.background = realResidualPercent < 30 ? 'var(--danger)' : (realResidualPercent < 75 ? 'var(--bb-gold)' : 'var(--success)');
+
+  // KENNZAHLEN ROW
+  const totalChange = (priceFactor - 1) * 100;
+  document.getElementById('kpi-price-change').textContent = `${totalChange >= 0 ? '+' : ''}${fmt(totalChange, 1)} %`;
+  
+  const yearsDiff = targetObj.year - startObj.year;
+  const absYears = Math.abs(yearsDiff);
+  let cagr = 0;
+  if (absYears > 0) {
+    cagr = (Math.pow(priceFactor, 1 / absYears) - 1) * 100;
+    if (yearsDiff < 0) cagr = -cagr;
+    document.getElementById('kpi-cagr').textContent = `${cagr >= 0 ? '+' : ''}${fmt(cagr, 2)} %`;
+  } else {
+    document.getElementById('kpi-cagr').textContent = "0,00 %";
+  }
+
+  if (cagr > 0) {
+    const r72 = 72 / cagr;
+    document.getElementById('kpi-rule72').textContent = `alle ~${fmt(r72, 1)} Jahre`;
+  } else {
+    document.getElementById('kpi-rule72').textContent = "Keine Teuerung";
+  }
+
+  document.getElementById('kpi-vpi-relation').textContent = `${startObj.vpi.toFixed(1)} → ${targetObj.vpi.toFixed(1)}`;
+  document.getElementById('kpi-buba-mult').textContent = `${startObj.bubaVal.toFixed(2)} € → ${targetObj.bubaVal.toFixed(2)} €`;
+
+  document.getElementById('chart-selection-label').textContent = `Epoche: ${startYearTxt}–${targetYearTxt} (Faktor: ${fmt(priceFactor, 2)}×)`;
+
+  drawMainChart();
+  runWorktimeCalculation();
+}
+
+function getCurrencySign(cur) {
+  if (cur === "Euro") return "€";
+  if (cur === "D-Mark") return "DM";
+  if (cur === "Reichsmark") return "RM";
+  if (cur === "Mark") return "ℳ (Mark)";
+  if (cur === "Gulden") return "Fl. (Gulden)";
+  if (cur === "Taler") return "Thlr. (Taler)";
+  return cur;
+}
+
+/* ========================================================================== */
+/* 4. SPARBUCH-, ZINS- & REALRENDITE-SIMULATOR (MIT DYNAMISIERUNG)            */
+/* ========================================================================== */
+
+function runSimCalculation() {
+  const startCap = parseFloat(document.getElementById('sim-start-capital').value) || 0;
+  const monthlyRate = parseFloat(document.getElementById('sim-monthly-rate').value) || 0;
+  const dynamicPercent = parseFloat(document.getElementById('sim-dynamic').value) || 0;
+  const nomInterest = (parseFloat(document.getElementById('sim-interest').value) || 0) / 100;
+  const years = parseInt(document.getElementById('sim-years').value) || 1;
+  const inflRate = (parseFloat(document.getElementById('sim-inflation-est').value) || 0) / 100;
+
+  let totalDeposits = startCap;
+  let currentNominal = startCap;
+  let currentRate = monthlyRate;
+
+  // Jahresschleife für Zinseszins und funktionierende Sparraten-Dynamisierung
+  const historyData = [{ year: 0, deposits: startCap, nominal: startCap, real: startCap }];
+
+  for (let y = 1; y <= years; y++) {
+    // Jährliche Einzahlung mit 12 Monatssparraten
+    const yearSavings = currentRate * 12;
+    totalDeposits += yearSavings;
+
+    // Zinsgutschrift (unterjährig monatlich bzw. Jahresschnitt)
+    currentNominal = (currentNominal + yearSavings) * (1 + nomInterest);
+
+    // Dynamisierung: Erhöhung der Sparrate für das Folgejahr
+    currentRate = currentRate * (1 + dynamicPercent / 100);
+
+    // Realkaufkraft (nach Inflation)
+    const inflationDiscount = Math.pow(1 + inflRate, y);
+    const realPurchasingPower = currentNominal / inflationDiscount;
+
+    historyData.push({
+      year: y,
+      deposits: totalDeposits,
+      nominal: currentNominal,
+      real: realPurchasingPower
+    });
+  }
+
+  const finalReal = historyData[years].real;
+  const finalNominal = historyData[years].nominal;
+  const interestEarned = finalNominal - totalDeposits;
+  const realDiff = ((finalReal / totalDeposits) - 1) * 100;
+
+  const fmt = (n, dec = 0) => n.toLocaleString('de-DE', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+
+  document.getElementById('sim-res-deposits').textContent = `${fmt(totalDeposits)} €`;
+  document.getElementById('sim-res-nominal').textContent = `${fmt(finalNominal)} €`;
+  document.getElementById('sim-res-interest-earn').textContent = `+${fmt(interestEarned)} € Zinsgewinn`;
+  document.getElementById('sim-res-real').textContent = `${fmt(finalReal)} €`;
+
+  const isWin = realDiff >= 0;
+  const diffEl = document.getElementById('sim-res-real-diff');
+  diffEl.textContent = `${isWin ? '+' : ''}${realDiff.toFixed(1)} %`;
+  diffEl.style.color = isWin ? 'var(--success)' : 'var(--danger)';
+  document.getElementById('sim-res-status').textContent = isWin ? 'Realer Kaufkraftzuwachs' : 'Realkaufkraftverlust trotz Zinsen';
+
+  drawSimChart(historyData);
+}
+
+/* ========================================================================== */
+/* 5. ARBEITSZEIT-KAUFKRAFT & REALLOHN-BERECHNUNG                             */
+/* ========================================================================== */
+
+function runWorktimeCalculation() {
+  const amount = parseFloat(document.getElementById('input-amount').value) || 100;
+  const startValKey = parseFloat(document.getElementById('select-start-year').value);
+  const targetValKey = parseFloat(document.getElementById('select-target-year').value);
+
+  const startObj = bubaData.find(d => d.year === startValKey);
+  const targetObj = bubaData.find(d => d.year === targetValKey);
+  if (!startObj || !targetObj) return;
+
+  const sYr = startObj.displayYear || startObj.year;
+  const tYr = targetObj.displayYear || targetObj.year;
+
+  document.getElementById('wt-start-yr-lbl').textContent = sYr;
+  document.getElementById('wt-target-yr-lbl').textContent = tYr;
+  document.getElementById('wt-start-amt-lbl').textContent = `${amount} ${startObj.cur}`;
+
+  // Löhne
+  const customStart = parseFloat(document.getElementById('custom-wage-old').value);
+  const customTarget = parseFloat(document.getElementById('custom-wage-new').value);
+
+  const wageStart = (!isNaN(customStart) && customStart > 0) ? customStart : (startObj.wage || 1);
+  const wageTarget = (!isNaN(customTarget) && customTarget > 0) ? customTarget : (targetObj.wage || 1);
+
+  // Arbeitsstunden Ausgangsjahr
+  const hoursStart = amount / wageStart;
+  const hS = Math.floor(hoursStart);
+  const mS = Math.round((hoursStart - hS) * 60);
+
+  // Zieljahr Betrag
+  const targetEquivAmount = (amount * startObj.bubaVal) / targetObj.bubaVal;
+  const hoursTarget = targetEquivAmount / wageTarget;
+  const hT = Math.floor(hoursTarget);
+  const mT = Math.round((hoursTarget - hT) * 60);
+
+  document.getElementById('wt-res-start').textContent = `${hS} Std. ${mS.toString().padStart(2, '0')} Min.`;
+  document.getElementById('wt-wage-start').textContent = `Lohnbasis: ${wageStart.toFixed(2)} ${startObj.cur}/Std.`;
+
+  document.getElementById('wt-res-target').textContent = `${hT} Std. ${mT.toString().padStart(2, '0')} Min.`;
+  document.getElementById('wt-wage-target').textContent = `Lohnbasis: ${wageTarget.toFixed(2)} ${targetObj.cur}/Std.`;
 
   const diffHours = hoursStart - hoursTarget;
-  const verdictEl = document.getElementById('de-worktime-verdict');
+  const verdictBanner = document.getElementById('wt-summary-verdict');
+
   if (diffHours > 0) {
-    verdictEl.style.color = 'var(--success)';
-    verdictEl.innerHTML = `⚡ <strong>Wohlstandsgewinn:</strong> Man muss heute <strong>${Math.floor(diffHours)} Std. ${Math.round((diffHours % 1) * 60)} Min. weniger</strong> für denselben Lebensstandard arbeiten.`;
+    verdictBanner.style.background = 'var(--success-bg)';
+    verdictBanner.style.color = 'var(--success)';
+    verdictBanner.style.borderColor = 'var(--success)';
+    verdictBanner.innerHTML = `⚡ <strong>Produktivitätsgewinn:</strong> Für denselben Lebensstandard muss man heute <strong>${Math.floor(diffHours)} Std. ${Math.round((diffHours % 1) * 60)} Min. weniger</strong> arbeiten als damals!`;
   } else if (diffHours < 0) {
-    verdictEl.style.color = 'var(--danger)';
-    verdictEl.innerHTML = `⚠️ <strong>Mehraufwand:</strong> Für dieselbe Anschaffung sind heute <strong>${Math.floor(Math.abs(diffHours))} Std. mehr</strong> Arbeit nötig.`;
+    verdictBanner.style.background = 'var(--danger-bg)';
+    verdictBanner.style.color = 'var(--danger)';
+    verdictBanner.style.borderColor = 'var(--danger)';
+    verdictBanner.innerHTML = `⚠️ <strong>Mehraufwand:</strong> Für diesen Warenkorb sind heute <strong>${Math.floor(Math.abs(diffHours))} Std. mehr</strong> Arbeitszeit nötig.`;
   } else {
-    verdictEl.style.color = 'var(--text)';
-    verdictEl.textContent = "Die benötigte Arbeitszeit ist unverändert.";
-  }
-
-  // Eigener Stundenlohn
-  const customWage = parseFloat(document.getElementById('de-custom-wage').value);
-  const customEl = document.getElementById('de-custom-wage-res');
-  if (!isNaN(customWage) && customWage > 0) {
-    const custHours = targetEquivInEUR / customWage;
-    const cH = Math.floor(custHours);
-    const cM = Math.round((custHours - cH) * 60);
-    customEl.textContent = `Mit deinem Stundenlohn (${customWage.toFixed(2)} €/h) benötigst du dafür aktuell: ${cH} Std. ${cM} Min.`;
-  } else {
-    customEl.textContent = '';
+    verdictBanner.style.background = 'var(--card-sub)';
+    verdictBanner.style.color = 'var(--text)';
+    verdictBanner.innerHTML = `Die benötigte Arbeitszeit ist in beiden Perioden exakt gleich.`;
   }
 }
 
-/* ==================== SPARBUCH- & REALZINS-SIMULATOR DE ==================== */
+/* ========================================================================== */
+/* 6. HYPERINFLATION 1914–1923 (SPEZIALRECHNER & TABELLE)                     */
+/* ========================================================================== */
 
-function calculateDESim() {
-  const amount = parseFloat(document.getElementById('de-amount').value);
-  const startY = parseInt(document.getElementById('de-start-year').value);
-  const targetY = parseInt(document.getElementById('de-target-year').value);
-  const nominalRate = parseFloat(document.getElementById('de-sim-rate').value) / 100;
-  const resEl = document.getElementById('de-sim-result');
-
-  const startObj = dataDE.find(d => d.year === startY);
-  const targetObj = dataDE.find(d => d.year === targetY);
-  const years = Math.abs(targetY - startY);
-
-  if (isNaN(amount) || amount <= 0 || !startObj || !targetObj || years === 0) {
-    resEl.textContent = "Wähle mindestens 1 Jahr Zeitabstand.";
-    return;
-  }
-
-  const inflationFactor = targetObj.vpi / startObj.vpi;
-  const endNominal = amount * Math.pow(1 + nominalRate, years);
-  const endRealInStartPrices = endNominal / inflationFactor;
-  const realGainPercent = ((endRealInStartPrices / amount) - 1) * 100;
-
-  const fmt = (n, dec = 2) => n.toLocaleString('de-DE', { minimumFractionDigits: dec, maximumFractionDigits: dec });
-
-  const isWin = realGainPercent >= 0;
-  resEl.innerHTML = `
-    Nominales Endguthaben nach ${years} Jahren: <strong>${fmt(endNominal)} ${currentDeInputCur}</strong><br>
-    Reale Kaufkraft (in ${startY}-Geldwert): <strong>${fmt(endRealInStartPrices)} ${currentDeInputCur}</strong><br>
-    Netto-Realkaufkraft-Effekt: <span style="font-weight:700; color:${isWin ? 'var(--success)' : 'var(--danger)'};">
-      ${isWin ? '+' : ''}${fmt(realGainPercent, 1)} % ${isWin ? '(Vermögenszuwachs)' : '(Realverlust trotz Zinsen)'}
-    </span>
-  `;
-}
-
-/* ==================== REALLOHN DE ==================== */
-
-function calculateRealWageDE() {
-  const oldWage = parseFloat(document.getElementById('de-salary-old').value);
-  const newWage = parseFloat(document.getElementById('de-salary-new').value);
-  const startY = parseInt(document.getElementById('de-start-year').value);
-  const targetY = parseInt(document.getElementById('de-target-year').value);
-
-  const startObj = dataDE.find(d => d.year === startY);
-  const targetObj = dataDE.find(d => d.year === targetY);
-  const resEl = document.getElementById('de-salary-result');
-
-  document.getElementById('lbl-de-wage-old').textContent = `Einkommen in ${startY} (${startY <= 2001 ? 'DM' : 'EUR'}):`;
-  document.getElementById('lbl-de-wage-new').textContent = `Einkommen in ${targetY} (${targetY <= 2001 ? 'DM' : 'EUR'}):`;
-
-  if (isNaN(oldWage) || isNaN(newWage) || oldWage <= 0 || newWage <= 0 || !startObj || !targetObj) {
-    resEl.textContent = "Bitte gültige Einkommen eingeben.";
-    return;
-  }
-
-  const oldInEUR = startY <= 2001 ? (oldWage / EUR_DM_RATE) : oldWage;
-  const newInEUR = targetY <= 2001 ? (newWage / EUR_DM_RATE) : newWage;
-
-  const inflationFactor = targetObj.vpi / startObj.vpi;
-  const neededInEUR = oldInEUR * inflationFactor;
-  const diffPercent = ((newInEUR / neededInEUR) - 1) * 100;
-
-  const fmt = n => n.toLocaleString('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-  const neededDisplay = targetY <= 2001 ? `${fmt(neededInEUR * EUR_DM_RATE)} DM` : `${fmt(neededInEUR)} €`;
-
-  if (diffPercent >= 0) {
-    resEl.style.color = "var(--success)";
-    resEl.innerHTML = `✅ <strong>Reallohngewinn: +${diffPercent.toFixed(1)} %</strong><br>Um die Kaufkraft von ${startY} zu bewahren, wären ${neededDisplay} erforderlich gewesen.`;
-  } else {
-    resEl.style.color = "var(--danger)";
-    resEl.innerHTML = `⚠️ <strong>Reallohnverlust: ${diffPercent.toFixed(1)} %</strong><br>Erforderlich gewesen wären ${neededDisplay}, um den Lebensstandard von ${startY} zu halten.`;
-  }
-}
-
-/* ==================== WARENKORB INTERAKTIV MIT SPEICHERUNG ==================== */
-
-function addCustomGoodDE(e) {
-  e.preventDefault();
-  const nameInput = document.getElementById('de-good-name');
-  const yearInput = document.getElementById('de-good-year');
-  const priceInput = document.getElementById('de-good-price');
-
-  const name = nameInput.value.trim();
-  const baseYear = parseInt(yearInput.value);
-  const basePrice = parseFloat(priceInput.value);
-
-  if (!name || isNaN(baseYear) || isNaN(basePrice) || basePrice <= 0) return;
-
-  const unit = baseYear <= 2001 ? 'DM' : 'EUR';
-  userGoodsDE.push({ id: Date.now(), name, baseYear, basePrice, unit });
-  localStorage.setItem('vpi_userGoodsDE', JSON.stringify(userGoodsDE));
-
-  nameInput.value = '';
-  priceInput.value = '';
-  renderCustomGoodsDE();
-}
-
-function deleteCustomGoodDE(id) {
-  userGoodsDE = userGoodsDE.filter(g => g.id !== id);
-  localStorage.setItem('vpi_userGoodsDE', JSON.stringify(userGoodsDE));
-  renderCustomGoodsDE();
-}
-
-function renderCustomGoodsDE() {
-  const targetY = parseInt(document.getElementById('de-target-year').value);
-  const targetObj = dataDE.find(d => d.year === targetY);
-  const list = document.getElementById('de-custom-goods-list');
-  document.getElementById('de-basket-target-label').textContent = `Ziel: ${targetY}`;
-
-  if (!targetObj) return;
-  list.innerHTML = '';
-  if (userGoodsDE.length === 0) {
-    list.innerHTML = '<li style="font-size:0.8rem; color:var(--text-muted); padding:4px;">Keine Güter eingetragen.</li>';
-    return;
-  }
-
-  const fmt = (n, dec = 2) => n.toLocaleString('de-DE', { minimumFractionDigits: dec, maximumFractionDigits: dec });
-
-  userGoodsDE.forEach(item => {
-    const baseObj = dataDE.find(d => d.year === item.baseYear);
-    if (!baseObj) return;
-
-    const factor = targetObj.vpi / baseObj.vpi;
-    const basePriceInEUR = item.unit === 'DM' ? (item.basePrice / EUR_DM_RATE) : item.basePrice;
-    const targetPriceEUR = basePriceInEUR * factor;
-    const targetPriceDM = targetPriceEUR * EUR_DM_RATE;
-
-    const targetDisplay = targetY <= 2001 ? `${fmt(targetPriceDM)} DM` : `${fmt(targetPriceEUR)} €`;
-
-    const li = document.createElement('li');
-    li.className = 'custom-good-item';
-    li.innerHTML = `
-      <div>
-        <strong>${item.name}</strong>
-        <div style="color:var(--text-muted); font-size:0.75rem;">
-          ${item.baseYear}: ${fmt(item.basePrice)} ${item.unit}
-          → <strong>Soll-Preis ${targetY}: ${targetDisplay}</strong>
-          (${factor >= 1 ? '+' : ''}${((factor - 1) * 100).toFixed(1)} %)
-        </div>
-      </div>
-      <button class="btn-del-item" title="Löschen" onclick="deleteCustomGoodDE(${item.id})">✕</button>
+function populateHyperTable() {
+  const tbody = document.getElementById('hyper-table-body');
+  tbody.innerHTML = '';
+  hyperTableData.forEach(row => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${row.pmark} Mark</strong></td>
+      <td><strong>${row.date}</strong></td>
+      <td>${row.porto}</td>
+      <td>${row.dollar}</td>
+      <td>${row.span}</td>
     `;
-    list.appendChild(li);
+    tbody.appendChild(tr);
   });
 }
 
-function exportGoodsJSON(country) {
-  const list = country === 'de' ? userGoodsDE : userGoodsCN;
-  const blob = new Blob([JSON.stringify(list, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
+function runHyperCalculation() {
+  const amount = parseFloat(document.getElementById('hyp-amount').value) || 0;
+  const stageIdx = parseInt(document.getElementById('hyp-stage').value);
+  const stage = hyperTableData[stageIdx];
+
+  const fmt = (n, dec = 2) => n.toLocaleString('de-DE', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+
+  // 1 Goldmark = stage.mult Papiermark
+  const goldmarkVal = amount / stage.mult;
+
+  // Dollarkurs
+  let usdVal = 0;
+  if (stage.dollar !== "–") {
+    const dKurs = parseFloat(stage.dollar.replace(/\./g, '').replace(/,/g, '.').replace(/-/g, ''));
+    if (!isNaN(dKurs) && dKurs > 0) {
+      usdVal = amount / dKurs;
+    }
+  } else {
+    usdVal = goldmarkVal / 4.20; // Über Goldparität
+  }
+
+  // Briefporto
+  let stamps = 0;
+  let pNum = 0;
+  if (stage.porto.includes('RPf')) pNum = 10000000000;
+  else pNum = parseFloat(stage.porto.replace(/\./g, '').replace(/,/g, '.').replace(/-/g, ''));
+  if (!isNaN(pNum) && pNum > 0) stamps = Math.floor(amount / pNum);
+
+  // Währungsreform: 1 Billion Papiermark = 1 Rentenmark
+  const rmVal = amount / 1e12;
+
+  // Kaufkraft in 2025er-Euro (1 Goldmark 1913/1914 entsprach 6,60 € 2025 laut Bundesbank)
+  const eur2025Val = goldmarkVal * 6.60;
+
+  document.getElementById('hyp-res-goldmark').textContent = `${fmt(goldmarkVal, 4)} GM`;
+  document.getElementById('hyp-res-usd').textContent = `${fmt(usdVal, 2)} $`;
+  document.getElementById('hyp-res-stamps').textContent = `${fmt(stamps, 0)} Briefe`;
+  document.getElementById('hyp-res-rm').textContent = `${fmt(rmVal, 6)} RM`;
+  document.getElementById('hyp-res-eur2025').textContent = `${fmt(eur2025Val, 2)} €`;
+}
+
+/* ========================================================================== */
+/* 7. GESAMTDATENSATZ TABELLE & CSV-EXPORT                                    */
+/* ========================================================================== */
+
+function populateDatasetTable(dataset = bubaData) {
+  const tbody = document.getElementById('buba-table-body');
+  tbody.innerHTML = '';
+  dataset.forEach(row => {
+    if (row.bubaVal === null) return;
+    const tr = document.createElement('tr');
+    let badgeClass = "b-dm";
+    if (row.cur === "Euro") badgeClass = "b-eur";
+    else if (row.cur === "Reichsmark") badgeClass = "b-rm";
+    else if (row.cur === "Mark") badgeClass = "b-mark";
+    else if (row.cur === "Gulden") badgeClass = "b-gulden";
+    else if (row.cur === "Taler") badgeClass = "b-taler";
+
+    tr.innerHTML = `
+      <td><strong>${row.displayYear || row.year}</strong></td>
+      <td><span class="badge-cur ${badgeClass}">${row.cur}</span></td>
+      <td><strong>${row.bubaVal.toFixed(2)} €</strong></td>
+      <td><strong>${row.vpi.toFixed(1)}</strong></td>
+      <td>${row.wage ? row.wage.toFixed(2) + ' ' + (row.year <= 2001 ? (row.cur) : '€') : '–'}</td>
+      <td>${row.note}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function filterDatasetTable() {
+  const q = document.getElementById('table-search').value.toLowerCase();
+  const filtered = bubaData.filter(d => 
+    d.year.toString().includes(q) ||
+    d.cur.toLowerCase().includes(q) ||
+    d.note.toLowerCase().includes(q)
+  );
+  populateDatasetTable(filtered);
+}
+
+function exportDataCSV() {
+  let csv = 'Jahr;Waehrung;Buba_Kaufkraftaequivalent_in_Euro_2025;VPI_Basis_2020;Stundenlohn_historisch;Epoche_und_Anmerkung\n';
+  bubaData.forEach(d => {
+    if (d.bubaVal === null) return;
+    csv += `"${d.displayYear || d.year}";"${d.cur}";${d.bubaVal};${d.vpi};${d.wage || ''};"${d.note}"\n`;
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const a = document.createElement('a');
-  a.href = url;
-  a.download = `Warenkorb_${country.toUpperCase()}_Backup.json`;
+  a.href = URL.createObjectURL(blob);
+  a.download = `Bundesbank_Kaufkraftreihe_1810_2025.csv`;
   a.click();
 }
 
-function importGoodsJSON(event, country) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      const imported = JSON.parse(e.target.result);
-      if (Array.isArray(imported)) {
-        if (country === 'de') {
-          userGoodsDE = imported;
-          localStorage.setItem('vpi_userGoodsDE', JSON.stringify(userGoodsDE));
-          renderCustomGoodsDE();
-        } else {
-          userGoodsCN = imported;
-          localStorage.setItem('vpi_userGoodsCN', JSON.stringify(userGoodsCN));
-          renderCustomGoodsCN();
-        }
-        alert("Warenkorb erfolgreich importiert!");
-      }
-    } catch {
-      alert("Fehlerhafte JSON-Datei!");
-    }
-  };
-  reader.readAsText(file);
-}
+/* ========================================================================== */
+/* 8. INTERAKTIVE CANVAS-DIAGRAMME                                            */
+/* ========================================================================== */
 
-/* ==================== CHINA LOGIK ==================== */
-
-function setCnPreset(startY, targetY) {
-  document.getElementById('cn-start-year').value = startY;
-  document.getElementById('cn-target-year').value = targetY;
-  calculateCN();
-}
-
-function calculateCN() {
-  const amount = parseFloat(document.getElementById('cn-amount').value);
-  const startY = parseInt(document.getElementById('cn-start-year').value);
-  const targetY = parseInt(document.getElementById('cn-target-year').value);
-
-  const startObj = dataCN.find(d => d.year === startY);
-  const targetObj = dataCN.find(d => d.year === targetY);
-  if (isNaN(amount) || amount < 0 || !startObj || !targetObj) return;
-
-  const factor = targetObj.vpi / startObj.vpi;
-  const fmt = (n, dec = 2) => n.toLocaleString('de-DE', { minimumFractionDigits: dec, maximumFractionDigits: dec });
-
-  // Perspektive A
-  const result = amount * factor;
-  document.getElementById('cn-res-primary').textContent = `${fmt(result)} ¥ (RMB)`;
-  document.getElementById('cn-res-secondary').textContent = `Veränderungsfaktor: ${factor.toFixed(2)}×`;
-
-  // Perspektive B
-  const cashRemaining = amount / factor;
-  const remainingPercent = Math.min(100, Math.max(0, (1 / factor) * 100));
-  const lossPercent = 100 - remainingPercent;
-
-  document.getElementById('cn-res-cash-val').textContent = `${fmt(cashRemaining)} ¥ (in ${startY}-Preisen)`;
-  document.getElementById('cn-res-cash-sub').textContent = factor >= 1
-    ? `-${fmt(lossPercent, 1)} % realer Kaufkraftverlust`
-    : `+${fmt(Math.abs(lossPercent), 1)} % realer Kaufkraftgewinn`;
-
-  document.getElementById('cn-loss-val').textContent = `${remainingPercent.toFixed(1)} %`;
-  const lossBar = document.getElementById('cn-loss-fill');
-  lossBar.style.width = `${remainingPercent}%`;
-  lossBar.style.background = remainingPercent < 30 ? 'var(--danger)' : (remainingPercent < 60 ? 'var(--accent-cn)' : 'var(--success)');
-
-  // Statistiken
-  const totalChange = (factor - 1) * 100;
-  document.getElementById('cn-stat-factor').textContent = (totalChange >= 0 ? '+' : '') + totalChange.toFixed(1) + ' %';
-
-  const years = targetY - startY;
-  let cagr = 0;
-  if (years !== 0) {
-    cagr = (Math.pow(factor, 1 / Math.abs(years)) - 1) * 100;
-    if (years < 0) cagr = -cagr;
-    document.getElementById('cn-stat-cagr').textContent = (cagr >= 0 ? '+' : '') + cagr.toFixed(2) + ' %';
-  } else {
-    document.getElementById('cn-stat-cagr').textContent = "0,00 %";
-  }
-
-  if (cagr > 0) {
-    const halfYears = 72 / cagr;
-    document.getElementById('cn-stat-rule72').textContent = `alle ~${halfYears.toFixed(1)} Jahre`;
-  } else {
-    document.getElementById('cn-stat-rule72').textContent = "Keine Entwertung";
-  }
-
-  const minYear = Math.min(startY, targetY);
-  const maxYear = Math.max(startY, targetY);
-  const ratesSubset = dataCN
-    .filter(d => d.year > minYear && d.year <= maxYear)
-    .map(d => parseFloat(d.rate.replace('%', '').replace('+', '').replace(',', '.').trim()))
-    .filter(n => !isNaN(n));
-
-  const vola = calculateVolatilty(ratesSubset);
-  document.getElementById('cn-stat-volatility').textContent = `± ${vola.toFixed(2)} %`;
-  document.getElementById('cn-stat-worst-stretch').textContent = findWorst3YearStretch(dataCN, minYear, maxYear);
-  document.getElementById('cn-stat-indices').textContent = `${startObj.vpi.toFixed(2)} → ${targetObj.vpi.toFixed(2)}`;
-
-  drawChart('chart-cn', dataCN, startY, targetY, '#dc2626');
-  document.getElementById('chart-cn-range').textContent = `Auswahl: ${startY}–${targetY} (${factor.toFixed(2)}×)`;
-
-  renderTimeline('cn', startY, targetY, dataCN);
-  calculateCNWorkTime();
-  calculateCNSim();
-  calculateRealWageCN();
-  renderCustomGoodsCN();
-}
-
-function calculateCNWorkTime() {
-  const amount = parseFloat(document.getElementById('cn-amount').value);
-  const startY = parseInt(document.getElementById('cn-start-year').value);
-  const targetY = parseInt(document.getElementById('cn-target-year').value);
-
-  const startObj = dataCN.find(d => d.year === startY);
-  const targetObj = dataCN.find(d => d.year === targetY);
-  if (!startObj || !targetObj || isNaN(amount) || amount <= 0) return;
-
-  document.getElementById('lbl-cn-work-start-yr').textContent = startY;
-  document.getElementById('lbl-cn-work-target-yr').textContent = targetY;
-
-  // Stündlicher Lohn aus Monatswert (ca. 168 Monatsarbeitsstunden)
-  const wageHStart = startObj.wageMonth / 168;
-  const wageHTarget = targetObj.wageMonth / 168;
-
-  const hoursStart = amount / wageHStart;
-  const factor = targetObj.vpi / startObj.vpi;
-  const hoursTarget = (amount * factor) / wageHTarget;
-
-  document.getElementById('cn-worktime-start').textContent = `${Math.floor(hoursStart)} Std. ${Math.round((hoursStart % 1) * 60)} Min.`;
-  document.getElementById('cn-work-wage-start').textContent = `(~${wageHStart.toFixed(2)} ¥/h)`;
-
-  document.getElementById('cn-worktime-target').textContent = `${Math.floor(hoursTarget)} Std. ${Math.round((hoursTarget % 1) * 60)} Min.`;
-  document.getElementById('cn-work-wage-target').textContent = `(~${wageHTarget.toFixed(2)} ¥/h)`;
-
-  const diffHours = hoursStart - hoursTarget;
-  const verdictEl = document.getElementById('cn-worktime-verdict');
-  if (diffHours > 0) {
-    verdictEl.style.color = 'var(--success)';
-    verdictEl.innerHTML = `⚡ <strong>Produktivitätssprung:</strong> Städtische Angestellte müssen heute <strong>${Math.floor(diffHours)} Std. weniger</strong> für dieses Gut arbeiten!`;
-  } else {
-    verdictEl.style.color = 'var(--danger)';
-    verdictEl.textContent = `Erfordert heute mehr Arbeitszeit als damals.`;
-  }
-}
-
-function calculateCNSim() {
-  const amount = parseFloat(document.getElementById('cn-amount').value);
-  const startY = parseInt(document.getElementById('cn-start-year').value);
-  const targetY = parseInt(document.getElementById('cn-target-year').value);
-  const nominalRate = parseFloat(document.getElementById('cn-sim-rate').value) / 100;
-  const resEl = document.getElementById('cn-sim-result');
-
-  const startObj = dataCN.find(d => d.year === startY);
-  const targetObj = dataCN.find(d => d.year === targetY);
-  const years = Math.abs(targetY - startY);
-
-  if (isNaN(amount) || amount <= 0 || !startObj || !targetObj || years === 0) {
-    resEl.textContent = "Wähle mindestens 1 Jahr Zeitabstand.";
-    return;
-  }
-
-  const inflationFactor = targetObj.vpi / startObj.vpi;
-  const endNominal = amount * Math.pow(1 + nominalRate, years);
-  const endReal = endNominal / inflationFactor;
-  const realGain = ((endReal / amount) - 1) * 100;
-
-  const fmt = (n, dec = 2) => n.toLocaleString('de-DE', { minimumFractionDigits: dec, maximumFractionDigits: dec });
-  const isWin = realGain >= 0;
-
-  resEl.innerHTML = `
-    Nominalwert nach ${years} Jahren: <strong>${fmt(endNominal)} ¥</strong><br>
-    Reale Kaufkraft (${startY}-Preise): <strong>${fmt(endReal)} ¥</strong><br>
-    Effekt: <span style="font-weight:700; color:${isWin ? 'var(--success)' : 'var(--danger)'};">
-      ${isWin ? '+' : ''}${fmt(realGain, 1)} % ${isWin ? '(Zuwachs)' : '(Realer Kaufkraftverlust)'}
-    </span>
-  `;
-}
-
-function calculateRealWageCN() {
-  const oldWage = parseFloat(document.getElementById('cn-salary-old').value);
-  const newWage = parseFloat(document.getElementById('cn-salary-new').value);
-  const startY = parseInt(document.getElementById('cn-start-year').value);
-  const targetY = parseInt(document.getElementById('cn-target-year').value);
-
-  const startObj = dataCN.find(d => d.year === startY);
-  const targetObj = dataCN.find(d => d.year === targetY);
-  const resEl = document.getElementById('cn-salary-result');
-
-  if (isNaN(oldWage) || isNaN(newWage) || oldWage <= 0 || newWage <= 0 || !startObj || !targetObj) {
-    resEl.textContent = "Bitte gültige Einkommen eingeben.";
-    return;
-  }
-
-  const factor = targetObj.vpi / startObj.vpi;
-  const neededWage = oldWage * factor;
-  const diffPercent = ((newWage / neededWage) - 1) * 100;
-
-  const fmt = n => n.toLocaleString('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-
-  if (diffPercent >= 0) {
-    resEl.style.color = "var(--success)";
-    resEl.innerHTML = `✅ <strong>Reallohngewinn: +${diffPercent.toFixed(1)} %</strong><br>Um die Kaufkraft von ${startY} zu halten, hätten ${fmt(neededWage)} ¥ gereicht.`;
-  } else {
-    resEl.style.color = "var(--danger)";
-    resEl.innerHTML = `⚠️ <strong>Reallohnverlust: ${diffPercent.toFixed(1)} %</strong><br>Nötig gewesen wären ${fmt(neededWage)} ¥, um die Kaufkraft von ${startY} zu decken.`;
-  }
-}
-
-function addCustomGoodCN(e) {
-  e.preventDefault();
-  const nameInput = document.getElementById('cn-good-name');
-  const yearInput = document.getElementById('cn-good-year');
-  const priceInput = document.getElementById('cn-good-price');
-
-  const name = nameInput.value.trim();
-  const baseYear = parseInt(yearInput.value);
-  const basePrice = parseFloat(priceInput.value);
-
-  if (!name || isNaN(baseYear) || isNaN(basePrice) || basePrice <= 0) return;
-
-  userGoodsCN.push({ id: Date.now(), name, baseYear, basePrice });
-  localStorage.setItem('vpi_userGoodsCN', JSON.stringify(userGoodsCN));
-
-  nameInput.value = '';
-  priceInput.value = '';
-  renderCustomGoodsCN();
-}
-
-function deleteCustomGoodCN(id) {
-  userGoodsCN = userGoodsCN.filter(g => g.id !== id);
-  localStorage.setItem('vpi_userGoodsCN', JSON.stringify(userGoodsCN));
-  renderCustomGoodsCN();
-}
-
-function renderCustomGoodsCN() {
-  const targetY = parseInt(document.getElementById('cn-target-year').value);
-  const targetObj = dataCN.find(d => d.year === targetY);
-  const list = document.getElementById('cn-custom-goods-list');
-  document.getElementById('cn-basket-target-label').textContent = `Ziel: ${targetY}`;
-
-  if (!targetObj) return;
-  list.innerHTML = '';
-  if (userGoodsCN.length === 0) {
-    list.innerHTML = '<li style="font-size:0.8rem; color:var(--text-muted); padding:4px;">Keine Güter eingetragen.</li>';
-    return;
-  }
-
-  const fmt = (n, dec = 2) => n.toLocaleString('de-DE', { minimumFractionDigits: dec, maximumFractionDigits: dec });
-
-  userGoodsCN.forEach(item => {
-    const baseObj = dataCN.find(d => d.year === item.baseYear);
-    if (!baseObj) return;
-
-    const factor = targetObj.vpi / baseObj.vpi;
-    const targetPrice = item.basePrice * factor;
-
-    const li = document.createElement('li');
-    li.className = 'custom-good-item';
-    li.innerHTML = `
-      <div>
-        <strong>${item.name}</strong>
-        <div style="color:var(--text-muted); font-size:0.75rem;">
-          ${item.baseYear}: ${fmt(item.basePrice)} ¥
-          → <strong>Soll-Preis ${targetY}: ${fmt(targetPrice)} ¥</strong>
-          (${factor >= 1 ? '+' : ''}${((factor - 1) * 100).toFixed(1)} %)
-        </div>
-      </div>
-      <button class="btn-del-item" title="Löschen" onclick="deleteCustomGoodCN(${item.id})">✕</button>
-    `;
-    list.appendChild(li);
-  });
-}
-
-/* ==================== TIMELINE ==================== */
-
-function renderTimeline(country, startY, targetY, dataset) {
-  const min = Math.min(startY, targetY);
-  const max = Math.max(startY, targetY);
-  const list = document.getElementById(`${country}-timeline`);
-  document.getElementById(`${country}-tl-start`).textContent = min;
-  document.getElementById(`${country}-tl-target`).textContent = max;
-
-  list.innerHTML = '';
-  const filtered = dataset.filter(d => d.year >= min && d.year <= max);
-
-  if (filtered.length <= 1) {
-    list.innerHTML = '<li class="timeline-item"><span style="color:var(--text-muted);">Keine Zwischenjahre ausgewählt.</span></li>';
-    return;
-  }
-
-  filtered.forEach(item => {
-    const li = document.createElement('li');
-    li.className = 'timeline-item';
-    li.innerHTML = `
-      <span class="timeline-year">${item.year}</span>
-      <span><strong>(${item.rate}):</strong> ${item.note}</span>
-    `;
-    list.appendChild(li);
-  });
-}
-
-/* ==================== CANVAS & INTERAKTION ==================== */
-
-function drawChart(canvasId, dataset, startY, targetY, lineColor, hoverYear = null) {
-  const canvas = document.getElementById(canvasId);
+function drawMainChart(hoverYear = null) {
+  const canvas = document.getElementById('chart-main-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   const dpr = window.devicePixelRatio || 1;
@@ -1641,47 +1478,49 @@ function drawChart(canvasId, dataset, startY, targetY, lineColor, hoverYear = nu
 
   const W = rect.width;
   const H = rect.height;
-  const padL = 45, padR = 15, padT = 15, padB = 25;
+  const padL = 50, padR = 25, padT = 20, padB = 30;
 
   ctx.clearRect(0, 0, W, H);
 
-  const minYear = dataset[0].year;
-  const maxYear = dataset[dataset.length - 1].year;
-  const minVpi = 0;
-  const maxVpi = Math.max(...dataset.map(d => d.vpi)) * 1.1;
+  // Filtere gültige Datensätze
+  const dataset = bubaData.filter(d => d.vpi !== null);
+  const minYear = 1810;
+  const maxYear = 2025;
+  const maxVpi = 135;
 
-  const getX = y => padL + ((y - minYear) / (maxYear - minYear)) * (W - padL - padR);
-  const getY = v => H - padB - ((v - minVpi) / (maxVpi - minVpi)) * (H - padT - padB);
+  const getX = yr => padL + ((yr - minYear) / (maxYear - minYear)) * (W - padL - padR);
+  const getY = v => H - padB - (v / maxVpi) * (H - padT - padB);
 
-  const selMin = Math.min(startY, targetY);
-  const selMax = Math.max(startY, targetY);
-  const x1 = getX(selMin);
-  const x2 = getX(selMax);
+  // Markiere ausgewählte Epoche
+  const sYr = parseFloat(document.getElementById('select-start-year').value);
+  const tYr = parseFloat(document.getElementById('select-target-year').value);
+  const minSel = Math.min(sYr, tYr);
+  const maxSel = Math.max(sYr, tYr);
 
-  ctx.fillStyle = 'rgba(59, 130, 246, 0.08)';
-  ctx.fillRect(x1, padT, (x2 - x1), H - padT - padB);
+  ctx.fillStyle = 'rgba(0, 75, 147, 0.08)';
+  ctx.fillRect(getX(minSel), padT, getX(maxSel) - getX(minSel), H - padT - padB);
 
   // Gitternetz
-  ctx.strokeStyle = document.body.getAttribute('data-theme') === 'dark' ? '#334155' : '#e2e8f0';
+  const isDark = document.body.getAttribute('data-theme') === 'dark';
+  ctx.strokeStyle = isDark ? '#1f293d' : '#e2e8f0';
   ctx.lineWidth = 1;
-  for (let i = 0; i <= 4; i++) {
-    const yVal = (maxVpi / 4) * i;
-    const yPos = getY(yVal);
+  for (let val = 0; val <= 120; val += 30) {
+    const yPos = getY(val);
     ctx.beginPath();
     ctx.moveTo(padL, yPos);
     ctx.lineTo(W - padR, yPos);
     ctx.stroke();
 
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '10px sans-serif';
+    ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
+    ctx.font = '11px sans-serif';
     ctx.textAlign = 'right';
-    ctx.fillText(Math.round(yVal), padL - 8, yPos + 3);
+    ctx.fillText(val, padL - 8, yPos + 4);
   }
 
-  // Kurve
+  // VPI-Kurve
   ctx.beginPath();
   ctx.lineWidth = 2.5;
-  ctx.strokeStyle = lineColor;
+  ctx.strokeStyle = '#004b93';
   dataset.forEach((d, idx) => {
     const x = getX(d.year);
     const y = getY(d.vpi);
@@ -1690,17 +1529,17 @@ function drawChart(canvasId, dataset, startY, targetY, lineColor, hoverYear = nu
   });
   ctx.stroke();
 
-  // Markierungspunkte Start und Ziel
-  [selMin, selMax].forEach(yr => {
-    const item = dataset.find(d => d.year === yr);
+  // Markiere Start und Ziel
+  [minSel, maxSel].forEach(yr => {
+    const item = dataset.find(d => Math.abs(d.year - yr) < 0.6);
     if (item) {
       const px = getX(item.year);
       const py = getY(item.vpi);
-      ctx.fillStyle = lineColor;
+      ctx.fillStyle = '#c29b38';
       ctx.beginPath();
-      ctx.arc(px, py, 5, 0, Math.PI * 2);
+      ctx.arc(px, py, 5.5, 0, Math.PI * 2);
       ctx.fill();
-      ctx.fillStyle = '#fff';
+      ctx.fillStyle = '#ffffff';
       ctx.beginPath();
       ctx.arc(px, py, 2.5, 0, Math.PI * 2);
       ctx.fill();
@@ -1709,153 +1548,154 @@ function drawChart(canvasId, dataset, startY, targetY, lineColor, hoverYear = nu
 
   // Hover Linie
   if (hoverYear !== null) {
-    const hoverItem = dataset.find(d => d.year === hoverYear);
-    if (hoverItem) {
-      const hx = getX(hoverItem.year);
-      const hy = getY(hoverItem.vpi);
-
-      ctx.strokeStyle = '#94a3b8';
-      ctx.setLineDash([3, 3]);
+    const hItem = dataset.find(d => Math.abs(d.year - hoverYear) < 0.6);
+    if (hItem) {
+      const hx = getX(hItem.year);
+      ctx.strokeStyle = '#c29b38';
+      ctx.setLineDash([4, 4]);
       ctx.beginPath();
       ctx.moveTo(hx, padT);
       ctx.lineTo(hx, H - padB);
       ctx.stroke();
       ctx.setLineDash([]);
-
-      ctx.fillStyle = lineColor;
-      ctx.beginPath();
-      ctx.arc(hx, hy, 6, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
-      ctx.arc(hx, hy, 3, 0, Math.PI * 2);
-      ctx.fill();
     }
   }
 
-  // X-Achsenbeschriftung
-  ctx.fillStyle = '#94a3b8';
+  // X-Achsen Beschriftung
+  ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
   ctx.textAlign = 'center';
-  const step = dataset.length > 50 ? 10 : 5;
-  for (let yr = minYear; yr <= maxYear; yr += step) {
-    ctx.fillText(yr, getX(yr), H - 8);
+  for (let y = 1820; y <= 2025; y += 30) {
+    ctx.fillText(y, getX(y), H - 10);
   }
 }
 
-function initChartInteraction(wrapperId, canvasId, tipId, dataset) {
-  const wrapper = document.getElementById(wrapperId);
-  const canvas = document.getElementById(canvasId);
-  const tip = document.getElementById(tipId);
+function drawSimChart(historyData = null) {
+  const canvas = document.getElementById('chart-sim-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
 
-  function handleMove(e) {
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.scale(dpr, dpr);
+
+  const W = rect.width;
+  const H = rect.height;
+  const padL = 60, padR = 25, padT = 20, padB = 30;
+
+  ctx.clearRect(0, 0, W, H);
+  if (!historyData || historyData.length === 0) return;
+
+  const maxVal = Math.max(...historyData.map(d => Math.max(d.nominal, d.deposits, d.real))) * 1.15;
+  const maxYears = historyData.length - 1;
+
+  const getX = yr => padL + (yr / maxYears) * (W - padL - padR);
+  const getY = v => H - padB - (v / maxVal) * (H - padT - padB);
+
+  // Gitternetz
+  const isDark = document.body.getAttribute('data-theme') === 'dark';
+  ctx.strokeStyle = isDark ? '#1f293d' : '#e2e8f0';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const val = (maxVal / 4) * i;
+    const yPos = getY(val);
+    ctx.beginPath();
+    ctx.moveTo(padL, yPos);
+    ctx.lineTo(W - padR, yPos);
+    ctx.stroke();
+
+    ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(Math.round(val).toLocaleString('de-DE') + ' €', padL - 8, yPos + 3);
+  }
+
+  // 1. Eingezahltes Kapital (Grau gestrichelt)
+  ctx.beginPath();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = '#94a3b8';
+  ctx.setLineDash([4, 4]);
+  historyData.forEach((d, idx) => {
+    if (idx === 0) ctx.moveTo(getX(d.year), getY(d.deposits));
+    else ctx.lineTo(getX(d.year), getY(d.deposits));
+  });
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // 2. Nominalkapital (Blau)
+  ctx.beginPath();
+  ctx.lineWidth = 2.5;
+  ctx.strokeStyle = '#004b93';
+  historyData.forEach((d, idx) => {
+    if (idx === 0) ctx.moveTo(getX(d.year), getY(d.nominal));
+    else ctx.lineTo(getX(d.year), getY(d.nominal));
+  });
+  ctx.stroke();
+
+  // 3. Realkaufkraft (Gold)
+  ctx.beginPath();
+  ctx.lineWidth = 2.5;
+  ctx.strokeStyle = '#c29b38';
+  historyData.forEach((d, idx) => {
+    if (idx === 0) ctx.moveTo(getX(d.year), getY(d.real));
+    else ctx.lineTo(getX(d.year), getY(d.real));
+  });
+  ctx.stroke();
+
+  // Legende
+  ctx.font = '11px sans-serif';
+  ctx.fillStyle = '#94a3b8';
+  ctx.fillText('-- Einzahlung', padL + 70, padT + 10);
+  ctx.fillStyle = '#004b93';
+  ctx.fillText('— Nominalkapital', padL + 170, padT + 10);
+  ctx.fillStyle = '#c29b38';
+  ctx.fillText('— Realkaufkraft', padL + 275, padT + 10);
+}
+
+function initCanvasInteractions() {
+  const wrap = document.getElementById('chart-main-wrap');
+  const canvas = document.getElementById('chart-main-canvas');
+  const tip = document.getElementById('chart-main-tip');
+
+  function onMove(e) {
     const rect = canvas.getBoundingClientRect();
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
     const mouseX = clientX - rect.left;
     const mouseY = clientY - rect.top;
 
-    const padL = 45, padR = 15;
-    const W = rect.width;
-    const minYear = dataset[0].year;
-    const maxYear = dataset[dataset.length - 1].year;
+    const padL = 50, padR = 25;
+    const ratio = (mouseX - padL) / (rect.width - padL - padR);
+    let targetYear = Math.round(1810 + ratio * (2025 - 1810));
+    targetYear = Math.max(1810, Math.min(2025, targetYear));
 
-    const yearRatio = (mouseX - padL) / (W - padL - padR);
-    let targetYear = Math.round(minYear + yearRatio * (maxYear - minYear));
-    targetYear = Math.max(minYear, Math.min(maxYear, targetYear));
+    const item = bubaData.find(d => Math.abs(d.year - targetYear) < 0.6);
+    if (!item || item.vpi === null) return;
 
-    const item = dataset.find(d => d.year === targetYear);
-    if (!item) return;
-
-    const sY = parseInt(document.getElementById(canvasId === 'chart-de' ? 'de-start-year' : 'cn-start-year').value);
-    const tY = parseInt(document.getElementById(canvasId === 'chart-de' ? 'de-target-year' : 'cn-target-year').value);
-    const color = canvasId === 'chart-de' ? '#2563eb' : '#dc2626';
-    drawChart(canvasId, dataset, sY, tY, color, targetYear);
+    drawMainChart(targetYear);
 
     tip.style.display = 'block';
     tip.style.left = `${mouseX}px`;
     tip.style.top = `${mouseY}px`;
     tip.innerHTML = `
-      <strong>Jahr ${item.year}</strong><br>
-      VPI: <strong>${item.vpi.toFixed(canvasId === 'chart-de' ? 1 : 2)}</strong> (${item.rate})<br>
-      <span style="font-size:0.75rem; opacity:0.85;">${item.note}</span>
+      <strong>Jahr ${item.displayYear || item.year}</strong><br>
+      Währung: <strong>${item.cur}</strong><br>
+      Buba-Kaufkraft: <strong>${item.bubaVal.toFixed(2)} € (2025)</strong><br>
+      VPI (2020=100): <strong>${item.vpi.toFixed(1)}</strong><br>
+      <span style="font-size:0.75rem; color:#cbd5e1;">${item.note}</span>
     `;
   }
 
-  function handleLeave() {
+  function onLeave() {
     tip.style.display = 'none';
-    const sY = parseInt(document.getElementById(canvasId === 'chart-de' ? 'de-start-year' : 'cn-start-year').value);
-    const tY = parseInt(document.getElementById(canvasId === 'chart-de' ? 'de-target-year' : 'cn-target-year').value);
-    const color = canvasId === 'chart-de' ? '#2563eb' : '#dc2626';
-    drawChart(canvasId, dataset, sY, tY, color, null);
+    drawMainChart(null);
   }
 
-  wrapper.addEventListener('mousemove', handleMove);
-  wrapper.addEventListener('mouseleave', handleLeave);
-  wrapper.addEventListener('touchmove', handleMove);
-  wrapper.addEventListener('touchend', handleLeave);
-}
-
-/* ==================== TABELLEN & EXPORTE ==================== */
-
-function renderTableRows(country, data) {
-  const tbody = document.getElementById(`${country}-table-body`);
-  tbody.innerHTML = '';
-  data.forEach(row => {
-    const tr = document.createElement('tr');
-    if (country === 'de') {
-      const badge = row.year <= 2001 ? '<span class="badge badge-dm">DM</span>' : '<span class="badge badge-eur">EUR</span>';
-      tr.innerHTML = `
-        <td><strong>${row.year}</strong></td>
-        <td>${badge}</td>
-        <td><strong>${row.vpi.toFixed(1)}</strong></td>
-        <td>${row.rate}</td>
-        <td>${row.wagePerHour.toFixed(2)} ${row.year <= 2001 ? 'DM' : '€'}</td>
-        <td>${row.note}</td>
-      `;
-    } else {
-      tr.innerHTML = `
-        <td><strong>${row.year}</strong></td>
-        <td><strong>${row.vpi.toFixed(2)}</strong></td>
-        <td>${row.rate}</td>
-        <td>${row.wageMonth} ¥</td>
-        <td>${row.note}</td>
-      `;
-    }
-    tbody.appendChild(tr);
-  });
-}
-
-function filterTable(country) {
-  const query = document.getElementById(`${country}-search`).value.toLowerCase();
-  const dataset = country === 'de' ? dataDE : dataCN;
-  const filtered = dataset.filter(d =>
-    d.year.toString().includes(query) ||
-    d.note.toLowerCase().includes(query) ||
-    d.rate.toLowerCase().includes(query)
-  );
-  renderTableRows(country, filtered);
-}
-
-function exportCSV(country) {
-  const dataset = country === 'de' ? dataDE : dataCN;
-  let csv = country === 'de'
-    ? 'Jahr;Waehrung;VPI_Basis_2020;Veraenderung_Vorjahr;Stundenlohn;Anmerkung\n'
-    : 'Jahr;VPI_Basis_1985;Veraenderung_Vorjahr;Monatslohn;Anmerkung\n';
-
-  dataset.forEach(d => {
-    if (country === 'de') {
-      csv += `${d.year};${d.year <= 2001 ? 'DM' : 'EUR'};${d.vpi.toFixed(1)};${d.rate};${d.wagePerHour};"${d.note}"\n`;
-    } else {
-      csv += `${d.year};${d.vpi.toFixed(2)};${d.rate};${d.wageMonth};"${d.note}"\n`;
-    }
-  });
-
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `VPI_${country.toUpperCase()}_1948_2026.csv`;
-  a.click();
+  wrap.addEventListener('mousemove', onMove);
+  wrap.addEventListener('mouseleave', onLeave);
+  wrap.addEventListener('touchmove', onMove);
+  wrap.addEventListener('touchend', onLeave);
 }
 </script>
 </body>
